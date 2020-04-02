@@ -283,8 +283,8 @@ render(siteMainElement, createMainNavigationTemplate(), `beforeend`);
 render(siteMainElement, createFilmFilterTemplate(), `beforeend`);
 render(siteMainElement, createFilmsSectionTemplate(), `beforeend`);
 
-const filmsSection = siteMainElement.querySelector('.films');
-const filmsContainer = filmsSection.querySelector('.films-list__container');
+const filmsSection = siteMainElement.querySelector(`.films`);
+const filmsContainer = filmsSection.querySelector(`.films-list__container`);
 
 for (let i = 0; i < CARD_COUNT; i++) {
   render(filmsContainer, createFilmCardTemplate(), `beforeend`);
@@ -295,10 +295,8 @@ render(filmsSection, createShowMoreBtnTemplate(), `beforeend`);
 render(filmsSection, createTopRatedTemplate(), `beforeend`);
 render(filmsSection, createCommentedTemplate(), `beforeend`);
 
-const topRatedContainer = filmsSection.querySelector('.films-list--extra:nth-last-child(2) .films-list__container');
-const commentedContainer = filmsSection.querySelector('.films-list--extra:last-child .films-list__container');
-
-console.log(topRatedContainer, commentedContainer);
+const topRatedContainer = filmsSection.querySelector(`.films-list--extra:nth-last-child(2) .films-list__container`);
+const commentedContainer = filmsSection.querySelector(`.films-list--extra:last-child .films-list__container`);
 
 for (let i = 0; i < PROMOTE_COUNT; i++) {
   render(topRatedContainer, createFilmCardTemplate(), `beforeend`);
