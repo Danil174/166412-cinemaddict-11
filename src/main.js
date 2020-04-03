@@ -1,5 +1,3 @@
-"use strict";
-
 const CARD_COUNT = 5;
 const PROMOTE_COUNT = 2;
 
