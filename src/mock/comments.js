@@ -1,14 +1,50 @@
+import {
+  getRandomArrayItem,
+  getRandomIntegerNumber,
+  getRandomDate
+} from '../util.js';
+
+const REACTIONS = [
+  `unbelievably`,
+  `incredibly`,
+  `improbably`,
+  `amazingly`,
+  `terribly`,
+  `awfully`,
+  `horribly`,
+  `dreadfully`
+];
+
+const AUTHORS = [
+  `Tony Stark`,
+  `Steve Rogers`,
+  `Bruce Banner`,
+  `Thor`,
+  `Natasha Romanoff`,
+  `Clint Barton`,
+  `Loki`,
+  `Agent Phil Coulson`,
+  `Agent Maria Hill`,
+];
+
+const EMOTIONS = [
+  `smile`,
+  `sleeping`,
+  `puke`,
+  `angry`
+];
+
 const generateComment = () => ({
-  comment: `Booooooooooring`,
-  author: `Tim Macoveev`,
-  date: `2019/12/31 23:59`,
-  emotion: [`smile`, `sleeping`, `puke`, `angry`],
+  comment: getRandomArrayItem(REACTIONS),
+  author: getRandomArrayItem(AUTHORS),
+  date: getRandomDate(getRandomIntegerNumber(2018, 2020), getRandomIntegerNumber(1, 12), getRandomIntegerNumber(1, 30)),
+  emotion: getRandomArrayItem(EMOTIONS)
 });
 
 const generateComments = (count) => {
   return new Array(count)
     .fill(``)
-    .map(generateFilm);
+    .map(generateComment);
 };
 
-export {ggenerateComments};
+export {generateComments};

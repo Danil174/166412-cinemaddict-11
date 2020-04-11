@@ -107,6 +107,8 @@ const AGES = [
 
 const MIN_SENTENCES_AMOUNT = 1;
 const MAX_SENTENCES_AMOUNT = 5;
+const MIN_COMMENTS_AMOUNT = 0;
+const MAX_COMMENTS_AMOUNT = 5;
 
 const generateFilm = () => {
   const randomIndex = getRandomIntegerNumber(0, FILMS.length - 1);
@@ -122,12 +124,13 @@ const generateFilm = () => {
     releaseDate: getRandomDate(getRandomIntegerNumber(1925, 1955), getRandomIntegerNumber(1, 12), getRandomIntegerNumber(1, 30)),
     duration: `${getRandomIntegerNumber(1, 3)}h ${getRandomIntegerNumber(5, 59)}m`,
     country: getRandomArrayItem(COUNTRIES),
-    genres: getRandomArrayItems(GENRES, 3, 1, `, `),
+    genres: getRandomArrayItems(GENRES, 3, 1, `, `).split(`, `),
     description: getRandomArrayItems(DESCRIPTIONS, MAX_SENTENCES_AMOUNT, MIN_SENTENCES_AMOUNT, ` `),
     allowedAge: getRandomArrayItem(AGES),
     watchlist: getRandomBool(),
     watched: getRandomBool(),
     favorite: getRandomBool(),
+    numberOfComments: getRandomIntegerNumber(MIN_COMMENTS_AMOUNT, MAX_COMMENTS_AMOUNT),
   };
 };
 

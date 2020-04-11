@@ -11,7 +11,7 @@ export const getRandomArrayItems = (array, maxItems = array.length, minItems = 1
 };
 
 export const getRandomArrayItem = (array) => {
-  const randomIndex = getRandomIntegerNumber(0, array.length);
+  const randomIndex = getRandomIntegerNumber(0, array.length - 1);
 
   return array[randomIndex];
 };
@@ -21,9 +21,13 @@ export const getRandomIntegerNumber = (min, max) => {
 };
 
 export const getRandomBool = () => {
-  return Math.random > 0.5;
+  return Math.random() > 0.5;
 };
 
 export const getRandomDate = (year, month, day) => {
   return (new Date(year, month, day));
+};
+
+export const getAmountByCurrentKey = (objects, key, value) => {
+  return (objects.filter((obj) => obj[key] === value)).length;
 };
