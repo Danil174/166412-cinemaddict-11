@@ -1,3 +1,9 @@
+export const RenderPosition = {
+  AFTER: `afterbegin`,
+  BEFORE: `beforeend`
+};
+
+
 export const getRandomArrayItems = (array, maxItems = array.length, minItems = 1, joinSTR = `, `) => {
   const arr = array.slice();
   const itemsAmount = getRandomIntegerNumber(minItems, maxItems);
@@ -35,4 +41,22 @@ export const getAmountByCurrentKey = (objects, key, value) => {
 export const sortObjectsByKeyMaxMin = (objects, key) => {
   const arr = objects.slice();
   return arr.sort((a, b) => b[key] - a[key]);
+};
+
+export const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+
+  return newElement.firstChild;
+};
+
+export const render = (container, element, place) => {
+  switch (place) {
+    case RenderPosition.AFTER:
+      container.prepend(element);
+      break;
+    case RenderPosition.BEFORE:
+      container.append(element);
+      break;
+  }
 };

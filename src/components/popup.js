@@ -1,5 +1,5 @@
 import {getRandomIntegerNumber} from '../util.js';
-import {month} from '../const.js';
+import {months} from '../const.js';
 import {generateComments} from '../mock/comments.js';
 
 const generateGenresTemplate = (genres) => {
@@ -63,7 +63,7 @@ export const createFilmPopupTemplate = (film) => {
     numberOfComments
   } = film;
 
-  const readableDate = `${releaseDate.getDate()} ${month[releaseDate.getMonth()]} ${releaseDate.getFullYear()}`;
+  const readableDate = `${releaseDate.getDate()} ${months[releaseDate.getMonth()]} ${releaseDate.getFullYear()}`;
 
   const multiGentesSign = genres.length > 1 ? true : false;
 
