@@ -6,9 +6,9 @@ import {createFilmCardTemplate} from "./components/film-card.js";
 import {createShowMoreBtnTemplate} from "./components/show-more-btn.js";
 import {createExtraSectionTemplate} from "./components/extra-section.js";
 import {createFilmPopupTemplate} from "./components/popup.js";
-import {createFooterStatisticsTemplate} from "./components/footer-statistics.js";
+import FooterCounterComponent from "./components/footer-movies-counter.js";
 import {generateFilms} from "./mock/film.js";
-import {getAmountByCurrentKey, sortObjectsByKeyMaxMin} from "./util.js";
+import {getAmountByCurrentKey, sortObjectsByKeyMaxMin, render as renderNew, RenderPosition} from "./util.js";
 import {mainPageConfigs} from "./const.js";
 
 const films = generateFilms(mainPageConfigs.CARD_COUNT);
@@ -55,7 +55,8 @@ showMoreButton.addEventListener(`click`, () => {
 });
 
 const footer = document.querySelector(`.footer`);
-render(footer, createFooterStatisticsTemplate(mainPageConfigs.CARD_COUNT), `beforeend`);
+const footerCounter = new FooterCounterComponent(mainPageConfigs.CARD_COUNT);
+renderNew(footer, footerCounter.getElement(), RenderPosition.BEFOREEND);
 
 // render(siteMainElement, createFilmPopupTemplate(films[0]), `beforeend`);
 
