@@ -1,5 +1,7 @@
-export const createMainNavigationTemplate = (filters) => {
-  const {inWatchlist, watched, favorite} = filters;
+import {createElement} from "../util.js";
+
+export const createNavigationTemplate = (collections) => {
+  const {inWatchlist, watched, favorite} = collections;
 
   return (
     `<nav class="main-navigation">
@@ -13,3 +15,27 @@ export const createMainNavigationTemplate = (filters) => {
     </nav>`
   );
 };
+
+export default class Navigation {
+  constructor(collection) {
+    this._collection = collection;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createNavigationTemplate(this._collection);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
