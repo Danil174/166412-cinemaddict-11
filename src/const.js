@@ -26,3 +26,6 @@ export const extraSectionConfigs = {
   COMMENTED_TITLE: `Most commented`
 };
 
+export const KeyCodes = {
+  ESC_KEYCODE: 27
+};

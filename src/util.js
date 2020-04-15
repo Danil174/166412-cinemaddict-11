@@ -60,3 +60,7 @@ export const render = (container, element, place) => {
       break;
   }
 };
+
+export const removeElement = (element) => {
+  element.remove();
+};

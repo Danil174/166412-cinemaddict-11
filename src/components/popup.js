@@ -1,4 +1,4 @@
-import {getRandomIntegerNumber} from '../util.js';
+import {getRandomIntegerNumber, createElement} from '../util.js';
 import {months} from '../const.js';
 import {generateComments} from '../mock/comments.js';
 
@@ -42,7 +42,7 @@ const setInputCheck = (checked) => {
   return (checked ? `checked` : ``);
 };
 
-export const createFilmPopupTemplate = (film) => {
+const createFilmPopupTemplate = (film) => {
   const {
     img,
     name,
@@ -64,10 +64,13 @@ export const createFilmPopupTemplate = (film) => {
   } = film;
 
   const readableDate = `${releaseDate.getDate()} ${months[releaseDate.getMonth()]} ${releaseDate.getFullYear()}`;
-
-  const multiGentesSign = genres.length > 1 ? true : false;
-
+  const multiGenresSign = genres.length > 1 ? `s` : ``;
+  const watchlistCheckStatus = setInputCheck(watchlist);
+  const watchedCheckStatus = setInputCheck(watched);
+  const favoritetCheckStatus = setInputCheck(favorite);
   const commentsAmount = numberOfComments;
+  const generesDetails = generateGenresTemplate(genres);
+  const comments = generateCommentsTemplate(commentsAmount);
 
   return (
     `<section class="film-details">
@@ -121,9 +124,9 @@ export const createFilmPopupTemplate = (film) => {
                   <td class="film-details__cell">${country}</td>
                 </tr>
                 <tr class="film-details__row">
-                  <td class="film-details__term">Genre${multiGentesSign ? `s` : ``}</td>
+                  <td class="film-details__term">Genre${multiGenresSign}</td>
                   <td class="film-details__cell">
-                    ${generateGenresTemplate(genres)}
+                    ${generesDetails}
                 </tr>
               </table>
 
@@ -134,13 +137,13 @@ export const createFilmPopupTemplate = (film) => {
           </div>
 
           <section class="film-details__controls">
-            <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${setInputCheck(watchlist)}>
+            <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${watchlistCheckStatus}>
             <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-            <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${setInputCheck(watched)}>
+            <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${watchedCheckStatus}>
             <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-            <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${setInputCheck(favorite)}>
+            <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${favoritetCheckStatus}>
             <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
           </section>
         </div>
@@ -150,7 +153,7 @@ export const createFilmPopupTemplate = (film) => {
             <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentsAmount}</span></h3>
 
             <ul class="film-details__comments-list">
-              ${generateCommentsTemplate(commentsAmount)}
+              ${comments}
             </ul>
 
             <div class="film-details__new-comment">
@@ -188,3 +191,29 @@ export const createFilmPopupTemplate = (film) => {
     </section>`
   );
 };
+
+export default class PopUp {
+  constructor(film) {
+    this._film = film;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmPopupTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    console.log(this._element);
+    this._element = null;
+  }
+}
+
