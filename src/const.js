@@ -20,7 +20,7 @@ export const mainPageConfigs = {
   SHOWING_FILM_BY_BUTTON: 5
 };
 
-export const extraSectionCongigs = {
+export const extraSectionConfigs = {
   PROMOTE_COUNT: 2,
   RATED_TITLE: `Top rated`,
   COMMENTED_TITLE: `Most commented`
