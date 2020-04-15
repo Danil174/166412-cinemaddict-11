@@ -9,7 +9,7 @@ import ExtraSectionComponent from "./components/extra-section.js";
 import PopupComponent from "./components/popup.js";
 import FooterCounterComponent from "./components/footer-movies-counter.js";
 import {generateFilms} from "./mock/film.js";
-import {getAmountByCurrentKey, sortObjectsByKeyMaxMin, render, RenderPosition, removeElement} from "./util.js";
+import {getAmountByCurrentKey, sortObjectsByKeyMaxMin, render, RenderPosition} from "./util.js";
 import {mainPageConfigs, extraSectionConfigs, KeyCodes} from "./const.js";
 
 const filmsCollection = generateFilms(mainPageConfigs.CARD_COUNT);

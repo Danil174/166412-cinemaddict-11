@@ -212,7 +212,6 @@ export default class PopUp {
   }
 
   removeElement() {
-    console.log(this._element);
     this._element = null;
   }
 }
