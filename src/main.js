@@ -43,21 +43,21 @@ const renderFilm = (container, film, position) => {
   const showPopUpElements = [`.film-card__poster`, `.film-card__title`, `.film-card__comments`];
 
   const renderPopUp = () => {
-    render(document.querySelector(`body`), popup.getElement(), RenderPosition.BEFOREEND);
+    document.body.appendChild(popup.getElement());
     document.addEventListener(`keydown`, onEscKeyDown);
     popup.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, onPopUpCloseBtnClick);
   };
 
   const onPopUpCloseBtnClick = () => {
     popup.getElement().querySelector(`.film-details__close-btn`).removeEventListener(`click`, onPopUpCloseBtnClick);
-    removeElement(popup.getElement());
+    document.body.removeChild(popup.getElement());
     document.removeEventListener(`keydown`, onEscKeyDown);
   };
 
   const onEscKeyDown = (evt) => {
     if (evt.keyCode === KeyCodes.ESC_KEYCODE) {
       popup.getElement().querySelector(`.film-details__close-btn`).removeEventListener(`click`, onPopUpCloseBtnClick);
-      removeElement(popup.getElement());
+      document.body.removeChild(popup.getElement());
       document.removeEventListener(`keydown`, onEscKeyDown);
     }
   };
