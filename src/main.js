@@ -24,21 +24,6 @@ const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
 const siteFooterElement = document.querySelector(`.footer`);
 
-const headerProfile = new HeaderProfileComponent();
-render(siteHeaderElement, headerProfile.getElement(), RenderPosition.BEFOREEND);
-
-const siteMainNavigation = new NavigationComponent(filteredMovies);
-render(siteMainElement, siteMainNavigation.getElement(), RenderPosition.BEFOREEND);
-
-const siteMainFilters = new FiltersComponent();
-render(siteMainElement, siteMainFilters.getElement(), RenderPosition.BEFOREEND);
-
-const filmsSection = new FilmsSectionComponent();
-render(siteMainElement, filmsSection.getElement(), RenderPosition.BEFOREEND);
-
-const filmsPrimaryList = new FilmsListComponent();
-render(filmsSection.getElement(), filmsPrimaryList.getElement(), RenderPosition.BEFOREEND);
-
 const renderFilm = (container, film, position) => {
   const showPopUpElements = [`.film-card__poster`, `.film-card__title`, `.film-card__comments`];
 
@@ -48,17 +33,20 @@ const renderFilm = (container, film, position) => {
     popup.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, onPopUpCloseBtnClick);
   };
 
-  const onPopUpCloseBtnClick = () => {
+  const removePopUp = () => {
     popup.getElement().querySelector(`.film-details__close-btn`).removeEventListener(`click`, onPopUpCloseBtnClick);
     document.body.removeChild(popup.getElement());
+    popup.removeElement();
     document.removeEventListener(`keydown`, onEscKeyDown);
+  };
+
+  const onPopUpCloseBtnClick = () => {
+    removePopUp();
   };
 
   const onEscKeyDown = (evt) => {
     if (evt.keyCode === KeyCodes.ESC_KEYCODE) {
-      popup.getElement().querySelector(`.film-details__close-btn`).removeEventListener(`click`, onPopUpCloseBtnClick);
-      document.body.removeChild(popup.getElement());
-      document.removeEventListener(`keydown`, onEscKeyDown);
+      removePopUp();
     }
   };
 
@@ -94,9 +82,25 @@ const renderBigList = (list, films) => {
 
     if (showingFilmsCount >= films.length) {
       showMoreBtnComponent.getElement().remove();
+      showMoreBtnComponent.removeElement();
     }
   });
 };
+
+const headerProfile = new HeaderProfileComponent();
+render(siteHeaderElement, headerProfile.getElement(), RenderPosition.BEFOREEND);
+
+const siteMainNavigation = new NavigationComponent(filteredMovies);
+render(siteMainElement, siteMainNavigation.getElement(), RenderPosition.BEFOREEND);
+
+const siteMainFilters = new FiltersComponent();
+render(siteMainElement, siteMainFilters.getElement(), RenderPosition.BEFOREEND);
+
+const filmsSection = new FilmsSectionComponent();
+render(siteMainElement, filmsSection.getElement(), RenderPosition.BEFOREEND);
+
+const filmsPrimaryList = new FilmsListComponent();
+render(filmsSection.getElement(), filmsPrimaryList.getElement(), RenderPosition.BEFOREEND);
 
 renderBigList(filmsPrimaryList, filmsCollection);
 
