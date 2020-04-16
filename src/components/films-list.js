@@ -1,6 +1,6 @@
 import {createElement} from "../util.js";
 
-export const createExtraSectionTemplate = (title, type) => {
+export const createListSectionTemplate = (title, type) => {
   return (
     `<section class="films-list${type}">
       <h2 class="films-list__title">${title}</h2>
@@ -8,7 +8,7 @@ export const createExtraSectionTemplate = (title, type) => {
   );
 };
 
-export default class ExtraSection {
+export default class ListSection {
   constructor(title, type = ``) {
     this._title = title;
     this._type = type;
@@ -17,7 +17,7 @@ export default class ExtraSection {
   }
 
   getTemplate() {
-    return createExtraSectionTemplate(this._title, this._type);
+    return createListSectionTemplate(this._title, this._type);
   }
 
   getElement() {
