@@ -1,23 +1,26 @@
 import {createElement} from "../util.js";
 
-export const createListSectionTemplate = (title, type) => {
+const extraClass = `--extra`;
+
+export const createListSectionTemplate = (title, isExtraList) => {
+  const classPostfix = isExtraList ? extraClass : ``;
   return (
-    `<section class="films-list${type}">
+    `<section class="films-list${classPostfix}">
       <h2 class="films-list__title">${title}</h2>
     </section>`
   );
 };
 
 export default class ListSection {
-  constructor(title, type = ``) {
+  constructor(title, isExtraLis = false) {
     this._title = title;
-    this._type = type;
+    this._isExtraLis = isExtraLis;
 
     this._element = null;
   }
 
   getTemplate() {
-    return createListSectionTemplate(this._title, this._type);
+    return createListSectionTemplate(this._title, this._isExtraLis);
   }
 
   getElement() {

@@ -89,8 +89,8 @@ const renderBigList = (list, films) => {
   });
 };
 
-const renderList = (container, title, type, position, collection, showingElements) => {
-  const list = new FilmsListComponent(title, type);
+const renderList = ({container, title, isExtraList, position, collection, showingElements}) => {
+  const list = new FilmsListComponent(title, isExtraList);
   render(container, list.getElement(), position);
   const listContainer = new ContainerComponent();
   render(list.getElement(), listContainer.getElement(), RenderPosition.BEFOREEND);
@@ -124,8 +124,22 @@ const renderMainContent = () => {
     renderBigList(filmsPrimaryList, filmsCollection);
 
     // дополнительная часть
-    renderList(filmsSection.getElement(), sectionTitles.RATED, `--extra`, RenderPosition.BEFOREEND, topRated, mainPageConfigs.PROMOTE_COUNT);
-    renderList(filmsSection.getElement(), sectionTitles.COMMENTED, `--extra`, RenderPosition.BEFOREEND, mostCommented, mainPageConfigs.PROMOTE_COUNT);
+    renderList({
+      container: filmsSection.getElement(),
+      title: sectionTitles.RATED,
+      isExtraList: `--extra`,
+      position: RenderPosition.BEFOREEND,
+      collection: topRated,
+      showingElements: mainPageConfigs.PROMOTE_COUNT
+    });
+    renderList({
+      container: filmsSection.getElement(),
+      title: sectionTitles.COMMENTED,
+      isExtraList: `--extra`,
+      position: RenderPosition.BEFOREEND,
+      collection: mostCommented,
+      showingElements: mainPageConfigs.PROMOTE_COUNT
+    });
   } else {
     render(filmsSection.getElement(), (new FilmsListComponent(sectionTitles.EMPTY)).getElement(), RenderPosition.BEFOREEND);
   }
