@@ -1,4 +1,6 @@
-export const createFilmCardTemplate = (film) => {
+import {createElement} from "../util.js";
+
+const createFilmCardTemplate = (film) => {
   const {
     img,
     name,
@@ -10,14 +12,17 @@ export const createFilmCardTemplate = (film) => {
     numberOfComments,
   } = film;
 
+  const genre = genres[0];
+  const releaseYear = releaseDate.getFullYear();
+
   return (
     `<article class="film-card">
       <h3 class="film-card__title">${name}</h3>
       <p class="film-card__rating">${rating}</p>
       <p class="film-card__info">
-        <span class="film-card__year">${releaseDate.getFullYear()}</span>
+        <span class="film-card__year">${releaseYear}</span>
         <span class="film-card__duration">${duration}</span>
-        <span class="film-card__genre">${genres[0]}</span>
+        <span class="film-card__genre">${genre}</span>
       </p>
       <img src="./images/posters/${img}" alt="" class="film-card__poster">
       <p class="film-card__description">${description}</p>
@@ -30,3 +35,27 @@ export const createFilmCardTemplate = (film) => {
     </article>`
   );
 };
+
+export default class FilmCard {
+  constructor(film) {
+    this._film = film;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmCardTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

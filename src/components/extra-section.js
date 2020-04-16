@@ -1,3 +1,5 @@
+import {createElement} from "../util.js";
+
 export const createExtraSectionTemplate = (title) => {
   return (
     `<section class="films-list--extra">
@@ -7,3 +9,27 @@ export const createExtraSectionTemplate = (title) => {
     </section>`
   );
 };
+
+export default class ExtraSection {
+  constructor(title) {
+    this._title = title;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createExtraSectionTemplate(this._title);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
