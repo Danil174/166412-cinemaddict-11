@@ -17,13 +17,15 @@ export const months = [
 export const mainPageConfigs = {
   CARD_COUNT: 20,
   SHOWING_FILM_ON_START: 5,
-  SHOWING_FILM_BY_BUTTON: 5
+  SHOWING_FILM_BY_BUTTON: 5,
+  PROMOTE_COUNT: 2,
 };
 
-export const extraSectionConfigs = {
-  PROMOTE_COUNT: 2,
-  RATED_TITLE: `Top rated`,
-  COMMENTED_TITLE: `Most commented`
+export const sectionTitles = {
+  DEFAULT: `All movies. Upcoming`,
+  EMPTY: `There are no movies in our database`,
+  RATED: `Top rated`,
+  COMMENTED: `Most commented`,
 };
 
 export const KeyCodes = {
