@@ -1,5 +1,11 @@
 import AbstractComponent from "./abstract-component.js";
 
+const clickableCardElements = [
+  `.film-card__poster`,
+  `.film-card__title`,
+  `.film-card__comments`
+];
+
 const createFilmCardTemplate = (film) => {
   const {
     img,
@@ -45,5 +51,13 @@ export default class FilmCard extends AbstractComponent {
 
   getTemplate() {
     return createFilmCardTemplate(this._film);
+  }
+
+  setOpenPopUpElementsClickHandler(handler) {
+    clickableCardElements.forEach((element) => {
+      this.getElement()
+        .querySelector(element)
+        .addEventListener(`click`, handler);
+    });
   }
 }
