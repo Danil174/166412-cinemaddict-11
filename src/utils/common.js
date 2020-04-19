@@ -38,7 +38,7 @@ export const sortObjectsByKeyMaxMin = (objects, key) => {
 };
 
 export const sortArrayOfArrsFromMaxToMin = (arr) => {
-  arr.slice().sort((a, b) => {
+  return arr.slice().sort((a, b) => {
     return b.length - a.length;
   });
 };

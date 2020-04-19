@@ -128,7 +128,6 @@ const generateFilm = () => {
     watchlist: getRandomBool(),
     watched: getRandomBool(),
     favorite: getRandomBool(),
-    // numberOfComments: getRandomIntegerNumber(MIN_COMMENTS_AMOUNT, MAX_COMMENTS_AMOUNT),
   };
 };
 
