@@ -32,16 +32,16 @@ const renderFilm = (container, film, position) => {
   const showPopUpElements = [`.film-card__poster`, `.film-card__title`, `.film-card__comments`];
 
   const renderPopUp = () => {
-    document.body.appendChild(popup.getElement());
+    render(document.body, popup, RenderPosition.BEFOREEND);
     document.addEventListener(`keydown`, onEscKeyDown);
     popup.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, onPopUpCloseBtnClick);
   };
 
   const removePopUp = () => {
-    popup.getElement().querySelector(`.film-details__close-btn`).removeEventListener(`click`, onPopUpCloseBtnClick);
-    document.body.removeChild(popup.getElement());
-    popup.removeElement();
+    remove(popup);
     document.removeEventListener(`keydown`, onEscKeyDown);
+    //нужно ли тут удалять eventListener? Ведь мы удаляем компонент полностью?
+    popup.getElement().querySelector(`.film-details__close-btn`).removeEventListener(`click`, onPopUpCloseBtnClick);
   };
 
   const onPopUpCloseBtnClick = () => {
@@ -91,8 +91,7 @@ const renderBigList = (list, films) => {
     renderFilms(listContainer.getElement(), films, prevFilmCount, showingFilmsCount, RenderPosition.BEFOREEND);
 
     if (showingFilmsCount >= films.length) {
-      remove(showMoreBtnComponent.getElement());
-      showMoreBtnComponent.removeElement();
+      remove(showMoreBtnComponent);
     }
   });
 };
