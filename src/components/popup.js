@@ -1,4 +1,5 @@
-import {getRandomIntegerNumber, createElement} from '../util.js';
+import AbstractComponent from "./abstract-component.js";
+import {getRandomIntegerNumber} from '../util.js';
 import {months} from '../const.js';
 import {generateComments} from '../mock/comments.js';
 
@@ -192,27 +193,15 @@ const createFilmPopupTemplate = (film) => {
   );
 };
 
-export default class PopUp {
+export default class PopUp extends AbstractComponent {
   constructor(film) {
-    this._film = film;
+    super();
 
-    this._element = null;
+    this._film = film;
   }
 
   getTemplate() {
     return createFilmPopupTemplate(this._film);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

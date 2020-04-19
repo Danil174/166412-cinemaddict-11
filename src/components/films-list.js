@@ -1,4 +1,4 @@
-import {createElement} from "../util.js";
+import AbstractComponent from "./abstract-component.js";
 
 const extraClass = `--extra`;
 
@@ -11,27 +11,15 @@ export const createListSectionTemplate = (title, isExtraList) => {
   );
 };
 
-export default class ListSection {
+export default class ListSection extends AbstractComponent {
   constructor(title, isExtraLis = false) {
+    super();
+
     this._title = title;
     this._isExtraLis = isExtraLis;
-
-    this._element = null;
   }
 
   getTemplate() {
     return createListSectionTemplate(this._title, this._isExtraLis);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
