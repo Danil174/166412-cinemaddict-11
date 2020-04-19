@@ -23,7 +23,6 @@ export const mainPageConfigs = {
 
 export const sectionTitles = {
   DEFAULT: `All movies. Upcoming`,
-  EMPTY: `There are no movies in our database`,
   RATED: `Top rated`,
   COMMENTED: `Most commented`,
 };
