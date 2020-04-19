@@ -9,7 +9,8 @@ import ShowMoreBtnComponent from "./components/show-more-btn.js";
 import PopupComponent from "./components/popup.js";
 import FooterCounterComponent from "./components/footer-movies-counter.js";
 import {generateFilms} from "./mock/film.js";
-import {getAmountByCurrentKey, sortObjectsByKeyMaxMin, render, RenderPosition} from "./util.js";
+import {getAmountByCurrentKey, sortObjectsByKeyMaxMin} from "./util.js";
+import {render, RenderPosition, remove} from "./utils/render";
 import {mainPageConfigs, sectionTitles, KeyCodes} from "./const.js";
 
 const filmsCollection = generateFilms(mainPageConfigs.CARD_COUNT);
@@ -54,7 +55,7 @@ const renderFilm = (container, film, position) => {
   };
 
   const filmComponent = new FilmComponent(film);
-  render(container, filmComponent.getElement(), position);
+  render(container, filmComponent, position);
 
   const popup = new PopupComponent(film);
 
@@ -74,14 +75,14 @@ const renderBigList = (list, films) => {
   list.getElement().querySelector(`.films-list__title`).classList.add(`visually-hidden`);
 
   const listContainer = new ContainerComponent();
-  render(list.getElement(), listContainer.getElement(), RenderPosition.BEFOREEND);
+  render(list.getElement(), listContainer, RenderPosition.BEFOREEND);
 
   let showingFilmsCount = mainPageConfigs.SHOWING_FILM_ON_START;
 
   renderFilms(listContainer.getElement(), films, 0, showingFilmsCount, RenderPosition.BEFOREEND);
 
   const showMoreBtnComponent = new ShowMoreBtnComponent();
-  render(list.getElement(), showMoreBtnComponent.getElement(), RenderPosition.BEFOREEND);
+  render(list.getElement(), showMoreBtnComponent, RenderPosition.BEFOREEND);
 
   showMoreBtnComponent.getElement().addEventListener(`click`, () => {
     const prevFilmCount = showingFilmsCount;
@@ -90,7 +91,7 @@ const renderBigList = (list, films) => {
     renderFilms(listContainer.getElement(), films, prevFilmCount, showingFilmsCount, RenderPosition.BEFOREEND);
 
     if (showingFilmsCount >= films.length) {
-      showMoreBtnComponent.getElement().remove();
+      remove(showMoreBtnComponent.getElement());
       showMoreBtnComponent.removeElement();
     }
   });
@@ -98,16 +99,16 @@ const renderBigList = (list, films) => {
 
 const renderList = ({container, title, isExtraList, position, collection, showingElements}) => {
   const list = new FilmsListComponent(title, isExtraList);
-  render(container, list.getElement(), position);
+  render(container, list, position);
   const listContainer = new ContainerComponent();
-  render(list.getElement(), listContainer.getElement(), RenderPosition.BEFOREEND);
+  render(list.getElement(), listContainer, RenderPosition.BEFOREEND);
   renderFilms(listContainer.getElement(), collection, 0, showingElements, RenderPosition.BEFOREEND);
 };
 
 const renderMainContent = () => {
   if (filmsCollection.length) {
     const filmsPrimaryList = new FilmsListComponent(sectionTitles.DEFAULT);
-    render(filmsSection.getElement(), filmsPrimaryList.getElement(), RenderPosition.BEFOREEND);
+    render(filmsSection.getElement(), filmsPrimaryList, RenderPosition.BEFOREEND);
 
     renderBigList(filmsPrimaryList, filmsCollection);
 
@@ -130,23 +131,23 @@ const renderMainContent = () => {
     });
   } else {
     const emptyList = new FilmsListComponent(sectionTitles.EMPTY);
-    render(filmsSection.getElement(), emptyList.getElement(), RenderPosition.BEFOREEND);
+    render(filmsSection.getElement(), emptyList, RenderPosition.BEFOREEND);
   }
 };
 
 const headerProfile = new HeaderProfileComponent();
-render(siteHeaderElement, headerProfile.getElement(), RenderPosition.BEFOREEND);
+render(siteHeaderElement, headerProfile, RenderPosition.BEFOREEND);
 
 const siteMainNavigation = new NavigationComponent(filteredMovies);
-render(siteMainElement, siteMainNavigation.getElement(), RenderPosition.BEFOREEND);
+render(siteMainElement, siteMainNavigation, RenderPosition.BEFOREEND);
 
 const siteMainFilters = new FiltersComponent();
-render(siteMainElement, siteMainFilters.getElement(), RenderPosition.BEFOREEND);
+render(siteMainElement, siteMainFilters, RenderPosition.BEFOREEND);
 
 const filmsSection = new FilmsSectionComponent();
-render(siteMainElement, filmsSection.getElement(), RenderPosition.BEFOREEND);
+render(siteMainElement, filmsSection, RenderPosition.BEFOREEND);
 
 renderMainContent();
 
 const footerCounter = new FooterCounterComponent(mainPageConfigs.CARD_COUNT);
-render(siteFooterElement, footerCounter.getElement(), RenderPosition.BEFOREEND);
+render(siteFooterElement, footerCounter, RenderPosition.BEFOREEND);
