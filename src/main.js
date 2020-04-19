@@ -35,7 +35,7 @@ render(siteMainElement, siteMainFilters, RenderPosition.BEFOREEND);
 const filmsSection = new FilmsSectionComponent();
 const filmsSectionController = new FilmsSectionController(filmsSection);
 render(siteMainElement, filmsSection, RenderPosition.BEFOREEND);
-filmsSectionController.render(filmsSection, commentsCollection, commentsCollection);
+filmsSectionController.render(filmsCollection, commentsCollection);
 
 const footerCounter = new FooterCounterComponent(mainPageConfigs.CARD_COUNT);
 render(siteFooterElement, footerCounter, RenderPosition.BEFOREEND);

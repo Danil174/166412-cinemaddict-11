@@ -1,4 +1,5 @@
 import FilmsListComponent from "../components/films-list.js";
+import EmptyListComponent from "../components/empty-list.js";
 import FilmComponent from "../components/film-card.js";
 import ContainerComponent from "../components/container.js";
 import ShowMoreBtnComponent from "../components/show-more-btn.js";
@@ -108,18 +109,20 @@ import {mainPageConfigs, sectionTitles, KeyCodes} from "../const.js";
 //     render(filmsSection.getElement(), emptyList, RenderPosition.BEFOREEND);
 //   }
 // };
-const renderPage = (pageComponent, tasks, comments) =>  {
-  console.log(pageComponent);
-  console.log(tasks);
-  console.log(comments);
-};
 
 export default class PageController {
   constructor(container) {
     this._container = container;
+
+    this._emptyListComponent = new EmptyListComponent();
   }
 
-  render(task, comments) {
-    renderPage(this._container, task, comments);
+  render(films, comments) {
+    const container = this._container.getElement();
+
+    if (films.length === 0) {
+      render(container, this._emptyListComponent, RenderPosition.BEFOREEND);
+      return;
+    }
   }
 }
