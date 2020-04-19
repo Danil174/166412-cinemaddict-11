@@ -107,8 +107,6 @@ const AGES = [
 
 const MIN_SENTENCES_AMOUNT = 1;
 const MAX_SENTENCES_AMOUNT = 5;
-const MIN_COMMENTS_AMOUNT = 0;
-const MAX_COMMENTS_AMOUNT = 5;
 
 const generateFilm = () => {
   const randomIndex = getRandomIntegerNumber(0, FILMS.length - 1);
@@ -130,7 +128,7 @@ const generateFilm = () => {
     watchlist: getRandomBool(),
     watched: getRandomBool(),
     favorite: getRandomBool(),
-    numberOfComments: getRandomIntegerNumber(MIN_COMMENTS_AMOUNT, MAX_COMMENTS_AMOUNT),
+    // numberOfComments: getRandomIntegerNumber(MIN_COMMENTS_AMOUNT, MAX_COMMENTS_AMOUNT),
   };
 };
 

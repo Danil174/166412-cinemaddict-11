@@ -34,17 +34,32 @@ const EMOTIONS = [
   `angry`
 ];
 
-const generateComment = () => ({
-  comment: getRandomArrayItem(REACTIONS),
-  author: getRandomArrayItem(AUTHORS),
-  date: getRandomDate(getRandomIntegerNumber(2018, 2020), getRandomIntegerNumber(1, 12), getRandomIntegerNumber(1, 30)),
-  emotion: getRandomArrayItem(EMOTIONS)
-});
+const MIN_COMMENTS_AMOUNT = 0;
+const MAX_COMMENTS_AMOUNT = 5;
+
+const generateComment = () => {
+  return ({
+    comment: getRandomArrayItem(REACTIONS),
+    author: getRandomArrayItem(AUTHORS),
+    date: getRandomDate(getRandomIntegerNumber(2018, 2020), getRandomIntegerNumber(1, 12), getRandomIntegerNumber(1, 30)),
+    emotion: getRandomArrayItem(EMOTIONS)
+  });
+};
+
+const generateFilmComments = (amount) => {
+  let comments = [];
+  for (let i = 0; i < amount; i++) {
+    comments.push(generateComment());
+  }
+  return comments;
+};
 
 const generateComments = (count) => {
-  return new Array(count)
-    .fill(``)
-    .map(generateComment);
+  const arr = [];
+  for (let i = 0; i < count; i++) {
+    arr.push(generateFilmComments(getRandomIntegerNumber(MIN_COMMENTS_AMOUNT, MAX_COMMENTS_AMOUNT)));
+  }
+  return arr;
 };
 
 export {generateComments};
