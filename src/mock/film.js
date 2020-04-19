@@ -4,7 +4,7 @@ import {
   getRandomIntegerNumber,
   getRandomBool,
   getRandomDate
-} from '../util.js';
+} from "../utils/common.js";
 
 const FILMS = [
   `Made for Each Other`,

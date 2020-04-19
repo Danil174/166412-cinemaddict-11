@@ -1,7 +1,7 @@
 import AbstractComponent from "./abstract-component.js";
-import {getRandomIntegerNumber} from '../util.js';
-import {months} from '../const.js';
-import {generateComments} from '../mock/comments.js';
+import {getRandomIntegerNumber} from "../utils/common.js";
+import {months} from "../const.js";
+import {generateComments} from "../mock/comments.js";
 
 const generateGenresTemplate = (genres) => {
   return genres

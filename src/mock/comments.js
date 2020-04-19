@@ -2,7 +2,7 @@ import {
   getRandomArrayItem,
   getRandomIntegerNumber,
   getRandomDate
-} from '../util.js';
+} from "../utils/common.js";
 
 const REACTIONS = [
   `unbelievably`,

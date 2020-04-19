@@ -9,7 +9,7 @@ import ShowMoreBtnComponent from "./components/show-more-btn.js";
 import PopupComponent from "./components/popup.js";
 import FooterCounterComponent from "./components/footer-movies-counter.js";
 import {generateFilms} from "./mock/film.js";
-import {getAmountByCurrentKey, sortObjectsByKeyMaxMin} from "./util.js";
+import {getAmountByCurrentKey, sortObjectsByKeyMaxMin} from "./utils/common.js";
 import {render, RenderPosition, remove} from "./utils/render";
 import {mainPageConfigs, sectionTitles, KeyCodes} from "./const.js";
 
@@ -40,7 +40,7 @@ const renderFilm = (container, film, position) => {
   const removePopUp = () => {
     remove(popup);
     document.removeEventListener(`keydown`, onEscKeyDown);
-    //нужно ли тут удалять eventListener? Ведь мы удаляем компонент полностью?
+    // нужно ли тут удалять eventListener? Ведь мы удаляем компонент полностью?
     popup.getElement().querySelector(`.film-details__close-btn`).removeEventListener(`click`, onPopUpCloseBtnClick);
   };
 
