@@ -4,7 +4,7 @@ import FilmComponent from "../components/film-card.js";
 import ShowMoreBtnComponent from "../components/show-more-btn.js";
 import PopupComponent from "../components/popup.js";
 
-import {concatCollections, getElementFromBinaryArr, sortObjectsByKeyMaxMin} from "../utils/common.js";
+import {getElementFromBinaryArr, concatAndSortByCommentsCollections, concatAndSortByRatingCollections} from "../utils/common.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {mainPageConfigs, sectionTitles, KeyCodes} from "../const.js";
 
@@ -66,8 +66,13 @@ export default class PageController {
     const container = this._container.getElement();
     const primaryList = this._primaryList.getElement();
 
-    const topRated = sortObjectsByKeyMaxMin(films, `rating`).slice(0, 2);
-    const mostCommentedWithComment = concatCollections(films, comments);
+    const showingFilmsInStart = films.slice(0, mainPageConfigs.SHOWING_FILM_BY_BUTTON);
+
+    const topRaredWithComment = concatAndSortByRatingCollections(films, comments);
+    const topRaredFilms = getElementFromBinaryArr(topRaredWithComment, 0);
+    const topRaredComments = getElementFromBinaryArr(topRaredWithComment, 1);
+
+    const mostCommentedWithComment = concatAndSortByCommentsCollections(films, comments);
     const mostCommentedFilms = getElementFromBinaryArr(mostCommentedWithComment, 0);
     const mostCommentedComments = getElementFromBinaryArr(mostCommentedWithComment, 1);
 
@@ -76,21 +81,22 @@ export default class PageController {
       return;
     }
 
-    renderList(container, this._primaryList, films, comments);
-    renderList(container, this._topRatedList, topRated, comments);
+    renderList(container, this._primaryList, showingFilmsInStart, comments);
+    renderList(container, this._topRatedList, topRaredFilms, topRaredComments);
     renderList(container, this._mostCommentedList, mostCommentedFilms, mostCommentedComments);
 
     let showingFilmsCount = mainPageConfigs.SHOWING_FILM_ON_START;
-    // renderFilms(listContainer.getElement(), films, 0, showingFilmsCount, RenderPosition.BEFOREEND);
 
     const showMoreBtnComponent = new ShowMoreBtnComponent();
     render(primaryList, showMoreBtnComponent, RenderPosition.BEFOREEND);
 
     showMoreBtnComponent.setClickHandler(() => {
       const prevFilmCount = showingFilmsCount;
+      const listContainer = showMoreBtnComponent.getElement().parentElement.querySelector(`.films-list__container`);
+
       showingFilmsCount = showingFilmsCount + mainPageConfigs.SHOWING_FILM_BY_BUTTON;
 
-      renderFilms(listContainer.getElement(), films, prevFilmCount, showingFilmsCount, RenderPosition.BEFOREEND);
+      renderFilms(listContainer, films.slice(prevFilmCount, showingFilmsCount), comments.slice(prevFilmCount, showingFilmsCount));
 
       if (showingFilmsCount >= films.length) {
         remove(showMoreBtnComponent);

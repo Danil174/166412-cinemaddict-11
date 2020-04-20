@@ -37,13 +37,22 @@ export const sortObjectsByKeyMaxMin = (objects, key) => {
   return arr.sort((a, b) => b[key] - a[key]);
 };
 
-export const concatCollections = (keyCollection, valuesCollection) => {
+export const concatAndSortByCommentsCollections = (keyCollection, valuesCollection) => {
   const collection = new Map();
 
   for (let i = 0; i < keyCollection.length; i++) {
     collection.set(keyCollection[i], valuesCollection[i]);
   }
   return [...collection.entries()].sort((a, b) => b[1].length - a[1].length).slice(0, 2);
+};
+
+export const concatAndSortByRatingCollections = (keyCollection, valuesCollection) => {
+  const collection = new Map();
+
+  for (let i = 0; i < keyCollection.length; i++) {
+    collection.set(keyCollection[i], valuesCollection[i]);
+  }
+  return [...collection.entries()].sort((a, b) => b[0].rating - a[0].rating).slice(0, 2);
 };
 
 export const getElementFromBinaryArr = (arr, index) => {
