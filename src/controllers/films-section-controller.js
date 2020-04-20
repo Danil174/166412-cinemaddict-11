@@ -4,13 +4,13 @@ import FilmComponent from "../components/film-card.js";
 import ShowMoreBtnComponent from "../components/show-more-btn.js";
 import PopupComponent from "../components/popup.js";
 
-import {sortArrayOfArrsFromMaxToMin, sortObjectsByKeyMaxMin} from "../utils/common.js";
+import {concatCollections, getElementFromBinaryArr, sortObjectsByKeyMaxMin} from "../utils/common.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {mainPageConfigs, sectionTitles, KeyCodes} from "../const.js";
 
-const renderFilm = (container, film) => {
-  const filmComponent = new FilmComponent(film);
-  const popup = new PopupComponent(film);
+const renderFilm = (container, film, comments) => {
+  const filmComponent = new FilmComponent(film, comments);
+  const popup = new PopupComponent(film, comments);
 
   const renderPopUp = () => {
     render(document.body, popup, RenderPosition.BEFOREEND);
@@ -38,14 +38,17 @@ const renderFilm = (container, film) => {
   filmComponent.setOpenPopUpElementsClickHandler(renderPopUp);
 };
 
-const renderFilms = (parent, collection) => {
-  collection.forEach((film) => renderFilm(parent, film));
+const renderFilms = (parent, collection, comments) => {
+  let index = 0;
+  collection.forEach((film) => {
+    renderFilm(parent, film, comments[index++]);
+  });
 };
 
-const renderList = (container, currentList, films) => {
+const renderList = (container, currentList, films, comments) => {
   render(container, currentList, RenderPosition.BEFOREEND);
   const innerContainer = currentList.getElement().querySelector(`.films-list__container`);
-  renderFilms(innerContainer, films);
+  renderFilms(innerContainer, films, comments);
 };
 
 export default class PageController {
@@ -64,16 +67,18 @@ export default class PageController {
     const primaryList = this._primaryList.getElement();
 
     const topRated = sortObjectsByKeyMaxMin(films, `rating`).slice(0, 2);
-    const mostCommented = sortArrayOfArrsFromMaxToMin(comments).slice(0, 2);
+    const mostCommentedWithComment = concatCollections(films, comments);
+    const mostCommentedFilms = getElementFromBinaryArr(mostCommentedWithComment, 0);
+    const mostCommentedComments = getElementFromBinaryArr(mostCommentedWithComment, 1);
 
     if (films.length === 0) {
       render(container, this._emptyListComponent, RenderPosition.BEFOREEND);
       return;
     }
 
-    renderList(container, this._primaryList, films.slice(0, 5));
-    renderList(container, this._topRatedList, topRated);
-    renderList(container, this._mostCommentedList, mostCommented);
+    renderList(container, this._primaryList, films, comments);
+    renderList(container, this._topRatedList, topRated, comments);
+    renderList(container, this._mostCommentedList, mostCommentedFilms, mostCommentedComments);
 
     let showingFilmsCount = mainPageConfigs.SHOWING_FILM_ON_START;
     // renderFilms(listContainer.getElement(), films, 0, showingFilmsCount, RenderPosition.BEFOREEND);

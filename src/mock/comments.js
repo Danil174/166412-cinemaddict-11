@@ -42,7 +42,7 @@ const generateComment = () => {
     comment: getRandomArrayItem(REACTIONS),
     author: getRandomArrayItem(AUTHORS),
     date: getRandomDate(getRandomIntegerNumber(2018, 2020), getRandomIntegerNumber(1, 12), getRandomIntegerNumber(1, 30)),
-    emotion: getRandomArrayItem(EMOTIONS)
+    emotion: getRandomArrayItem(EMOTIONS),
   });
 };
 

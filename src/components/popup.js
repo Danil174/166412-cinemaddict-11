@@ -1,7 +1,7 @@
 import AbstractComponent from "./abstract-component.js";
 import {getRandomIntegerNumber} from "../utils/common.js";
 import {months} from "../const.js";
-import {generateComments} from "../mock/comments.js";
+// import {generateComments} from "../mock/comments.js";
 
 const generateGenresTemplate = (genres) => {
   return genres
@@ -13,9 +13,7 @@ const generateGenresTemplate = (genres) => {
     .join(`\n`);
 };
 
-const generateCommentsTemplate = (amount) => {
-
-  const comments = generateComments(amount);
+const generateCommentsTemplate = (comments) => {
   return comments
     .map(({comment, author, date, emotion} = comments) => {
       const commentDate = `${date.getFullYear()}/${date.getMonth()}/${date.getDate()} ${getRandomIntegerNumber(2, 23)}:${getRandomIntegerNumber(13, 59)}`;
@@ -43,7 +41,7 @@ const setInputCheck = (checked) => {
   return (checked ? `checked` : ``);
 };
 
-const createFilmPopupTemplate = (film) => {
+const createFilmPopupTemplate = (film, comments) => {
   const {
     img,
     name,
@@ -71,7 +69,7 @@ const createFilmPopupTemplate = (film) => {
   const favoritetCheckStatus = setInputCheck(favorite);
   const commentsAmount = numberOfComments;
   const generesDetails = generateGenresTemplate(genres);
-  const comments = generateCommentsTemplate(commentsAmount);
+  const commentsTemplate = generateCommentsTemplate(comments);
 
   return (
     `<section class="film-details">
@@ -154,7 +152,7 @@ const createFilmPopupTemplate = (film) => {
             <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentsAmount}</span></h3>
 
             <ul class="film-details__comments-list">
-              ${comments}
+              ${commentsTemplate}
             </ul>
 
             <div class="film-details__new-comment">
@@ -194,14 +192,15 @@ const createFilmPopupTemplate = (film) => {
 };
 
 export default class PopUp extends AbstractComponent {
-  constructor(film) {
+  constructor(film, comments) {
     super();
 
     this._film = film;
+    this._comments = comments;
   }
 
   getTemplate() {
-    return createFilmPopupTemplate(this._film);
+    return createFilmPopupTemplate(this._film, this._comments);
   }
 
   setCloseButtonClickHandler(handler) {
