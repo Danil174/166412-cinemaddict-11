@@ -6,9 +6,9 @@ import FilmsSectionComponent from "./components/films-section.js";
 import FooterCounterComponent from "./components/footer-movies-counter.js";
 import {generateFilms} from "./mock/film.js";
 import {generateComments} from "./mock/comments.js";
-import {getAmountByCurrentKey, sortObjectsByKeyMaxMin} from "./utils/common.js";
-import {render, RenderPosition, remove} from "./utils/render";
-import {mainPageConfigs, sectionTitles, KeyCodes} from "./const.js";
+import {getAmountByCurrentKey} from "./utils/common.js";
+import {render, RenderPosition} from "./utils/render";
+import {mainPageConfigs} from "./const.js";
 
 const filmsCollection = generateFilms(mainPageConfigs.CARD_COUNT);
 const commentsCollection = generateComments(mainPageConfigs.CARD_COUNT);

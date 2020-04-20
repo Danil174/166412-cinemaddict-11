@@ -32,11 +32,6 @@ export const getAmountByCurrentKey = (objects, key, value) => {
   return (objects.filter((obj) => obj[key] === value)).length;
 };
 
-export const sortObjectsByKeyMaxMin = (objects, key) => {
-  const arr = objects.slice();
-  return arr.sort((a, b) => b[key] - a[key]);
-};
-
 export const concatAndSortByCommentsCollections = (keyCollection, valuesCollection) => {
   const collection = new Map();
 
