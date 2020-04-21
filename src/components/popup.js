@@ -58,7 +58,6 @@ const createFilmPopupTemplate = (film) => {
     watchlist,
     watched,
     favorite,
-    numberOfComments,
     comments
   } = film;
 
@@ -67,7 +66,7 @@ const createFilmPopupTemplate = (film) => {
   const watchlistCheckStatus = setInputCheck(watchlist);
   const watchedCheckStatus = setInputCheck(watched);
   const favoritetCheckStatus = setInputCheck(favorite);
-  const commentsAmount = numberOfComments;
+  const commentsAmount = comments.length;
   const generesDetails = generateGenresTemplate(genres);
   const commentsTemplate = generateCommentsTemplate(comments);
 
