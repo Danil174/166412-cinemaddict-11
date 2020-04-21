@@ -94,16 +94,18 @@ export default class MainController {
     const mostCommentedWithComment = concatAndSortByCommentsCollections(films, comments);
     const mostCommentedFilms = getElementFromBinaryArr(mostCommentedWithComment, 0);
     const mostCommentedComments = getElementFromBinaryArr(mostCommentedWithComment, 1);
-
+    // создание и отрисовка навигации
+    const navigationComponent = new NavigationComponent(filteredMovies(films));
+    render(mainContainer, navigationComponent, RenderPosition.BEFOREEND);
+    // отрисовка сортировки
+    render(mainContainer, this._siteMainFilters, RenderPosition.BEFOREEND);
+    // отрисовка секции с фильмами
+    render(mainContainer, this._filmsSection, RenderPosition.BEFOREEND);
+    // отрисовка пустого элемента, если нет фильмов, прерывание
     if (films.length === 0) {
       render(container, this._emptyListComponent, RenderPosition.BEFOREEND);
       return;
     }
-
-    const navigationComponent = new NavigationComponent(filteredMovies(films));
-    render(mainContainer, navigationComponent, RenderPosition.BEFOREEND);
-    render(mainContainer, this._siteMainFilters, RenderPosition.BEFOREEND);
-    render(mainContainer, this._filmsSection, RenderPosition.BEFOREEND);
 
     renderList(container, this._primaryList, showingFilmsInStart, comments);
     renderList(container, this._topRatedList, topRaredFilms, topRaredComments);
@@ -111,19 +113,18 @@ export default class MainController {
 
     let showingFilmsCount = mainPageConfigs.SHOWING_FILM_ON_START;
 
-    const showMoreBtnComponent = new ShowMoreBtnComponent();
-    render(primaryList, showMoreBtnComponent, RenderPosition.BEFOREEND);
+    render(primaryList, this._showMoreBtnComponent, RenderPosition.BEFOREEND);
 
-    showMoreBtnComponent.setClickHandler(() => {
+    this._showMoreBtnComponent.setClickHandler(() => {
       const prevFilmCount = showingFilmsCount;
-      const listContainer = showMoreBtnComponent.getElement().parentElement.querySelector(`.films-list__container`);
+      const listContainer = this._showMoreBtnComponent.getElement().parentElement.querySelector(`.films-list__container`);
 
       showingFilmsCount = showingFilmsCount + mainPageConfigs.SHOWING_FILM_BY_BUTTON;
 
       renderFilms(listContainer, films.slice(prevFilmCount, showingFilmsCount), comments.slice(prevFilmCount, showingFilmsCount));
 
       if (showingFilmsCount >= films.length) {
-        remove(showMoreBtnComponent);
+        remove(this._showMoreBtnComponent);
       }
     });
   }
