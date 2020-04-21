@@ -6,7 +6,7 @@ const clickableCardElements = [
   `.film-card__comments`
 ];
 
-const createFilmCardTemplate = (film, comments) => {
+const createFilmCardTemplate = (film) => {
   const {
     img,
     name,
@@ -14,7 +14,8 @@ const createFilmCardTemplate = (film, comments) => {
     releaseDate,
     duration,
     genres,
-    description
+    description,
+    comments,
   } = film;
 
   const commentsLength = comments.length;
@@ -43,15 +44,14 @@ const createFilmCardTemplate = (film, comments) => {
 };
 
 export default class FilmCard extends AbstractComponent {
-  constructor(film, comments) {
+  constructor(film) {
     super();
 
     this._film = film;
-    this._comments = comments;
   }
 
   getTemplate() {
-    return createFilmCardTemplate(this._film, this._comments);
+    return createFilmCardTemplate(this._film);
   }
 
   setOpenPopUpElementsClickHandler(handler) {

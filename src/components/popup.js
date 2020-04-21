@@ -1,7 +1,6 @@
 import AbstractComponent from "./abstract-component.js";
 import {getRandomIntegerNumber} from "../utils/common.js";
 import {months} from "../const.js";
-// import {generateComments} from "../mock/comments.js";
 
 const generateGenresTemplate = (genres) => {
   return genres
@@ -41,7 +40,7 @@ const setInputCheck = (checked) => {
   return (checked ? `checked` : ``);
 };
 
-const createFilmPopupTemplate = (film, comments) => {
+const createFilmPopupTemplate = (film) => {
   const {
     img,
     name,
@@ -59,7 +58,8 @@ const createFilmPopupTemplate = (film, comments) => {
     watchlist,
     watched,
     favorite,
-    numberOfComments
+    numberOfComments,
+    comments
   } = film;
 
   const readableDate = `${releaseDate.getDate()} ${months[releaseDate.getMonth()]} ${releaseDate.getFullYear()}`;
@@ -192,15 +192,14 @@ const createFilmPopupTemplate = (film, comments) => {
 };
 
 export default class PopUp extends AbstractComponent {
-  constructor(film, comments) {
+  constructor(film) {
     super();
 
     this._film = film;
-    this._comments = comments;
   }
 
   getTemplate() {
-    return createFilmPopupTemplate(this._film, this._comments);
+    return createFilmPopupTemplate(this._film);
   }
 
   setCloseButtonClickHandler(handler) {
