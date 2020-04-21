@@ -1,12 +1,18 @@
-import FilmsSectionComponent from "../components/films-section.js";
+import NavigationComponent from "../components/navigation.js";
 import FiltersComponent from "../components/filters.js";
+import FilmsSectionComponent from "../components/films-section.js";
 import FilmsListComponent from "../components/films-list.js";
 import EmptyListComponent from "../components/empty-list.js";
 import FilmComponent from "../components/film-card.js";
 import ShowMoreBtnComponent from "../components/show-more-btn.js";
 import PopupComponent from "../components/popup.js";
 
-import {getElementFromBinaryArr, concatAndSortByCommentsCollections, concatAndSortByRatingCollections} from "../utils/common.js";
+import {
+  getElementFromBinaryArr,
+  getAmountByCurrentKey,
+  concatAndSortByCommentsCollections,
+  concatAndSortByRatingCollections,
+} from "../utils/common.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {mainPageConfigs, sectionTitles, KeyCodes} from "../const.js";
 
@@ -53,12 +59,20 @@ const renderList = (container, currentList, films, comments) => {
   renderFilms(innerContainer, films, comments);
 };
 
+const filteredMovies = (films) => {
+  return ({
+    inWatchlist: getAmountByCurrentKey(films, `watchlist`, true),
+    watched: getAmountByCurrentKey(films, `watched`, true),
+    favorite: getAmountByCurrentKey(films, `favorite`, true),
+  });
+};
+
 export default class MainController {
   constructor(container) {
     this._container = container;
 
-    this._filmsSection = new FilmsSectionComponent();
     this._siteMainFilters = new FiltersComponent();
+    this._filmsSection = new FilmsSectionComponent();
     this._emptyListComponent = new EmptyListComponent();
     this._showMoreBtnComponent = new ShowMoreBtnComponent();
     this._primaryList = new FilmsListComponent(sectionTitles.DEFAULT);
@@ -86,6 +100,8 @@ export default class MainController {
       return;
     }
 
+    const navigationComponent = new NavigationComponent(filteredMovies(films));
+    render(mainContainer, navigationComponent, RenderPosition.BEFOREEND);
     render(mainContainer, this._siteMainFilters, RenderPosition.BEFOREEND);
     render(mainContainer, this._filmsSection, RenderPosition.BEFOREEND);
 
