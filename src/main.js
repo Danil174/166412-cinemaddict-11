@@ -1,8 +1,7 @@
 import HeaderProfileComponent from "./components/header-profile.js";
 import NavigationComponent from "./components/navigation.js";
 import FiltersComponent from "./components/filters.js";
-import FilmsSectionController from "./controllers/films-section-controller.js";
-import FilmsSectionComponent from "./components/films-section.js";
+import MainController from "./controllers/main-controller.js";
 import FooterCounterComponent from "./components/footer-movies-counter.js";
 import {generateFilms} from "./mock/film.js";
 import {generateComments} from "./mock/comments.js";
@@ -32,9 +31,7 @@ render(siteMainElement, siteMainNavigation, RenderPosition.BEFOREEND);
 const siteMainFilters = new FiltersComponent();
 render(siteMainElement, siteMainFilters, RenderPosition.BEFOREEND);
 
-const filmsSection = new FilmsSectionComponent();
-const filmsSectionController = new FilmsSectionController(filmsSection);
-render(siteMainElement, filmsSection, RenderPosition.BEFOREEND);
+const filmsSectionController = new MainController(siteMainElement);
 filmsSectionController.render(filmsCollection, commentsCollection);
 
 const footerCounter = new FooterCounterComponent(mainPageConfigs.CARD_COUNT);

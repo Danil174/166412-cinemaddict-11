@@ -1,3 +1,4 @@
+import FilmsSectionComponent from "../components/films-section.js";
 import FilmsListComponent from "../components/films-list.js";
 import EmptyListComponent from "../components/empty-list.js";
 import FilmComponent from "../components/film-card.js";
@@ -51,10 +52,11 @@ const renderList = (container, currentList, films, comments) => {
   renderFilms(innerContainer, films, comments);
 };
 
-export default class PageController {
+export default class MainController {
   constructor(container) {
     this._container = container;
 
+    this._filmsSection = new FilmsSectionComponent();
     this._emptyListComponent = new EmptyListComponent();
     this._showMoreBtnComponent = new ShowMoreBtnComponent();
     this._primaryList = new FilmsListComponent(sectionTitles.DEFAULT);
@@ -63,7 +65,8 @@ export default class PageController {
   }
 
   render(films, comments) {
-    const container = this._container.getElement();
+    const mainContainer = this._container;
+    const container = this._filmsSection.getElement();
     const primaryList = this._primaryList.getElement();
 
     const showingFilmsInStart = films.slice(0, mainPageConfigs.SHOWING_FILM_BY_BUTTON);
@@ -80,6 +83,8 @@ export default class PageController {
       render(container, this._emptyListComponent, RenderPosition.BEFOREEND);
       return;
     }
+
+    render(mainContainer, this._filmsSection, RenderPosition.BEFOREEND);
 
     renderList(container, this._primaryList, showingFilmsInStart, comments);
     renderList(container, this._topRatedList, topRaredFilms, topRaredComments);
