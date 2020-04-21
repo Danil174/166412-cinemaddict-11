@@ -1,4 +1,10 @@
-import {createElement} from "../util.js";
+import AbstractComponent from "./abstract-component.js";
+
+const clickableCardElements = [
+  `.film-card__poster`,
+  `.film-card__title`,
+  `.film-card__comments`
+];
 
 const createFilmCardTemplate = (film) => {
   const {
@@ -9,9 +15,10 @@ const createFilmCardTemplate = (film) => {
     duration,
     genres,
     description,
-    numberOfComments,
+    comments,
   } = film;
 
+  const commentsLength = comments.length;
   const genre = genres[0];
   const releaseYear = releaseDate.getFullYear();
 
@@ -26,7 +33,7 @@ const createFilmCardTemplate = (film) => {
       </p>
       <img src="./images/posters/${img}" alt="" class="film-card__poster">
       <p class="film-card__description">${description}</p>
-      <a class="film-card__comments">${numberOfComments} comments</a>
+      <a class="film-card__comments">${commentsLength} comments</a>
       <form class="film-card__controls">
         <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist">Add to watchlist</button>
         <button class="film-card__controls-item button film-card__controls-item--mark-as-watched">Mark as watched</button>
@@ -36,26 +43,22 @@ const createFilmCardTemplate = (film) => {
   );
 };
 
-export default class FilmCard {
+export default class FilmCard extends AbstractComponent {
   constructor(film) {
-    this._film = film;
+    super();
 
-    this._element = null;
+    this._film = film;
   }
 
   getTemplate() {
     return createFilmCardTemplate(this._film);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setOpenPopUpElementsClickHandler(handler) {
+    clickableCardElements.forEach((element) => {
+      this.getElement()
+        .querySelector(element)
+        .addEventListener(`click`, handler);
+    });
   }
 }

@@ -4,7 +4,37 @@ import {
   getRandomIntegerNumber,
   getRandomBool,
   getRandomDate
-} from '../util.js';
+} from "../utils/common.js";
+
+const REACTIONS = [
+  `unbelievably`,
+  `incredibly`,
+  `improbably`,
+  `amazingly`,
+  `terribly`,
+  `awfully`,
+  `horribly`,
+  `dreadfully`
+];
+
+const AUTHORS = [
+  `Tony Stark`,
+  `Steve Rogers`,
+  `Bruce Banner`,
+  `Thor`,
+  `Natasha Romanoff`,
+  `Clint Barton`,
+  `Loki`,
+  `Agent Phil Coulson`,
+  `Agent Maria Hill`,
+];
+
+const EMOTIONS = [
+  `smile`,
+  `sleeping`,
+  `puke`,
+  `angry`
+];
 
 const FILMS = [
   `Made for Each Other`,
@@ -105,10 +135,29 @@ const AGES = [
   `4+`
 ];
 
-const MIN_SENTENCES_AMOUNT = 1;
-const MAX_SENTENCES_AMOUNT = 5;
 const MIN_COMMENTS_AMOUNT = 0;
 const MAX_COMMENTS_AMOUNT = 5;
+
+const generateComment = () => {
+  return ({
+    comment: getRandomArrayItem(REACTIONS),
+    author: getRandomArrayItem(AUTHORS),
+    date: getRandomDate(getRandomIntegerNumber(2018, 2020), getRandomIntegerNumber(1, 12), getRandomIntegerNumber(1, 30)),
+    emotion: getRandomArrayItem(EMOTIONS),
+  });
+};
+
+const generateFilmComments = (amount) => {
+  let comments = [];
+  for (let i = 0; i < amount; i++) {
+    comments.push(generateComment());
+  }
+  return comments;
+};
+
+
+const MIN_SENTENCES_AMOUNT = 1;
+const MAX_SENTENCES_AMOUNT = 5;
 
 const generateFilm = () => {
   const randomIndex = getRandomIntegerNumber(0, FILMS.length - 1);
@@ -130,7 +179,7 @@ const generateFilm = () => {
     watchlist: getRandomBool(),
     watched: getRandomBool(),
     favorite: getRandomBool(),
-    numberOfComments: getRandomIntegerNumber(MIN_COMMENTS_AMOUNT, MAX_COMMENTS_AMOUNT),
+    comments: generateFilmComments(getRandomIntegerNumber(MIN_COMMENTS_AMOUNT, MAX_COMMENTS_AMOUNT)),
   };
 };
 

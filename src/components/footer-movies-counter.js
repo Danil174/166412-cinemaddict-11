@@ -1,4 +1,4 @@
-import {createElement} from "../util.js";
+import AbstractComponent from "./abstract-component.js";
 
 const createMoviesCounterTemplate = (amount) => {
   return (
@@ -8,26 +8,14 @@ const createMoviesCounterTemplate = (amount) => {
   );
 };
 
-export default class MoviesCounter {
+export default class MoviesCounter extends AbstractComponent {
   constructor(amount) {
-    this._amount = amount;
+    super();
 
-    this._element = null;
+    this._amount = amount;
   }
 
   getTemplate() {
     return createMoviesCounterTemplate(this._amount);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

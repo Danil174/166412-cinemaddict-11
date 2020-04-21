@@ -1,6 +1,6 @@
-import {getRandomIntegerNumber, createElement} from '../util.js';
-import {months} from '../const.js';
-import {generateComments} from '../mock/comments.js';
+import AbstractComponent from "./abstract-component.js";
+import {getRandomIntegerNumber} from "../utils/common.js";
+import {months} from "../const.js";
 
 const generateGenresTemplate = (genres) => {
   return genres
@@ -12,9 +12,7 @@ const generateGenresTemplate = (genres) => {
     .join(`\n`);
 };
 
-const generateCommentsTemplate = (amount) => {
-
-  const comments = generateComments(amount);
+const generateCommentsTemplate = (comments) => {
   return comments
     .map(({comment, author, date, emotion} = comments) => {
       const commentDate = `${date.getFullYear()}/${date.getMonth()}/${date.getDate()} ${getRandomIntegerNumber(2, 23)}:${getRandomIntegerNumber(13, 59)}`;
@@ -60,7 +58,7 @@ const createFilmPopupTemplate = (film) => {
     watchlist,
     watched,
     favorite,
-    numberOfComments
+    comments
   } = film;
 
   const readableDate = `${releaseDate.getDate()} ${months[releaseDate.getMonth()]} ${releaseDate.getFullYear()}`;
@@ -68,9 +66,9 @@ const createFilmPopupTemplate = (film) => {
   const watchlistCheckStatus = setInputCheck(watchlist);
   const watchedCheckStatus = setInputCheck(watched);
   const favoritetCheckStatus = setInputCheck(favorite);
-  const commentsAmount = numberOfComments;
+  const commentsAmount = comments.length;
   const generesDetails = generateGenresTemplate(genres);
-  const comments = generateCommentsTemplate(commentsAmount);
+  const commentsTemplate = generateCommentsTemplate(comments);
 
   return (
     `<section class="film-details">
@@ -153,7 +151,7 @@ const createFilmPopupTemplate = (film) => {
             <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentsAmount}</span></h3>
 
             <ul class="film-details__comments-list">
-              ${comments}
+              ${commentsTemplate}
             </ul>
 
             <div class="film-details__new-comment">
@@ -192,27 +190,20 @@ const createFilmPopupTemplate = (film) => {
   );
 };
 
-export default class PopUp {
+export default class PopUp extends AbstractComponent {
   constructor(film) {
-    this._film = film;
+    super();
 
-    this._element = null;
+    this._film = film;
   }
 
   getTemplate() {
     return createFilmPopupTemplate(this._film);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setCloseButtonClickHandler(handler) {
+    this.getElement().querySelector(`.film-details__close-btn`)
+      .addEventListener(`click`, handler);
   }
 }
 
