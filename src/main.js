@@ -1,6 +1,5 @@
 import HeaderProfileComponent from "./components/header-profile.js";
 import NavigationComponent from "./components/navigation.js";
-import FiltersComponent from "./components/filters.js";
 import MainController from "./controllers/main-controller.js";
 import FooterCounterComponent from "./components/footer-movies-counter.js";
 import {generateFilms} from "./mock/film.js";
@@ -27,9 +26,6 @@ render(siteHeaderElement, headerProfile, RenderPosition.BEFOREEND);
 
 const siteMainNavigation = new NavigationComponent(filteredMovies);
 render(siteMainElement, siteMainNavigation, RenderPosition.BEFOREEND);
-
-const siteMainFilters = new FiltersComponent();
-render(siteMainElement, siteMainFilters, RenderPosition.BEFOREEND);
 
 const filmsSectionController = new MainController(siteMainElement);
 filmsSectionController.render(filmsCollection, commentsCollection);

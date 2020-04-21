@@ -1,4 +1,5 @@
 import FilmsSectionComponent from "../components/films-section.js";
+import FiltersComponent from "../components/filters.js";
 import FilmsListComponent from "../components/films-list.js";
 import EmptyListComponent from "../components/empty-list.js";
 import FilmComponent from "../components/film-card.js";
@@ -57,6 +58,7 @@ export default class MainController {
     this._container = container;
 
     this._filmsSection = new FilmsSectionComponent();
+    this._siteMainFilters = new FiltersComponent();
     this._emptyListComponent = new EmptyListComponent();
     this._showMoreBtnComponent = new ShowMoreBtnComponent();
     this._primaryList = new FilmsListComponent(sectionTitles.DEFAULT);
@@ -84,6 +86,7 @@ export default class MainController {
       return;
     }
 
+    render(mainContainer, this._siteMainFilters, RenderPosition.BEFOREEND);
     render(mainContainer, this._filmsSection, RenderPosition.BEFOREEND);
 
     renderList(container, this._primaryList, showingFilmsInStart, comments);
