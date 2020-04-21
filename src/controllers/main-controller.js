@@ -78,31 +78,32 @@ export default class MainController {
     this._mostCommentedList = new FilmsListComponent(sectionTitles.COMMENTED, true);
   }
 
+  _initLists(films) {
+    const showingFilmsInStart = films.slice(0, mainPageConfigs.SHOWING_FILM_BY_BUTTON);
+    const topRaredFilms = sortObjectsByKeyMaxMin(films, `rating`).slice(0, 2);
+    const mostCommentedFilms = sortObjectsByValueLength(films, `comments`).slice(0, 2);
+
+    renderList(this._filmsSection.getElement(), this._primaryList, showingFilmsInStart);
+    renderList(this._filmsSection.getElement(), this._topRatedList, topRaredFilms);
+    renderList(this._filmsSection.getElement(), this._mostCommentedList, mostCommentedFilms);
+  }
+
   render(films) {
     const mainContainer = this._container;
     const container = this._filmsSection.getElement();
     const primaryList = this._primaryList.getElement();
 
-    const showingFilmsInStart = films.slice(0, mainPageConfigs.SHOWING_FILM_BY_BUTTON);
-    const topRaredFilms = sortObjectsByKeyMaxMin(films, `rating`).slice(0, 2);
-    const mostCommentedFilms = sortObjectsByValueLength(films, `comments`).slice(0, 2);
-
-    // создание и отрисовка навигации
     const navigationComponent = new NavigationComponent(filteredMovies(films));
     render(mainContainer, navigationComponent, RenderPosition.BEFOREEND);
-    // отрисовка сортировки
     render(mainContainer, this._siteMainFilters, RenderPosition.BEFOREEND);
-    // отрисовка секции с фильмами
     render(mainContainer, this._filmsSection, RenderPosition.BEFOREEND);
-    // отрисовка пустого элемента, если нет фильмов, прерывание
+
     if (films.length === 0) {
       render(container, this._emptyListComponent, RenderPosition.BEFOREEND);
       return;
     }
 
-    renderList(container, this._primaryList, showingFilmsInStart);
-    renderList(container, this._topRatedList, topRaredFilms);
-    renderList(container, this._mostCommentedList, mostCommentedFilms);
+    this._initLists(films);
 
     let showingFilmsCount = mainPageConfigs.SHOWING_FILM_ON_START;
 
