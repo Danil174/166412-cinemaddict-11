@@ -6,6 +6,8 @@ export const SortType = {
   RATING: `rating`,
 };
 
+const activeClass = `sort__button--active`;
+
 const createFiltersTemplate = () => {
   return (
     `<ul class="sort">
@@ -31,6 +33,16 @@ export default class Filters extends AbstractComponent {
     return this._currentSortType;
   }
 
+  setActiveElement(selectedElement) {
+    const elements = this.getElement().querySelectorAll(`a`);
+
+    for (const element of elements) {
+      element.classList.remove(activeClass);
+    }
+
+    selectedElement.classList.add(activeClass);
+  }
+
   setSortTypeChangeHandler(handler) {
     this.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
@@ -44,6 +56,8 @@ export default class Filters extends AbstractComponent {
       if (this._currentSortType === sortType) {
         return;
       }
+
+      this.setActiveElement(evt.target);
 
       this._currentSortType = sortType;
 
