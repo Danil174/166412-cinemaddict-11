@@ -1,7 +1,7 @@
 import FilmComponent from "../components/film-card.js";
 import PopupComponent from "../components/popup.js";
 
-import {render, RenderPosition, remove} from "../utils/render.js";
+import {render, RenderPosition, replace, remove} from "../utils/render.js";
 import {KeyCodes} from "../const.js";
 
 export default class TaskController {
@@ -19,6 +19,9 @@ export default class TaskController {
   }
 
   render(film) {
+    const oldFilmComponent = this._filmComponent;
+    const oldPopupComponent = this._popup;
+
     this._filmComponent = new FilmComponent(film);
     this._popup = new PopupComponent(film);
 
@@ -42,6 +45,13 @@ export default class TaskController {
         watchlist: !this._filmComponent._film.watchlist
       }));
     });
+
+    if (oldFilmComponent && oldPopupComponent) {
+      replace(this._filmComponent, oldFilmComponent);
+      replace(this._popup, oldPopupComponent);
+    } else {
+      render(this._container, this._filmComponent, RenderPosition.BEFOREEND);
+    }
   }
 
   _renderPopUp() {
