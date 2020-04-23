@@ -61,4 +61,28 @@ export default class FilmCard extends AbstractComponent {
         .addEventListener(`click`, handler);
     });
   }
+
+  setWatchlistBtnHandler(handler) {
+    this.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`)
+      .addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+        handler();
+      });
+  }
+
+  setWatchedBtnHandler(handler) {
+    this.getElement().querySelector(`.film-card__controls-item--mark-as-watched`)
+      .addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+        handler();
+      });
+  }
+
+  setFavoriteBtnHandler(handler) {
+    this.getElement().querySelector(`.film-card__controls-item--favorite`)
+      .addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+        handler();
+      });
+  }
 }

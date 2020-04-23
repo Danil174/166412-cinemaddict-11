@@ -5,8 +5,9 @@ import {render, RenderPosition, remove} from "../utils/render.js";
 import {KeyCodes} from "../const.js";
 
 export default class TaskController {
-  constructor(container) {
+  constructor(container, onDataChange) {
     this._container = container;
+    this._onDataChange = onDataChange;
 
     this._filmComponent = null;
     this._popupComponent = null;
@@ -22,14 +23,49 @@ export default class TaskController {
     this._popup = new PopupComponent(film);
 
     render(this._container, this._filmComponent, RenderPosition.BEFOREEND);
-
     this._filmComponent.setOpenPopUpElementsClickHandler(this._renderPopUp);
+
+    this._filmComponent.setFavoriteBtnHandler(() => {
+      this._onDataChange(this, this._filmComponent._film, Object.assign({}, this._filmComponent._film, {
+        favorite: !this._filmComponent._film.favorite
+      }));
+    });
+
+    this._filmComponent.setWatchedBtnHandler(() => {
+      this._onDataChange(this, this._filmComponent._film, Object.assign({}, this._filmComponent._film, {
+        watched: !this._filmComponent._film.watched
+      }));
+    });
+
+    this._filmComponent.setWatchlistBtnHandler(() => {
+      this._onDataChange(this, this._filmComponent._film, Object.assign({}, this._filmComponent._film, {
+        watchlist: !this._filmComponent._film.watchlist
+      }));
+    });
   }
 
   _renderPopUp() {
     render(this._popupContainer, this._popup, RenderPosition.BEFOREEND);
     document.addEventListener(`keydown`, this._onEscKeyDown);
     this._popup.setCloseButtonClickHandler(this._onPopUpCloseBtnClick);
+
+    this._popup.setFavoriteCheckboxHandler(() => {
+      this._onDataChange(this, this._popup._film, Object.assign({}, this._popup._film, {
+        watched: !this._popup._film.favorite
+      }));
+    });
+
+    this._popup.setWatchedCheckboxHandler(() => {
+      this._onDataChange(this, this._popup._film, Object.assign({}, this._popup._film, {
+        favorite: !this._filmComponent._film.watched
+      }));
+    });
+
+    this._popup.setWatchlistCheckboxHandler(() => {
+      this._onDataChange(this, this._popup._film, Object.assign({}, this._popup._film, {
+        watchlist: !this._popup._film.watchlist
+      }));
+    });
   }
 
   _onPopUpCloseBtnClick() {

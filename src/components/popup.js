@@ -205,5 +205,20 @@ export default class PopUp extends AbstractComponent {
     this.getElement().querySelector(`.film-details__close-btn`)
       .addEventListener(`click`, handler);
   }
+
+  setWatchlistCheckboxHandler(handler) {
+    this.getElement().querySelector(`.film-details__control-label--watchlist`)
+      .addEventListener(`click`, handler);
+  }
+
+  setWatchedCheckboxHandler(handler) {
+    this.getElement().querySelector(`.film-details__control-label--watched`)
+      .addEventListener(`click`, handler);
+  }
+
+  setFavoriteCheckboxHandler(handler) {
+    this.getElement().querySelector(`.film-details__control-label--favorite`)
+      .addEventListener(`click`, handler);
+  }
 }
 
