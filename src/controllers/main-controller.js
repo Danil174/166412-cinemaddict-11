@@ -128,6 +128,8 @@ export default class MainController {
     const btnContainer = this._primaryListElement;
     const filmsContainer = this._primaryListContainer;
 
+    remove(this._showMoreBtnComponent);
+
     if (this._showingFilmsCount >= this._films.length) {
       return;
     }
