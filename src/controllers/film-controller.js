@@ -39,6 +39,7 @@ export default class TaskController {
   }
 
   _renderPopUp() {
+    this._popupComponent.rerender();
     console.log(this._popupComponent);
     render(this._popupContainer, this._popupComponent, RenderPosition.BEFOREEND);
     document.addEventListener(`keydown`, this._onEscKeyDown);
