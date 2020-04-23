@@ -20,11 +20,30 @@ export default class TaskController {
 
   render(film) {
     const oldFilmComponent = this._filmComponent;
+    const oldPopupComponent = this._popup;
 
     this._filmComponent = new FilmComponent(film);
     this._popup = new PopupComponent(film);
 
     render(this._container, this._filmComponent, RenderPosition.BEFOREEND);
+
+    this._setFilmCardHandlers();
+    this._setPopupHandlers();
+
+    if (oldFilmComponent && oldPopupComponent) {
+      replace(this._filmComponent, oldFilmComponent);
+      replace(this._popup, oldPopupComponent);
+    } else {
+      render(this._container, this._filmComponent, RenderPosition.BEFOREEND);
+    }
+  }
+
+  _renderPopUp() {
+    render(this._popupContainer, this._popup, RenderPosition.BEFOREEND);
+    document.addEventListener(`keydown`, this._onEscKeyDown);
+  }
+
+  _setFilmCardHandlers() {
     this._filmComponent.setOpenPopUpElementsClickHandler(this._renderPopUp);
 
     this._filmComponent.setFavoriteBtnHandler(() => {
@@ -44,22 +63,15 @@ export default class TaskController {
         watchlist: !this._filmComponent._film.watchlist
       }));
     });
-
-    // if (oldFilmComponent && oldPopupComponent) {
-    //   replace(this._filmComponent, oldFilmComponent);
-    // } else {
-    //   render(this._container, this._filmComponent, RenderPosition.BEFOREEND);
-    // }
   }
 
-  _renderPopUp() {
-    render(this._popupContainer, this._popup, RenderPosition.BEFOREEND);
-    document.addEventListener(`keydown`, this._onEscKeyDown);
+  _setPopupHandlers() {
     this._popup.setCloseButtonClickHandler(this._onPopUpCloseBtnClick);
 
     this._popup.setWatchlistCheckboxHandler(() => {
-
-      this._rerenderPopup();
+      this._onDataChange(this, this._popup._film, Object.assign({}, this._popup._film, {
+        watchlist: !this._filmComponent._film.watchlist
+      }));
     });
 
     this._popup.setWatchedCheckboxHandler(() => {
@@ -75,10 +87,6 @@ export default class TaskController {
     });
   }
 
-  _rerenderPopup() {
-    this._popup.rerender();
-  }
-
   _onPopUpCloseBtnClick() {
     this._removePopUp();
   }
@@ -90,7 +98,6 @@ export default class TaskController {
   }
 
   _removePopUp() {
-    // this._onDataChange(this, this._popup._film, Object.assign({}, this._popup._film));
     remove(this._popup);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
