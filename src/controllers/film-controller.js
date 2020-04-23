@@ -59,21 +59,21 @@ export default class TaskController {
     document.addEventListener(`keydown`, this._onEscKeyDown);
     this._popup.setCloseButtonClickHandler(this._onPopUpCloseBtnClick);
 
-    this._popup.setFavoriteCheckboxHandler(() => {
+    this._popup.setWatchlistCheckboxHandler(() => {
       this._onDataChange(this, this._popup._film, Object.assign({}, this._popup._film, {
-        watched: !this._popup._film.favorite
+        watchlist: !this._popup._film.watchlist
       }));
     });
 
     this._popup.setWatchedCheckboxHandler(() => {
       this._onDataChange(this, this._popup._film, Object.assign({}, this._popup._film, {
-        favorite: !this._filmComponent._film.watched
+        watched: !this._filmComponent._film.watched
       }));
     });
 
-    this._popup.setWatchlistCheckboxHandler(() => {
+    this._popup.setFavoriteCheckboxHandler(() => {
       this._onDataChange(this, this._popup._film, Object.assign({}, this._popup._film, {
-        watchlist: !this._popup._film.watchlist
+        favorite: !this._popup._film.favorite
       }));
     });
   }
