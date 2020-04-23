@@ -20,10 +20,10 @@ export default class TaskController {
 
   render(film) {
     const oldFilmComponent = this._filmComponent;
-    const oldPopupComponent = this._popup;
+    const oldPopupComponent = this._popupComponent;
 
     this._filmComponent = new FilmComponent(film);
-    this._popup = new PopupComponent(film);
+    this._popupComponent = new PopupComponent(film);
 
     render(this._container, this._filmComponent, RenderPosition.BEFOREEND);
 
@@ -32,14 +32,15 @@ export default class TaskController {
 
     if (oldFilmComponent && oldPopupComponent) {
       replace(this._filmComponent, oldFilmComponent);
-      replace(this._popup, oldPopupComponent);
+      replace(this._popupComponent, oldPopupComponent);
     } else {
       render(this._container, this._filmComponent, RenderPosition.BEFOREEND);
     }
   }
 
   _renderPopUp() {
-    render(this._popupContainer, this._popup, RenderPosition.BEFOREEND);
+    console.log(this._popupComponent);
+    render(this._popupContainer, this._popupComponent, RenderPosition.BEFOREEND);
     document.addEventListener(`keydown`, this._onEscKeyDown);
   }
 
@@ -66,23 +67,23 @@ export default class TaskController {
   }
 
   _setPopupHandlers() {
-    this._popup.setCloseButtonClickHandler(this._onPopUpCloseBtnClick);
+    this._popupComponent.setCloseButtonClickHandler(this._onPopUpCloseBtnClick);
 
-    this._popup.setWatchlistCheckboxHandler(() => {
-      this._onDataChange(this, this._popup._film, Object.assign({}, this._popup._film, {
+    this._popupComponent.setWatchlistCheckboxHandler(() => {
+      this._onDataChange(this, this._popupComponent._film, Object.assign({}, this._popupComponent._film, {
         watchlist: !this._filmComponent._film.watchlist
       }));
     });
 
-    this._popup.setWatchedCheckboxHandler(() => {
-      this._onDataChange(this, this._popup._film, Object.assign({}, this._popup._film, {
+    this._popupComponent.setWatchedCheckboxHandler(() => {
+      this._onDataChange(this, this._popupComponent._film, Object.assign({}, this._popupComponent._film, {
         watched: !this._filmComponent._film.watched
       }));
     });
 
-    this._popup.setFavoriteCheckboxHandler(() => {
-      this._onDataChange(this, this._popup._film, Object.assign({}, this._popup._film, {
-        favorite: !this._popup._film.favorite
+    this._popupComponent.setFavoriteCheckboxHandler(() => {
+      this._onDataChange(this, this._popupComponent._film, Object.assign({}, this._popupComponent._film, {
+        favorite: !this._popupComponent._film.favorite
       }));
     });
   }
@@ -98,7 +99,7 @@ export default class TaskController {
   }
 
   _removePopUp() {
-    remove(this._popup);
+    remove(this._popupComponent);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
 }
