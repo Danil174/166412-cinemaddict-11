@@ -12,9 +12,9 @@ export default class TaskController {
     this._popupComponent = null;
     this._popupContainer = document.querySelector(`body`);
     this._renderPopUp = this._renderPopUp.bind(this);
-    this._removePopUp = this._removePopUp.bind(this);
     this._onPopUpCloseBtnClick = this._onPopUpCloseBtnClick.bind(this);
-    this._onEscKeyDow = this._onEscKeyDown.bind(this);
+    this._removePopUp = this._removePopUp.bind(this);
+    this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
 
   render(film) {
@@ -32,11 +32,6 @@ export default class TaskController {
     this._popup.setCloseButtonClickHandler(this._onPopUpCloseBtnClick);
   }
 
-  _removePopUp() {
-    remove(this._popup);
-    document.removeEventListener(`keydown`, this._onEscKeyDown);
-  }
-
   _onPopUpCloseBtnClick() {
     this._removePopUp();
   }
@@ -45,5 +40,10 @@ export default class TaskController {
     if (evt.keyCode === KeyCodes.ESC_KEYCODE) {
       this._removePopUp();
     }
+  }
+
+  _removePopUp() {
+    remove(this._popup);
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
 }
