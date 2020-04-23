@@ -201,10 +201,6 @@ export default class PopUp extends AbstractSmartComponent {
     this._favoriteCheckboxHandler = null;
   }
 
-  rerender() {
-    super.rerender();
-  }
-
   getTemplate() {
     return createFilmPopupTemplate(this._film);
   }
