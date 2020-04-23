@@ -212,10 +212,6 @@ export default class PopUp extends AbstractSmartComponent {
     this.setFavoriteCheckboxHandler(this._favoriteCheckboxHandler);
   }
 
-  rerender() {
-    super.rerender();
-  }
-
   setCloseButtonClickHandler(handler) {
     this.getElement().querySelector(`.film-details__close-btn`)
       .addEventListener(`click`, handler);
