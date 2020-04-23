@@ -1,4 +1,4 @@
-import AbstractComponent from "./abstract-component.js";
+import AbstractSmartComponent from "./abstract-smart-component.js";
 import {getRandomIntegerNumber} from "../utils/common.js";
 import {months} from "../const.js";
 
@@ -190,35 +190,58 @@ const createFilmPopupTemplate = (film) => {
   );
 };
 
-export default class PopUp extends AbstractComponent {
+export default class PopUp extends AbstractSmartComponent {
   constructor(film) {
     super();
 
     this._film = film;
+    this._closeButtonClickHandler = null;
+    this._watchlistCheckboxHandler = null;
+    this._watchedCheckboxHandler = null;
+    this._favoriteCheckboxHandler = null;
   }
 
   getTemplate() {
     return createFilmPopupTemplate(this._film);
   }
 
+  recoveryListeners() {
+    this.setCloseButtonClickHandler(this._closeButtonClickHandler);
+    this.setWatchlistCheckboxHandler(this._watchlistCheckboxHandler);
+    this.setWatchedCheckboxHandler(this._watchedCheckboxHandler);
+    this.setFavoriteCheckboxHandler(this._favoriteCheckboxHandler);
+  }
+
+  rerender() {
+    super.rerender();
+  }
+
   setCloseButtonClickHandler(handler) {
     this.getElement().querySelector(`.film-details__close-btn`)
       .addEventListener(`click`, handler);
+
+    this._closeButtonClickHandler = handler;
   }
 
   setWatchlistCheckboxHandler(handler) {
     this.getElement().querySelector(`.film-details__control-label--watchlist`)
       .addEventListener(`click`, handler);
+
+    this._watchlistCheckboxHandler = handler;
   }
 
   setWatchedCheckboxHandler(handler) {
     this.getElement().querySelector(`.film-details__control-label--watched`)
       .addEventListener(`click`, handler);
+
+    this._watchedCheckboxHandler = handler;
   }
 
   setFavoriteCheckboxHandler(handler) {
     this.getElement().querySelector(`.film-details__control-label--favorite`)
       .addEventListener(`click`, handler);
+
+    this._favoriteCheckboxHandler = handler;
   }
 }
 
