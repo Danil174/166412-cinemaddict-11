@@ -1,11 +1,11 @@
+import FilmController from "./film-controller.js";
+
 import NavigationComponent from "../components/navigation.js";
 import FiltersComponent, {SortType} from "../components/filters.js";
 import FilmsSectionComponent from "../components/films-section.js";
 import FilmsListComponent from "../components/films-list.js";
 import EmptyListComponent from "../components/empty-list.js";
-import FilmComponent from "../components/film-card.js";
 import ShowMoreBtnComponent from "../components/show-more-btn.js";
-import PopupComponent from "../components/popup.js";
 
 import {
   getAmountByCurrentKey,
@@ -13,48 +13,23 @@ import {
   sortObjectsByValueLength,
 } from "../utils/common.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
-import {mainPageConfigs, sectionTitles, KeyCodes} from "../const.js";
-
-const renderFilm = (container, film) => {
-  const filmComponent = new FilmComponent(film);
-  const popup = new PopupComponent(film);
-
-  const renderPopUp = () => {
-    render(document.body, popup, RenderPosition.BEFOREEND);
-    document.addEventListener(`keydown`, onEscKeyDown);
-    popup.setCloseButtonClickHandler(onPopUpCloseBtnClick);
-  };
-
-  const removePopUp = () => {
-    remove(popup);
-    document.removeEventListener(`keydown`, onEscKeyDown);
-  };
-
-  const onPopUpCloseBtnClick = () => {
-    removePopUp();
-  };
-
-  const onEscKeyDown = (evt) => {
-    if (evt.keyCode === KeyCodes.ESC_KEYCODE) {
-      removePopUp();
-    }
-  };
-
-  render(container, filmComponent, RenderPosition.BEFOREEND);
-
-  filmComponent.setOpenPopUpElementsClickHandler(renderPopUp);
-};
+import {mainPageConfigs, sectionTitles} from "../const.js";
 
 const renderFilms = (parent, collection) => {
-  collection.forEach((film) => {
-    renderFilm(parent, film);
+  return collection.map((film) => {
+    const filmController = new FilmController(parent);
+
+    filmController.render(film);
+
+    return filmController;
   });
 };
 
 const renderList = (container, currentList, films) => {
   render(container, currentList, RenderPosition.BEFOREEND);
   const innerContainer = currentList.getElement().querySelector(`.films-list__container`);
-  renderFilms(innerContainer, films);
+  const newFilms = renderFilms(innerContainer, films);
+  return newFilms;
 };
 
 const filteredMovies = (films) => {
@@ -89,6 +64,7 @@ export default class MainController {
     this._container = container;
 
     this._films = [];
+    this._showedFilmControllers = [];
     this._showingFilmsCount = mainPageConfigs.SHOWING_FILM_ON_START;
     this._siteFilters = new FiltersComponent();
     this._filmsSection = new FilmsSectionComponent();
@@ -107,9 +83,10 @@ export default class MainController {
     const topRaredFilms = sortObjectsByKeyMaxMin(this._films, `rating`).slice(0, 2);
     const mostCommentedFilms = sortObjectsByValueLength(this._films, `comments`).slice(0, 2);
 
-    renderList(this._filmsSection.getElement(), this._primaryList, showingFilmsInStart);
-    renderList(this._filmsSection.getElement(), this._topRatedList, topRaredFilms);
-    renderList(this._filmsSection.getElement(), this._mostCommentedList, mostCommentedFilms);
+    let newFilms = renderList(this._filmsSection.getElement(), this._primaryList, showingFilmsInStart);
+    newFilms = newFilms.concat(renderList(this._filmsSection.getElement(), this._topRatedList, topRaredFilms));
+    newFilms = newFilms.concat(renderList(this._filmsSection.getElement(), this._mostCommentedList, mostCommentedFilms));
+    return newFilms;
   }
 
   _onSortTypeChange(sortType) {
@@ -119,7 +96,8 @@ export default class MainController {
 
     this._primaryListContainer.innerHTML = ``;
 
-    renderFilms(this._primaryListContainer, sortedFilms);
+    const newFilms = renderFilms(this._primaryListContainer, sortedFilms);
+    this._showedFilmControllers = this._showedFilmControllers.concat(newFilms);
 
     this._renderShowMoreBtn();
   }
@@ -142,7 +120,8 @@ export default class MainController {
 
       const sortedFilms = getSortedFilms(this._films, this._siteFilters.getSortType(), prevFilmCount, this._showingFilmsCount);
 
-      renderFilms(filmsContainer, sortedFilms);
+      const newFilms = renderFilms(filmsContainer, sortedFilms);
+      this._showedFilmControllers = this._showedFilmControllers.concat(newFilms);
 
       if (this._showingFilmsCount >= this._films.length) {
         remove(this._showMoreBtnComponent);
@@ -167,7 +146,8 @@ export default class MainController {
       return;
     }
 
-    this._initLists(films);
+    const newFilms = this._initLists(films);
+    this._showedFilmControllers = this._showedFilmControllers.concat(newFilms);
 
     this._renderShowMoreBtn();
   }
