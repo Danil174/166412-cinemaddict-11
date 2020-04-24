@@ -2,6 +2,13 @@ import AbstractSmartComponent from "./abstract-smart-component.js";
 import {getRandomIntegerNumber} from "../utils/common.js";
 import {months} from "../const.js";
 
+export const emojisList = new Map([
+  [`emoji-smile`, `smile`],
+  [`emoji-sleeping`, `sleeping`],
+  [`emoji-puke`, `puke`],
+  [`emoji-angry`, `angry`],
+]);
+
 const generateGenresTemplate = (genres) => {
   return genres
     .map((genre) => {
@@ -20,7 +27,7 @@ const generateCommentsTemplate = (comments) => {
       return (
         `<li class="film-details__comment">
           <span class="film-details__comment-emoji">
-            <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-smile">
+            <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
           </span>
           <div>
             <p class="film-details__comment-text">${comment}</p>
@@ -199,6 +206,7 @@ export default class PopUp extends AbstractSmartComponent {
     this._watchlistCheckboxHandler = null;
     this._watchedCheckboxHandler = null;
     this._favoriteCheckboxHandler = null;
+    this._smileClickHandler = null;
   }
 
   getTemplate() {
@@ -210,7 +218,9 @@ export default class PopUp extends AbstractSmartComponent {
     this.setWatchlistCheckboxHandler(this._watchlistCheckboxHandler);
     this.setWatchedCheckboxHandler(this._watchedCheckboxHandler);
     this.setFavoriteCheckboxHandler(this._favoriteCheckboxHandler);
+    this.setSmileClickHandler(this._smileClickHandler);
   }
+
   rerender() {
     super.rerender();
   }
@@ -241,6 +251,15 @@ export default class PopUp extends AbstractSmartComponent {
       .addEventListener(`click`, handler);
 
     this._favoriteCheckboxHandler = handler;
+  }
+
+  setSmileClickHandler(handler) {
+    this.getElement().querySelectorAll(`.film-details__emoji-label`)
+      .forEach((el) => {
+        el.addEventListener(`click`, handler);
+      });
+
+    this._smileClickHandler = handler;
   }
 }
 

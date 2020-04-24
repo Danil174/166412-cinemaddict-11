@@ -1,5 +1,5 @@
 import FilmComponent from "../components/film-card.js";
-import PopupComponent from "../components/popup.js";
+import PopupComponent, {emojisList} from "../components/popup.js";
 
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
 import {KeyCodes} from "../const.js";
@@ -40,7 +40,6 @@ export default class TaskController {
 
   _renderPopUp() {
     this._popupComponent.rerender();
-    console.log(this._popupComponent);
     render(this._popupContainer, this._popupComponent, RenderPosition.BEFOREEND);
     document.addEventListener(`keydown`, this._onEscKeyDown);
   }
@@ -86,6 +85,25 @@ export default class TaskController {
       this._onDataChange(this, this._popupComponent._film, Object.assign({}, this._popupComponent._film, {
         favorite: !this._popupComponent._film.favorite
       }));
+    });
+
+    this._popupComponent.setSmileClickHandler((evt) => {
+      if (evt.target.tagName !== `IMG`) {
+        return;
+      }
+      const popUp = this._popupComponent.getElement();
+      const emotionContainer = popUp.querySelector(`.film-details__add-emoji-label`);
+      const emotion = evt.target.parentElement.htmlFor;
+      const img = document.createElement(`img`);
+
+      img.classList.add(emojisList.get(emotion));
+      img.src = `./images/emoji/${emojisList.get(emotion)}.png`;
+      img.width = `55`;
+      img.height = `55`;
+      img.alt = emotion;
+
+      emotionContainer.innerHTML = ``;
+      emotionContainer.appendChild(img);
     });
   }
 
