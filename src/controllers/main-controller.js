@@ -9,8 +9,8 @@ import ShowMoreBtnComponent from "../components/show-more-btn.js";
 
 import {
   getAmountByCurrentKey,
-  sortObjectsByKeyMaxMin,
-  sortObjectsByValueLength,
+  // sortObjectsByKeyMaxMin,
+  // sortObjectsByValueLength,
 } from "../utils/common.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {mainPageConfigs, sectionTitles} from "../const.js";
@@ -82,8 +82,8 @@ export default class MainController {
 
   _initLists() {
     const showingFilmsInStart = this._films.slice(0, mainPageConfigs.SHOWING_FILM_BY_BUTTON);
-    const topRaredFilms = sortObjectsByKeyMaxMin(this._films, `rating`).slice(0, 2);
-    const mostCommentedFilms = sortObjectsByValueLength(this._films, `comments`).slice(0, 2);
+    // const topRaredFilms = sortObjectsByKeyMaxMin(this._films, `rating`).slice(0, 2);
+    // const mostCommentedFilms = sortObjectsByValueLength(this._films, `comments`).slice(0, 2);
 
     let newFilms = renderList(this._filmsSection.getElement(), this._primaryList, showingFilmsInStart, this._onDataChange, this._onViewChange);
     // newFilms = newFilms.concat(renderList(this._filmsSection.getElement(), this._topRatedList, topRaredFilms), this._onDataChange, this._onViewChange);
@@ -132,11 +132,10 @@ export default class MainController {
   }
 
   _onViewChange() {
-    console.log();
     this._showedFilmControllers.forEach((it) => it.setDefaultView());
   }
 
-  _onDataChange(filmController, oldData, newData) {
+  _onDataChange(oldData, newData) {
     const index = this._films.findIndex((it) => it === oldData);
 
     if (index === -1) {
@@ -144,8 +143,7 @@ export default class MainController {
     }
 
     this._films = [].concat(this._films.slice(0, index), newData, this._films.slice(index + 1));
-
-    filmController.render(this._films[index]);
+    this._showedFilmControllers.forEach((it) => it.updateView(this._films[index]));
   }
 
   render(films) {
