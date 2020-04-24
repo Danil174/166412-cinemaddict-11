@@ -35,11 +35,10 @@ export default class TaskController {
     const oldFilmComponent = this._filmComponent;
     const oldPopupComponent = this._popupComponent;
 
+
     this._filmComponent = new FilmComponent(film);
     this._popupComponent = new PopupComponent(film);
-
     render(this._container, this._filmComponent, RenderPosition.BEFOREEND);
-
     this._setFilmCardHandlers();
     this._setPopupHandlers();
 
