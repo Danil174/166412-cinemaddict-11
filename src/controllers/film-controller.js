@@ -4,11 +4,17 @@ import PopupComponent, {emojisList} from "../components/popup.js";
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
 import {KeyCodes} from "../const.js";
 
+const Mode = {
+  DEFAULT: `default`,
+  CLOSE: `close`,
+};
+
 export default class TaskController {
-  constructor(container, onDataChange) {
+  constructor(container, onDataChange, onViewChange) {
     this._container = container;
     this._onDataChange = onDataChange;
-
+    this._onViewChange = onViewChange;
+    this._mode = Mode.DEFAULT;
     this._filmComponent = null;
     this._popupComponent = null;
     this._popupContainer = document.querySelector(`body`);
@@ -38,10 +44,20 @@ export default class TaskController {
     }
   }
 
+  setDefaultView() {
+    if (this._mode !== Mode.DEFAULT) {
+      console.log(`test`);
+      this._removePopUp();
+    }
+  }
+
   _renderPopUp() {
+    console.log(this);
+    this._onViewChange();
     this._popupComponent.rerender();
     render(this._popupContainer, this._popupComponent, RenderPosition.BEFOREEND);
     document.addEventListener(`keydown`, this._onEscKeyDown);
+    this._mode = Mode.CLOSE;
   }
 
   _setFilmCardHandlers() {
@@ -118,6 +134,7 @@ export default class TaskController {
   }
 
   _removePopUp() {
+    this._mode = Mode.DEFAULT;
     remove(this._popupComponent);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
