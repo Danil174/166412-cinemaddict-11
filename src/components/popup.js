@@ -1,4 +1,4 @@
-import AbstractComponent from "./abstract-component.js";
+import AbstractSmartComponent from "./abstract-smart-component.js";
 import {getRandomIntegerNumber} from "../utils/common.js";
 import {months} from "../const.js";
 
@@ -20,7 +20,7 @@ const generateCommentsTemplate = (comments) => {
       return (
         `<li class="film-details__comment">
           <span class="film-details__comment-emoji">
-            <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-smile">
+            <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
           </span>
           <div>
             <p class="film-details__comment-text">${comment}</p>
@@ -190,20 +190,69 @@ const createFilmPopupTemplate = (film) => {
   );
 };
 
-export default class PopUp extends AbstractComponent {
+export default class PopUp extends AbstractSmartComponent {
   constructor(film) {
     super();
 
     this._film = film;
+    this._closeButtonClickHandler = null;
+    this._watchlistCheckboxHandler = null;
+    this._watchedCheckboxHandler = null;
+    this._favoriteCheckboxHandler = null;
+    this._smileClickHandler = null;
   }
 
   getTemplate() {
     return createFilmPopupTemplate(this._film);
   }
 
+  recoveryListeners() {
+    this.setCloseButtonClickHandler(this._closeButtonClickHandler);
+    this.setWatchlistCheckboxHandler(this._watchlistCheckboxHandler);
+    this.setWatchedCheckboxHandler(this._watchedCheckboxHandler);
+    this.setFavoriteCheckboxHandler(this._favoriteCheckboxHandler);
+    this.setSmileClickHandler(this._smileClickHandler);
+  }
+
+  rerender() {
+    super.rerender();
+  }
+
   setCloseButtonClickHandler(handler) {
     this.getElement().querySelector(`.film-details__close-btn`)
       .addEventListener(`click`, handler);
+
+    this._closeButtonClickHandler = handler;
+  }
+
+  setWatchlistCheckboxHandler(handler) {
+    this.getElement().querySelector(`.film-details__control-label--watchlist`)
+      .addEventListener(`click`, handler);
+
+    this._watchlistCheckboxHandler = handler;
+  }
+
+  setWatchedCheckboxHandler(handler) {
+    this.getElement().querySelector(`.film-details__control-label--watched`)
+      .addEventListener(`click`, handler);
+
+    this._watchedCheckboxHandler = handler;
+  }
+
+  setFavoriteCheckboxHandler(handler) {
+    this.getElement().querySelector(`.film-details__control-label--favorite`)
+      .addEventListener(`click`, handler);
+
+    this._favoriteCheckboxHandler = handler;
+  }
+
+  setSmileClickHandler(handler) {
+    this.getElement().querySelectorAll(`.film-details__emoji-label`)
+      .forEach((el) => {
+        el.addEventListener(`click`, handler);
+      });
+
+    this._smileClickHandler = handler;
   }
 }
 
