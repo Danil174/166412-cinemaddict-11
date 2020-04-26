@@ -1,3 +1,19 @@
+import moment from "moment";
+
+export const getReleaseDate = (date) => {
+  return moment(date).format(`DD MMMM YYYY`);
+};
+
+export const getHumanizeDate = (date) => {
+  return moment(date).fromNow();
+};
+
+export const getFilmDuration = (timeInMins) => {
+  const time = moment.utc().startOf(`day`).add({minutes: timeInMins});
+  const hours = time.hour() ? `${time.hour()}h ` : ``;
+  return `${hours}${time.minutes()}m`;
+};
+
 export const getRandomArrayItems = (array, maxItems = array.length, minItems = 1, joinSTR = `, `) => {
   const arr = array.slice();
   const itemsAmount = getRandomIntegerNumber(minItems, maxItems);

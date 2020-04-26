@@ -1,6 +1,5 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
-import {getRandomIntegerNumber} from "../utils/common.js";
-import {months} from "../const.js";
+import {getReleaseDate, getFilmDuration, getHumanizeDate} from "../utils/common.js";
 
 const generateGenresTemplate = (genres) => {
   return genres
@@ -15,7 +14,7 @@ const generateGenresTemplate = (genres) => {
 const generateCommentsTemplate = (comments) => {
   return comments
     .map(({comment, author, date, emotion} = comments) => {
-      const commentDate = `${date.getFullYear()}/${date.getMonth()}/${date.getDate()} ${getRandomIntegerNumber(2, 23)}:${getRandomIntegerNumber(13, 59)}`;
+      const commentDate = getHumanizeDate(date);
 
       return (
         `<li class="film-details__comment">
@@ -61,7 +60,7 @@ const createFilmPopupTemplate = (film) => {
     comments
   } = film;
 
-  const readableDate = `${releaseDate.getDate()} ${months[releaseDate.getMonth()]} ${releaseDate.getFullYear()}`;
+  const readableDate = getReleaseDate(releaseDate);
   const multiGenresSign = genres.length > 1 ? `s` : ``;
   const watchlistCheckStatus = setInputCheck(watchlist);
   const watchedCheckStatus = setInputCheck(watched);
@@ -69,6 +68,7 @@ const createFilmPopupTemplate = (film) => {
   const commentsAmount = comments.length;
   const generesDetails = generateGenresTemplate(genres);
   const commentsTemplate = generateCommentsTemplate(comments);
+  const prettyDuration = getFilmDuration(duration);
 
   return (
     `<section class="film-details">
@@ -115,7 +115,7 @@ const createFilmPopupTemplate = (film) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Runtime</td>
-                  <td class="film-details__cell">${duration}</td>
+                  <td class="film-details__cell">${prettyDuration}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Country</td>
