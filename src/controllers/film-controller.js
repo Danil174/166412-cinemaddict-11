@@ -14,7 +14,7 @@ const View = {
   CHANGED: `changed`,
 };
 
-export default class TaskController {
+export default class FilmController {
   constructor(container, onDataChange, onViewChange) {
     this._container = container;
     this._onDataChange = onDataChange;
@@ -125,17 +125,15 @@ export default class TaskController {
       }
       const popUp = this._popupComponent.getElement();
       const emotionContainer = popUp.querySelector(`.film-details__add-emoji-label`);
+      const targetSmile = evt.target.cloneNode();
       const emotion = evt.target.parentElement.htmlFor;
-      const img = document.createElement(`img`);
 
-      img.classList.add(emojisList.get(emotion));
-      img.src = `./images/emoji/${emojisList.get(emotion)}.png`;
-      img.width = `55`;
-      img.height = `55`;
-      img.alt = emotion;
+      targetSmile.width = `55`;
+      targetSmile.height = `55`;
+      targetSmile.alt = emotion;
 
       emotionContainer.innerHTML = ``;
-      emotionContainer.appendChild(img);
+      emotionContainer.appendChild(targetSmile);
     });
   }
 
