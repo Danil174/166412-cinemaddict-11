@@ -100,7 +100,6 @@ export default class MainController {
 
     const newFilms = renderFilms(this._primaryListContainer, sortedFilms, this._onDataChange, this._onViewChange);
     this._showedFilmControllers = newFilms;
-
     this._renderShowMoreBtn();
   }
 
@@ -137,13 +136,14 @@ export default class MainController {
 
   _onDataChange(oldData, newData) {
     const index = this._films.findIndex((it) => it === oldData);
+    const controllerIndex = this._showedFilmControllers.findIndex((it) => it._filmComponent._film === oldData);
 
     if (index === -1) {
       return;
     }
 
     this._films = [].concat(this._films.slice(0, index), newData, this._films.slice(index + 1));
-    this._showedFilmControllers.forEach((it) => it.updateView(this._films[index]));
+    this._showedFilmControllers[controllerIndex].updateView(this._films[index]);
   }
 
   render(films) {

@@ -1,5 +1,5 @@
 import FilmComponent from "../components/film-card.js";
-import PopupComponent, {emojisList} from "../components/popup.js";
+import PopupComponent from "../components/popup.js";
 
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
 import {KeyCodes} from "../const.js";
@@ -9,18 +9,12 @@ const Mode = {
   CLOSE: `close`,
 };
 
-const View = {
-  DEFAULT: `default`,
-  CHANGED: `changed`,
-};
-
 export default class FilmController {
   constructor(container, onDataChange, onViewChange) {
     this._container = container;
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
     this._mode = Mode.DEFAULT;
-    this._view = View.DEFAULT;
     this._filmComponent = null;
     this._popupComponent = null;
     this._popupContainer = document.querySelector(`body`);
@@ -31,7 +25,6 @@ export default class FilmController {
   }
 
   render(film) {
-    this._view = View.DEFAULT;
     const oldFilmComponent = this._filmComponent;
     const oldPopupComponent = this._popupComponent;
 
@@ -57,9 +50,7 @@ export default class FilmController {
   }
 
   updateView(film) {
-    if (this._view !== View.DEFAULT) {
-      this.render(film);
-    }
+    this.render(film);
   }
 
   _renderPopUp() {
@@ -74,21 +65,18 @@ export default class FilmController {
     this._filmComponent.setOpenPopUpElementsClickHandler(this._renderPopUp);
 
     this._filmComponent.setWatchlistBtnHandler(() => {
-      this._view = View.CHANGED;
       this._onDataChange(this._filmComponent._film, Object.assign({}, this._filmComponent._film, {
         watchlist: !this._filmComponent._film.watchlist
       }));
     });
 
     this._filmComponent.setWatchedBtnHandler(() => {
-      this._view = View.CHANGED;
       this._onDataChange(this._filmComponent._film, Object.assign({}, this._filmComponent._film, {
         watched: !this._filmComponent._film.watched
       }));
     });
 
     this._filmComponent.setFavoriteBtnHandler(() => {
-      this._view = View.CHANGED;
       this._onDataChange(this._filmComponent._film, Object.assign({}, this._filmComponent._film, {
         favorite: !this._filmComponent._film.favorite
       }));
@@ -99,21 +87,18 @@ export default class FilmController {
     this._popupComponent.setCloseButtonClickHandler(this._onPopUpCloseBtnClick);
 
     this._popupComponent.setWatchlistCheckboxHandler(() => {
-      this._view = View.CHANGED;
       this._onDataChange(this._popupComponent._film, Object.assign({}, this._popupComponent._film, {
         watchlist: !this._filmComponent._film.watchlist
       }));
     });
 
     this._popupComponent.setWatchedCheckboxHandler(() => {
-      this._view = View.CHANGED;
       this._onDataChange(this._popupComponent._film, Object.assign({}, this._popupComponent._film, {
         watched: !this._filmComponent._film.watched
       }));
     });
 
     this._popupComponent.setFavoriteCheckboxHandler(() => {
-      this._view = View.CHANGED;
       this._onDataChange(this._popupComponent._film, Object.assign({}, this._popupComponent._film, {
         favorite: !this._popupComponent._film.favorite
       }));

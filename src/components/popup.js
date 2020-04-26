@@ -2,13 +2,6 @@ import AbstractSmartComponent from "./abstract-smart-component.js";
 import {getRandomIntegerNumber} from "../utils/common.js";
 import {months} from "../const.js";
 
-export const emojisList = new Map([
-  [`emoji-smile`, `smile`],
-  [`emoji-sleeping`, `sleeping`],
-  [`emoji-puke`, `puke`],
-  [`emoji-angry`, `angry`],
-]);
-
 const generateGenresTemplate = (genres) => {
   return genres
     .map((genre) => {
