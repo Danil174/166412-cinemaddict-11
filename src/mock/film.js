@@ -171,7 +171,7 @@ const generateFilm = () => {
     writers: getRandomArrayItems(WRITERS),
     actors: getRandomArrayItems(ACTORS),
     releaseDate: getRandomDate(getRandomIntegerNumber(1925, 1955), getRandomIntegerNumber(1, 12), getRandomIntegerNumber(1, 30)),
-    duration: `${getRandomIntegerNumber(1, 3)}h ${getRandomIntegerNumber(5, 59)}m`,
+    duration: `${getRandomIntegerNumber(15, 180)}`,
     country: getRandomArrayItem(COUNTRIES),
     genres: getRandomArrayItems(GENRES, 3, 1, `, `).split(`, `),
     description: getRandomArrayItems(DESCRIPTIONS, MAX_SENTENCES_AMOUNT, MIN_SENTENCES_AMOUNT, ` `),

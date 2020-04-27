@@ -1,4 +1,5 @@
 import AbstractComponent from "./abstract-component.js";
+import {getFilmDuration} from "../utils/common.js";
 
 const clickableCardElements = [
   `.film-card__poster`,
@@ -29,6 +30,7 @@ const createFilmCardTemplate = (film) => {
   const watchlisBtnIsActive = watchlist ? btnActiveClass : ``;
   const watchedBtnIsActive = watched ? btnActiveClass : ``;
   const favoriteBtnIsActive = favorite ? btnActiveClass : ``;
+  const prettyDuration = getFilmDuration(duration);
 
   return (
     `<article class="film-card">
@@ -36,7 +38,7 @@ const createFilmCardTemplate = (film) => {
       <p class="film-card__rating">${rating}</p>
       <p class="film-card__info">
         <span class="film-card__year">${releaseYear}</span>
-        <span class="film-card__duration">${duration}</span>
+        <span class="film-card__duration">${prettyDuration}</span>
         <span class="film-card__genre">${genre}</span>
       </p>
       <img src="./images/posters/${img}" alt="" class="film-card__poster">
