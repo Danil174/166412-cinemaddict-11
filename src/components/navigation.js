@@ -1,7 +1,11 @@
 import AbstractComponent from "./abstract-component.js";
+import {getAmountByCurrentKey} from "../utils/common.js";
 
-export const createNavigationTemplate = (collections) => {
-  const {inWatchlist, watched, favorite} = collections;
+
+export const createNavigationTemplate = (films) => {
+  const inWatchlist = getAmountByCurrentKey(films, `watchlist`, true);
+  const watched = getAmountByCurrentKey(films, `watched`, true);
+  const favorite = getAmountByCurrentKey(films, `favorite`, true);
 
   return (
     `<nav class="main-navigation">
