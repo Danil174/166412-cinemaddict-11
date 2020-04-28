@@ -163,6 +163,7 @@ const generateFilm = () => {
   const randomIndex = getRandomIntegerNumber(0, FILMS.length - 1);
 
   return {
+    id: String(Date.now() + Math.random()),
     img: POSTERS[randomIndex],
     name: FILMS[randomIndex],
     originalName: FILMS[randomIndex].toUpperCase(),

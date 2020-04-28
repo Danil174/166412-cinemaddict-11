@@ -6,6 +6,7 @@ import {render, RenderPosition} from "./utils/render";
 import {mainPageConfigs} from "./const.js";
 
 const filmsCollection = generateFilms(mainPageConfigs.CARD_COUNT);
+console.log(filmsCollection);
 
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
