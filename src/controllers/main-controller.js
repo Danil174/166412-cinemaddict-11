@@ -66,6 +66,7 @@ export default class MainController {
     this._onDataChange = this._onDataChange.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
+    this._onShowMoreBtnClick = this._onShowMoreBtnClick.bind(this);
     this._filmsModel.setFilterChangeHandler(this._onFilterChange);
     this._siteFilters.setSortTypeChangeHandler(this._onSortTypeChange);
   }
@@ -116,30 +117,32 @@ export default class MainController {
 
   _renderShowMoreBtn() {
     const btnContainer = this._primaryListElement;
-    const filmsContainer = this._primaryListContainer;
 
     remove(this._showMoreBtnComponent);
 
     if (this._showingFilmsCount >= this._filmsModel.getFilms().length) {
+      debugger;
       return;
     }
 
     render(btnContainer, this._showMoreBtnComponent, RenderPosition.BEFOREEND);
+    this._showMoreBtnComponent.setClickHandler(this._onShowMoreBtnClick);
+  }
 
-    this._showMoreBtnComponent.setClickHandler(() => {
-      const films = this._filmsModel.getFilms();
-      const prevFilmCount = this._showingFilmsCount;
-      this._showingFilmsCount = this._showingFilmsCount + mainPageConfigs.SHOWING_FILM_BY_BUTTON;
+  _onShowMoreBtnClick() {
+    const prevFilmCount = this._showingFilmsCount;
+    debugger;
+    const films = this._filmsModel.getFilms();
+    this._showingFilmsCount = this._showingFilmsCount + mainPageConfigs.SHOWING_FILM_BY_BUTTON;
 
-      const sortedFilms = getSortedFilms(films, this._siteFilters.getSortType(), prevFilmCount, this._showingFilmsCount);
+    const sortedFilms = getSortedFilms(films, this._siteFilters.getSortType(), prevFilmCount, this._showingFilmsCount);
 
-      const newFilms = renderFilms(filmsContainer, sortedFilms, this._onDataChange, this._onViewChange);
-      this._showedFilmControllers = this._showedFilmControllers.concat(newFilms);
+    const newFilms = renderFilms(this._primaryListContainer, sortedFilms, this._onDataChange, this._onViewChange);
+    this._showedFilmControllers = this._showedFilmControllers.concat(newFilms);
 
-      if (this._showingFilmsCount >= this._filmsModel.getFilms().length) {
-        remove(this._showMoreBtnComponent);
-      }
-    });
+    if (this._showingFilmsCount >= this._filmsModel.getFilms().length) {
+      remove(this._showMoreBtnComponent);
+    }
   }
 
   _onSortTypeChange(sortType) {
@@ -167,8 +170,9 @@ export default class MainController {
   }
 
   _onFilterChange() {
+    this._showingFilmsCount = mainPageConfigs.SHOWING_FILM_ON_START;
     this._siteFilters.resetSortType();
-    this._updateFilms(mainPageConfigs.SHOWING_FILM_ON_START);
+    this._updateFilms(this._showingFilmsCount);
   }
 
   _onDataChange(oldData, newData) {
