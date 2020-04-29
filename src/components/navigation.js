@@ -1,12 +1,12 @@
 import AbstractComponent from "./abstract-component.js";
 
-const filterActiveClass = `main-navigation__item--active`;
+const navigationActiveClass = `main-navigation__item--active`;
 const filterWithoutСounterName = `All movies`;
 
 const createFilterMarkup = (filter) => {
   const {name, count, isActive} = filter;
   const counter = (filterWithoutСounterName === name) ? ` ` : ` <span class="main-navigation__item-count">${count}</span>`;
-  const activeClass = isActive ? filterActiveClass : ``;
+  const activeClass = isActive ? navigationActiveClass : ``;
 
   return (` <a href="#${name}" class="main-navigation__item ${activeClass}" data-navigation-type="${name}">${name} ${counter}</a>`);
 };
@@ -35,9 +35,21 @@ export default class Navigation extends AbstractComponent {
     return createNavigationTemplate(this._filters);
   }
 
+  setActiveElement(selectedElement) {
+    const elements = this.getElement().querySelectorAll(`.main-navigation__item`);
+
+    for (const element of elements) {
+      element.classList.remove(navigationActiveClass);
+    }
+
+    selectedElement.classList.add(navigationActiveClass);
+  }
+
+
   setFilterClickHandler(handler) {
     this.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
+      this.setActiveElement(evt.target);
       const navigationType = evt.target.dataset.navigationType;
       handler(navigationType);
     });
