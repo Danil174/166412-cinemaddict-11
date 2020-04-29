@@ -178,8 +178,8 @@ const generateFilm = () => {
     description: getRandomArrayItems(DESCRIPTIONS, MAX_SENTENCES_AMOUNT, MIN_SENTENCES_AMOUNT, ` `),
     allowedAge: getRandomArrayItem(AGES),
     watchlist: getRandomBool(),
-    watched: getRandomBool(),
-    favorite: getRandomBool(),
+    history: getRandomBool(),
+    favorites: getRandomBool(),
     comments: generateFilmComments(getRandomIntegerNumber(MIN_COMMENTS_AMOUNT, MAX_COMMENTS_AMOUNT)),
   };
 };

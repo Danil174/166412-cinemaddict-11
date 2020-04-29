@@ -1,6 +1,6 @@
 import FilmController from "./film-controller.js";
+import FilterController from "./navigation.js";
 
-import NavigationComponent from "../components/navigation.js";
 import FiltersComponent, {SortType} from "../components/filters.js";
 import FilmsSectionComponent from "../components/films-section.js";
 import FilmsListComponent from "../components/films-list.js";
@@ -64,7 +64,9 @@ export default class MainController {
 
     this._onViewChange = this._onViewChange.bind(this);
     this._onDataChange = this._onDataChange.bind(this);
+    this._onFilterChange = this._onFilterChange.bind(this);
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
+    this._filmsModel.setFilterChangeHandler(this._onFilterChange);
     this._siteFilters.setSortTypeChangeHandler(this._onSortTypeChange);
   }
 
@@ -74,7 +76,7 @@ export default class MainController {
     this._primaryListElement = this._primaryList.getElement();
     this._primaryListContainer = this._primaryListElement.querySelector(`.films-list__container`);
 
-    this._renderControls(films);
+    this._renderControls();
 
     if (films.length === 0) {
       render(container, this._emptyListComponent, RenderPosition.BEFOREEND);
@@ -86,23 +88,30 @@ export default class MainController {
     this._renderShowMoreBtn();
   }
 
-  _renderControls(films) {
-    const navigationComponent = new NavigationComponent(films);
-    render(this._container, navigationComponent, RenderPosition.BEFOREEND);
+  _removeFilms() {
+    this._showedFilmControllers.forEach((filmController) => filmController.destroy());
+    this._showedFilmControllers = [];
+  }
+
+  _renderControls() {
+    const filterController = new FilterController(this._container, this._filmsModel);
+    filterController.render();
+
     render(this._container, this._siteFilters, RenderPosition.BEFOREEND);
     render(this._container, this._filmsSection, RenderPosition.BEFOREEND);
   }
 
   _initLists(films) {
-    const showingFilmsInStart = films.slice(0, mainPageConfigs.SHOWING_FILM_ON_START);
     const topRaredFilms = sortObjectsByKeyMaxMin(films, `rating`).slice(0, 2);
     const mostCommentedFilms = sortObjectsByValueLength(films, `comments`).slice(0, 2);
+    const showingFilmsInStart = films.slice(0, mainPageConfigs.SHOWING_FILM_ON_START);
 
     const newFilms = renderList(this._filmsSection.getElement(), this._primaryList, showingFilmsInStart, this._onDataChange, this._onViewChange);
+    this._showedFilmControllers = this._showedFilmControllers.concat(newFilms);
+
     let newFilmsExtra = renderList(this._filmsSection.getElement(), this._topRatedList, topRaredFilms, this._onDataChange, this._onViewChange);
     newFilmsExtra = newFilmsExtra.concat(renderList(this._filmsSection.getElement(), this._mostCommentedList, mostCommentedFilms, this._onDataChange, this._onViewChange));
     this._showedFilmControllersExtra = this._showedFilmControllers.concat(newFilmsExtra);
-    this._showedFilmControllers = this._showedFilmControllers.concat(newFilms);
   }
 
   _renderShowMoreBtn() {
@@ -148,6 +157,17 @@ export default class MainController {
   _onViewChange() {
     const allShowedFilmControllers = this._showedFilmControllers.concat(this._showedFilmControllersExtra);
     allShowedFilmControllers .forEach((it) => it.setDefaultView());
+  }
+
+  _updateFilms(count) {
+    this._removeFilms();
+    const newFilms = renderFilms(this._primaryListContainer, this._filmsModel.getFilms().slice(0, count), this._onDataChange, this._onViewChange);
+    this._showedFilmControllers = newFilms;
+    this._renderShowMoreBtn();
+  }
+
+  _onFilterChange() {
+    this._updateFilms(mainPageConfigs.SHOWING_FILM_ON_START);
   }
 
   _onDataChange(oldData, newData) {

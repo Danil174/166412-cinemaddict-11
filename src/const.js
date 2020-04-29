@@ -14,6 +14,13 @@ export const months = [
   `December`
 ];
 
+export const FilterType = {
+  ALL: `All movies`,
+  WATCHLIST: `Watchlist`,
+  HISTORY: `History`,
+  FAVORITES: `Favorites`,
+};
+
 export const mainPageConfigs = {
   CARD_COUNT: 20,
   SHOWING_FILM_ON_START: 5,

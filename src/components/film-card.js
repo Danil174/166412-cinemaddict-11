@@ -18,8 +18,8 @@ const createFilmCardTemplate = (film) => {
     description,
     comments,
     watchlist,
-    watched,
-    favorite
+    history,
+    favorites
   } = film;
 
   const commentsLength = comments.length;
@@ -28,8 +28,8 @@ const createFilmCardTemplate = (film) => {
 
   const btnActiveClass = `film-card__controls-item--active`;
   const watchlisBtnIsActive = watchlist ? btnActiveClass : ``;
-  const watchedBtnIsActive = watched ? btnActiveClass : ``;
-  const favoriteBtnIsActive = favorite ? btnActiveClass : ``;
+  const watchedBtnIsActive = history ? btnActiveClass : ``;
+  const favoriteBtnIsActive = favorites ? btnActiveClass : ``;
   const prettyDuration = getFilmDuration(duration);
 
   return (
