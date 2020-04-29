@@ -49,6 +49,11 @@ export default class Navigation extends AbstractComponent {
   setFilterClickHandler(handler) {
     this.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
+
+      if (evt.target.tagName !== `A`) {
+        return;
+      }
+
       this.setActiveElement(evt.target);
       const navigationType = evt.target.dataset.navigationType;
       handler(navigationType);
