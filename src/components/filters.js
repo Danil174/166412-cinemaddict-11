@@ -33,6 +33,12 @@ export default class Filters extends AbstractComponent {
     return this._currentSortType;
   }
 
+  resetSortType() {
+    const defaultElement = this.getElement().querySelector(`[data-sort-type="${SortType.DEFAULT}"]`);
+    console.log(defaultElement);
+    this.setActiveElement(defaultElement);
+  }
+
   setActiveElement(selectedElement) {
     const elements = this.getElement().querySelectorAll(`a`);
 

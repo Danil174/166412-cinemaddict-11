@@ -156,7 +156,7 @@ export default class MainController {
 
   _onViewChange() {
     const allShowedFilmControllers = this._showedFilmControllers.concat(this._showedFilmControllersExtra);
-    allShowedFilmControllers .forEach((it) => it.setDefaultView());
+    allShowedFilmControllers.forEach((it) => it.setDefaultView());
   }
 
   _updateFilms(count) {
@@ -167,6 +167,7 @@ export default class MainController {
   }
 
   _onFilterChange() {
+    this._siteFilters.resetSortType();
     this._updateFilms(mainPageConfigs.SHOWING_FILM_ON_START);
   }
 
