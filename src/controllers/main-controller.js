@@ -121,7 +121,6 @@ export default class MainController {
     remove(this._showMoreBtnComponent);
 
     if (this._showingFilmsCount >= this._filmsModel.getFilms().length) {
-      debugger;
       return;
     }
 
@@ -131,7 +130,6 @@ export default class MainController {
 
   _onShowMoreBtnClick() {
     const prevFilmCount = this._showingFilmsCount;
-    debugger;
     const films = this._filmsModel.getFilms();
     this._showingFilmsCount = this._showingFilmsCount + mainPageConfigs.SHOWING_FILM_BY_BUTTON;
 
@@ -150,7 +148,7 @@ export default class MainController {
 
     const sortedFilms = getSortedFilms(this._filmsModel.getFilms(), sortType, 0, this._showingFilmsCount);
 
-    this._primaryListContainer.innerHTML = ``;
+    this._renderShowMoreBtn();
 
     const newFilms = renderFilms(this._primaryListContainer, sortedFilms, this._onDataChange, this._onViewChange);
     this._showedFilmControllers = newFilms;
