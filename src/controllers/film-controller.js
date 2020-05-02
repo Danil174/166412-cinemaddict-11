@@ -1,6 +1,8 @@
 import FilmComponent from "../components/film-card.js";
 import PopupComponent from "../components/popup.js";
 
+import {encode} from "he";
+
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
 import {KeyCodes} from "../const.js";
 
@@ -153,7 +155,8 @@ export default class FilmController {
   _createNewComment() {
     const newComment = this._popupComponent.getElement().querySelector(`.film-details__new-comment`);
     const emoji = newComment.querySelector(`input:checked`).value;
-    const text = newComment.querySelector(`.film-details__comment-input`).value;
+    const text = encode(newComment.querySelector(`.film-details__comment-input`).value);
+
     const comment = {
       comment: text,
       author: `test`,
