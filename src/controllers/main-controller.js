@@ -47,9 +47,10 @@ const getSortedFilms = (films, sortType, from, to) => {
 };
 
 export default class MainController {
-  constructor(container, filmsModel) {
+  constructor(container, filmsModel, commentsModel) {
     this._container = container;
     this._filmsModel = filmsModel;
+    this._commentsModel = commentsModel;
 
     this._showedFilmControllers = [];
     this._showedFilmControllersExtra = [];
@@ -144,11 +145,10 @@ export default class MainController {
   }
 
   _onSortTypeChange(sortType) {
+    this._removeFilms();
     this._showingFilmsCount = mainPageConfigs.SHOWING_FILM_BY_BUTTON;
 
     const sortedFilms = getSortedFilms(this._filmsModel.getFilms(), sortType, 0, this._showingFilmsCount);
-
-    this._renderShowMoreBtn();
 
     const newFilms = renderFilms(this._primaryListContainer, sortedFilms, this._onDataChange, this._onViewChange);
     this._showedFilmControllers = newFilms;
@@ -176,10 +176,10 @@ export default class MainController {
   _onDataChange(oldData, newData, comment = null) {
     if (comment !== null) {
       if (Number.isInteger(comment)) {
-        this._filmsModel.deleteComment(comment);
+        this._commentsModel.removeComment(comment);
         this._updateData(oldData, newData);
       } else {
-        this._filmsModel.addComment(newData);
+        this._commentsModel.addComment(newData);
         this._updateData(oldData, newData);
       }
     } else {
