@@ -22,6 +22,7 @@ export default class FilmController {
     this._onPopUpCloseBtnClick = this._onPopUpCloseBtnClick.bind(this);
     this._removePopUp = this._removePopUp.bind(this);
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
+    this._onKeysDownAddComment = this._onKeysDownAddComment.bind(this);
   }
 
   render(film) {
@@ -47,6 +48,7 @@ export default class FilmController {
     remove(this._filmComponent);
     remove(this._popupComponent);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
+    document.removeEventListener(`keydown`, this._onKeysDownAddComment);
   }
 
   setDefaultView() {
@@ -64,6 +66,7 @@ export default class FilmController {
     this._popupComponent.rerender();
     render(this._popupContainer, this._popupComponent, RenderPosition.BEFOREEND);
     document.addEventListener(`keydown`, this._onEscKeyDown);
+    document.addEventListener(`keydown`, this._onKeysDownAddComment);
     this._mode = Mode.CLOSE;
   }
 
@@ -126,6 +129,13 @@ export default class FilmController {
       emotionContainer.innerHTML = ``;
       emotionContainer.appendChild(targetSmile);
     });
+
+    this._popupComponent.setDeleteCommentBtnClickHandler((index) => {
+      const newComments = this._popupComponent._film.comments.slice();
+      this._onDataChange(this._popupComponent._film, Object.assign({}, this._popupComponent._film, {
+        comments: newComments.splice(index, 1)
+      }), index);
+    });
   }
 
   _onPopUpCloseBtnClick() {
@@ -138,9 +148,32 @@ export default class FilmController {
     }
   }
 
+  _createNewComment() {
+    const newComment = this._popupComponent.getElement().querySelector(`.film-details__new-comment`);
+    const emoji = newComment.querySelector(`input:checked`).value;
+    const text = newComment.querySelector(`.film-details__comment-input`).value;
+    const comment = {
+      comment: text,
+      author: `test`,
+      date: Date.now(),
+      emotion: emoji,
+    };
+
+    return comment;
+  }
+
+  _onKeysDownAddComment(evt) {
+    if (event.ctrlKey && evt.keyCode === KeyCodes.ENTER_KEYCODE) {
+      this._onDataChange(this._popupComponent._film, Object.assign({}, this._popupComponent._film, {
+        comments: this._popupComponent._film.comments.concat(this._createNewComment())
+      }), this._createNewComment());
+    }
+  }
+
   _removePopUp() {
     this._mode = Mode.DEFAULT;
     remove(this._popupComponent);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
+    document.removeEventListener(`keydown`, this._onKeysDownAddComment);
   }
 }

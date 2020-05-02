@@ -173,7 +173,21 @@ export default class MainController {
     this._updateFilms(this._showingFilmsCount);
   }
 
-  _onDataChange(oldData, newData) {
+  _onDataChange(oldData, newData, comment = null) {
+    if (comment !== null) {
+      if (Number.isInteger(comment)) {
+        this._filmsModel.deleteComment(comment);
+        this._updateData(oldData, newData);
+      } else {
+        this._filmsModel.addComment(newData);
+        this._updateData(oldData, newData);
+      }
+    } else {
+      this._updateData(oldData, newData);
+    }
+  }
+
+  _updateData(oldData, newData) {
     const isSuccess = this._filmsModel.updateFilm(oldData.id, newData);
     const allShowedFilmControllers = this._showedFilmControllers.concat(this._showedFilmControllersExtra);
     const controlletsToUpdate = allShowedFilmControllers.filter(

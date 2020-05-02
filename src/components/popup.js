@@ -200,6 +200,7 @@ export default class PopUp extends AbstractSmartComponent {
     this._watchedCheckboxHandler = null;
     this._favoriteCheckboxHandler = null;
     this._smileClickHandler = null;
+    this._setDeleteCommentBtnClickHandler = null;
   }
 
   getTemplate() {
@@ -212,6 +213,7 @@ export default class PopUp extends AbstractSmartComponent {
     this.setWatchedCheckboxHandler(this._watchedCheckboxHandler);
     this.setFavoriteCheckboxHandler(this._favoriteCheckboxHandler);
     this.setSmileClickHandler(this._smileClickHandler);
+    this.setDeleteCommentBtnClickHandler(this._setDeleteCommentBtnClickHandler);
   }
 
   rerender() {
@@ -253,6 +255,18 @@ export default class PopUp extends AbstractSmartComponent {
       });
 
     this._smileClickHandler = handler;
+  }
+
+  setDeleteCommentBtnClickHandler(handler) {
+    this.getElement().querySelectorAll(`.film-details__comment-delete`)
+      .forEach((el, index) => {
+        el.addEventListener(`click`, (evt) => {
+          evt.preventDefault();
+          handler(index);
+        });
+      });
+
+    this._setDeleteCommentBtnClickHandler = handler;
   }
 }
 

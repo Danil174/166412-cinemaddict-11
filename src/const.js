@@ -35,5 +35,6 @@ export const sectionTitles = {
 };
 
 export const KeyCodes = {
-  ESC_KEYCODE: 27
+  ESC_KEYCODE: 27,
+  ENTER_KEYCODE: 13
 };
