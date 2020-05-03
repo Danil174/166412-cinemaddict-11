@@ -1,5 +1,6 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import {getReleaseDate, getFilmDuration, getHumanizeDate} from "../utils/common.js";
+import {encode} from "he";
 
 const generateGenresTemplate = (genres) => {
   return genres
@@ -225,6 +226,22 @@ export default class PopUp extends AbstractSmartComponent {
 
   getTemplate() {
     return createFilmPopupTemplate(this._film);
+  }
+
+  getComment() {
+    const popUp = this;
+    const newComment = popUp.getElement().querySelector(`.film-details__new-comment`);
+    const emoji = newComment.querySelector(`input:checked`).value;
+    const text = encode(newComment.querySelector(`.film-details__comment-input`).value);
+
+    const comment = {
+      comment: text,
+      author: `test`,
+      date: Date.now(),
+      emotion: emoji,
+    };
+
+    return comment;
   }
 
   recoveryListeners() {

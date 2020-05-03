@@ -1,8 +1,6 @@
 import FilmComponent from "../components/film-card.js";
 import PopupComponent from "../components/popup.js";
 
-import {encode} from "he";
-
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
 import {KeyCodes} from "../const.js";
 
@@ -136,26 +134,11 @@ export default class FilmController {
     }
   }
 
-  _createNewComment() {
-    const newComment = this._popupComponent.getElement().querySelector(`.film-details__new-comment`);
-    const emoji = newComment.querySelector(`input:checked`).value;
-    const text = encode(newComment.querySelector(`.film-details__comment-input`).value);
-
-    const comment = {
-      comment: text,
-      author: `test`,
-      date: Date.now(),
-      emotion: emoji,
-    };
-
-    return comment;
-  }
-
   _onKeysDownAddComment(evt) {
     if (event.ctrlKey && evt.keyCode === KeyCodes.ENTER_KEYCODE) {
       this._onDataChange(this._popupComponent._film, Object.assign({}, this._popupComponent._film, {
-        comments: this._popupComponent._film.comments.concat(this._createNewComment())
-      }), this._createNewComment());
+        comments: this._popupComponent._film.comments.concat(this._popupComponent.getComment())
+      }), this._popupComponent.getComment());
     }
   }
 
