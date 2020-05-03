@@ -189,17 +189,11 @@ export default class MainController {
 
   _updateData(oldData, newData) {
     const isSuccess = this._filmsModel.updateFilm(oldData.id, newData);
-    const allShowedFilmControllers = this._showedFilmControllers.concat(this._showedFilmControllersExtra);
-    const controlletsToUpdate = allShowedFilmControllers.filter(
-        (it) => {
-          return (it._filmComponent._film.id === oldData.id);
-        });
 
     if (isSuccess) {
-      controlletsToUpdate.forEach(
-          (it) => {
-            it.updateView(newData);
-          });
+      const allShowedFilmControllers = this._showedFilmControllers.concat(this._showedFilmControllersExtra);
+      const controlletsToUpdate = allShowedFilmControllers.filter((it) => it._filmComponent._film.id === oldData.id);
+      controlletsToUpdate.forEach((it) => it.updateView(newData));
     }
   }
 }
