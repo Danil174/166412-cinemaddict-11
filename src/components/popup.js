@@ -190,6 +190,26 @@ const createFilmPopupTemplate = (film) => {
   );
 };
 
+const smileClickHandler = (evt) => {
+  const target = evt.target;
+
+  if (target.tagName !== `IMG`) {
+    return;
+  }
+
+  const newCommentContainer = target.parentElement.parentElement.parentElement;
+  const emotionContainer = newCommentContainer.querySelector(`.film-details__add-emoji-label`);
+  const targetSmile = target.cloneNode();
+  const emotion = target.parentElement.htmlFor;
+
+  targetSmile.width = `55`;
+  targetSmile.height = `55`;
+  targetSmile.alt = emotion;
+
+  emotionContainer.innerHTML = ``;
+  emotionContainer.appendChild(targetSmile);
+};
+
 export default class PopUp extends AbstractSmartComponent {
   constructor(film) {
     super();
@@ -248,13 +268,13 @@ export default class PopUp extends AbstractSmartComponent {
     this._favoriteCheckboxHandler = handler;
   }
 
-  setSmileClickHandler(handler) {
+  setSmileClickHandler() {
     this.getElement().querySelectorAll(`.film-details__emoji-label`)
       .forEach((el) => {
-        el.addEventListener(`click`, handler);
+        el.addEventListener(`click`, smileClickHandler);
       });
 
-    this._smileClickHandler = handler;
+    this._smileClickHandler = smileClickHandler;
   }
 
   setDeleteCommentBtnClickHandler(handler) {

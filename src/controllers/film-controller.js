@@ -68,6 +68,7 @@ export default class FilmController {
     this._popupComponent.rerender();
     render(this._popupContainer, this._popupComponent, RenderPosition.BEFOREEND);
     document.addEventListener(`keydown`, this._onEscKeyDown);
+    document.addEventListener(`keydown`, this._onKeysDownAddComment);
     this._mode = Mode.CLOSE;
   }
 
@@ -114,24 +115,7 @@ export default class FilmController {
       }));
     });
 
-    this._popupComponent.setSmileClickHandler((evt) => {
-      if (evt.target.tagName !== `IMG`) {
-        return;
-      }
-
-      document.addEventListener(`keydown`, this._onKeysDownAddComment);
-      const popUp = this._popupComponent.getElement();
-      const emotionContainer = popUp.querySelector(`.film-details__add-emoji-label`);
-      const targetSmile = evt.target.cloneNode();
-      const emotion = evt.target.parentElement.htmlFor;
-
-      targetSmile.width = `55`;
-      targetSmile.height = `55`;
-      targetSmile.alt = emotion;
-
-      emotionContainer.innerHTML = ``;
-      emotionContainer.appendChild(targetSmile);
-    });
+    this._popupComponent.setSmileClickHandler();
 
     this._popupComponent.setDeleteCommentBtnClickHandler((index) => {
       const newComments = this._popupComponent._film.comments.slice();
