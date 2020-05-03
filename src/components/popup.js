@@ -190,7 +190,7 @@ const createFilmPopupTemplate = (film) => {
   );
 };
 
-const smileClickHandler = (evt) => {
+const setSmile = (evt) => {
   const target = evt.target;
 
   if (target.tagName !== `IMG`) {
@@ -271,10 +271,10 @@ export default class PopUp extends AbstractSmartComponent {
   setSmileClickHandler() {
     this.getElement().querySelectorAll(`.film-details__emoji-label`)
       .forEach((el) => {
-        el.addEventListener(`click`, smileClickHandler);
+        el.addEventListener(`click`, setSmile);
       });
 
-    this._smileClickHandler = smileClickHandler;
+    this._smileClickHandler = setSmile;
   }
 
   setDeleteCommentBtnClickHandler(handler) {
