@@ -20,13 +20,8 @@ export default class FilterController {
   render() {
     const container = this._container;
     const allFilms = this._filmsModel.getFilmsAll();
-    const filters = Object.values(FilterType).map((filterType) => {
-      return {
-        name: filterType,
-        count: getFilmsByFilter(allFilms, filterType).length,
-        isActive: filterType === this._activeFilterType,
-      };
-    });
+    const filters = this._getFilters(allFilms);
+
     const oldComponent = this._filterComponent;
 
     this._filterComponent = new Navigation(filters);
@@ -37,6 +32,16 @@ export default class FilterController {
     } else {
       render(container, this._filterComponent, RenderPosition.BEFOREEND);
     }
+  }
+
+  _getFilters(films) {
+    return Object.values(FilterType).map((filterType) => {
+      return {
+        name: filterType,
+        count: getFilmsByFilter(films, filterType).length,
+        isActive: filterType === this._activeFilterType,
+      };
+    });
   }
 
   _onFilterChange(filterType) {
