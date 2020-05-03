@@ -17,9 +17,9 @@ const createFilmCardTemplate = (film) => {
     genres,
     description,
     comments,
-    watchlist,
-    history,
-    favorites
+    inWatchlist,
+    watched,
+    favorite
   } = film;
 
   const commentsLength = comments.length;
@@ -27,9 +27,9 @@ const createFilmCardTemplate = (film) => {
   const releaseYear = releaseDate.getFullYear();
 
   const btnActiveClass = `film-card__controls-item--active`;
-  const watchlisBtnIsActive = watchlist ? btnActiveClass : ``;
-  const watchedBtnIsActive = history ? btnActiveClass : ``;
-  const favoriteBtnIsActive = favorites ? btnActiveClass : ``;
+  const watchlisBtnIsActive = inWatchlist ? btnActiveClass : ``;
+  const watchedBtnIsActive = watched ? btnActiveClass : ``;
+  const favoriteBtnIsActive = favorite ? btnActiveClass : ``;
   const prettyDuration = getFilmDuration(duration);
 
   return (

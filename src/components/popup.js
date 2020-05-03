@@ -55,17 +55,17 @@ const createFilmPopupTemplate = (film) => {
     genres,
     description,
     allowedAge,
-    watchlist,
-    history,
-    favorites,
+    inWatchlist,
+    watched,
+    favorite,
     comments
   } = film;
 
   const readableDate = getReleaseDate(releaseDate);
   const multiGenresSign = genres.length > 1 ? `s` : ``;
-  const watchlistCheckStatus = setInputCheck(watchlist);
-  const watchedCheckStatus = setInputCheck(history);
-  const favoritetCheckStatus = setInputCheck(favorites);
+  const watchlistCheckStatus = setInputCheck(inWatchlist);
+  const watchedCheckStatus = setInputCheck(watched);
+  const favoritetCheckStatus = setInputCheck(favorite);
   const commentsAmount = comments.length;
   const generesDetails = generateGenresTemplate(genres);
   const commentsTemplate = generateCommentsTemplate(comments);

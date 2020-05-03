@@ -127,9 +127,9 @@ const generateFilm = () => {
     genres: getRandomArrayItems(GENRES, 3, 1, `, `).split(`, `),
     description: getRandomArrayItems(DESCRIPTIONS, MAX_SENTENCES_AMOUNT, MIN_SENTENCES_AMOUNT, ` `),
     allowedAge: getRandomArrayItem(AGES),
-    watchlist: getRandomBool(),
-    history: getRandomBool(),
-    favorites: getRandomBool(),
+    inWatchlist: getRandomBool(),
+    watched: getRandomBool(),
+    favorite: getRandomBool(),
     comments: [],
   };
 };

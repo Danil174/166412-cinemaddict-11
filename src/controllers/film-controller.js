@@ -75,19 +75,19 @@ export default class FilmController {
 
     this._filmComponent.setWatchlistBtnHandler(() => {
       this._onDataChange(this._filmComponent._film, Object.assign({}, this._filmComponent._film, {
-        watchlist: !this._filmComponent._film.watchlist
+        inWatchlist: !this._filmComponent._film.inWatchlist
       }));
     });
 
     this._filmComponent.setWatchedBtnHandler(() => {
       this._onDataChange(this._filmComponent._film, Object.assign({}, this._filmComponent._film, {
-        history: !this._filmComponent._film.history
+        watched: !this._filmComponent._film.watched
       }));
     });
 
     this._filmComponent.setFavoriteBtnHandler(() => {
       this._onDataChange(this._filmComponent._film, Object.assign({}, this._filmComponent._film, {
-        favorites: !this._filmComponent._film.favorites
+        favorite: !this._filmComponent._film.favorite
       }));
     });
   }
@@ -97,19 +97,19 @@ export default class FilmController {
 
     this._popupComponent.setWatchlistCheckboxHandler(() => {
       this._onDataChange(this._popupComponent._film, Object.assign({}, this._popupComponent._film, {
-        watchlist: !this._filmComponent._film.watchlist
+        inWatchlist: !this._filmComponent._film.inWatchlist
       }));
     });
 
     this._popupComponent.setWatchedCheckboxHandler(() => {
       this._onDataChange(this._popupComponent._film, Object.assign({}, this._popupComponent._film, {
-        history: !this._filmComponent._film.history
+        watched: !this._filmComponent._film.watched
       }));
     });
 
     this._popupComponent.setFavoriteCheckboxHandler(() => {
       this._onDataChange(this._popupComponent._film, Object.assign({}, this._popupComponent._film, {
-        favorites: !this._popupComponent._film.favorites
+        favorite: !this._popupComponent._film.favorite
       }));
     });
 

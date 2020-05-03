@@ -21,6 +21,12 @@ export const FilterType = {
   FAVORITES: `Favorites`,
 };
 
+export const FilterConvertType = {
+  WATCHLIST: `inWatchlist`,
+  HISTORY: `watched`,
+  FAVORITES: `favorite`,
+};
+
 export const mainPageConfigs = {
   CARD_COUNT: 20,
   SHOWING_FILM_ON_START: 5,
