@@ -229,8 +229,7 @@ export default class PopUp extends AbstractSmartComponent {
   }
 
   getComment() {
-    const popUp = this;
-    const newComment = popUp.getElement().querySelector(`.film-details__new-comment`);
+    const newComment = this.getElement().querySelector(`.film-details__new-comment`);
     const emoji = newComment.querySelector(`input:checked`).value;
     const text = encode(newComment.querySelector(`.film-details__comment-input`).value);
 
@@ -242,6 +241,14 @@ export default class PopUp extends AbstractSmartComponent {
     };
 
     return comment;
+  }
+
+  checkCommentFill() {
+    const newComment = this.getElement().querySelector(`.film-details__new-comment`);
+    const emojiNotSelect = newComment.querySelector(`input:checked`) === null;
+    const userCommentNotExist = newComment.querySelector(`.film-details__comment-input`).value === ``;
+
+    return (emojiNotSelect || userCommentNotExist);
   }
 
   recoveryListeners() {

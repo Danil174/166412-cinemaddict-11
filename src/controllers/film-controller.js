@@ -135,7 +135,10 @@ export default class FilmController {
   }
 
   _onKeysDownAddComment(evt) {
-    if (event.ctrlKey && evt.keyCode === KeyCodes.ENTER_KEYCODE) {
+    if (evt.ctrlKey && evt.keyCode === KeyCodes.ENTER_KEYCODE) {
+      if (this._popupComponent.checkCommentFill()) {
+        return;
+      }
       this._onDataChange(this._popupComponent._film, Object.assign({}, this._popupComponent._film, {
         comments: this._popupComponent._film.comments.concat(this._popupComponent.getComment())
       }), this._popupComponent.getComment());
