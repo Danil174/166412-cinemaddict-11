@@ -22,6 +22,7 @@ export default class FilmController {
     this._onPopUpCloseBtnClick = this._onPopUpCloseBtnClick.bind(this);
     this._removePopUp = this._removePopUp.bind(this);
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
+    this._onKeysDownAddComment = this._onKeysDownAddComment.bind(this);
   }
 
   render(film) {
@@ -43,6 +44,13 @@ export default class FilmController {
     }
   }
 
+  destroy() {
+    remove(this._filmComponent);
+    remove(this._popupComponent);
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
+    document.removeEventListener(`keydown`, this._onKeysDownAddComment);
+  }
+
   setDefaultView() {
     if (this._mode !== Mode.DEFAULT) {
       this._removePopUp();
@@ -58,6 +66,7 @@ export default class FilmController {
     this._popupComponent.rerender();
     render(this._popupContainer, this._popupComponent, RenderPosition.BEFOREEND);
     document.addEventListener(`keydown`, this._onEscKeyDown);
+    document.addEventListener(`keydown`, this._onKeysDownAddComment);
     this._mode = Mode.CLOSE;
   }
 
@@ -66,7 +75,7 @@ export default class FilmController {
 
     this._filmComponent.setWatchlistBtnHandler(() => {
       this._onDataChange(this._filmComponent._film, Object.assign({}, this._filmComponent._film, {
-        watchlist: !this._filmComponent._film.watchlist
+        inWatchlist: !this._filmComponent._film.inWatchlist
       }));
     });
 
@@ -88,7 +97,7 @@ export default class FilmController {
 
     this._popupComponent.setWatchlistCheckboxHandler(() => {
       this._onDataChange(this._popupComponent._film, Object.assign({}, this._popupComponent._film, {
-        watchlist: !this._filmComponent._film.watchlist
+        inWatchlist: !this._filmComponent._film.inWatchlist
       }));
     });
 
@@ -104,21 +113,14 @@ export default class FilmController {
       }));
     });
 
-    this._popupComponent.setSmileClickHandler((evt) => {
-      if (evt.target.tagName !== `IMG`) {
-        return;
-      }
-      const popUp = this._popupComponent.getElement();
-      const emotionContainer = popUp.querySelector(`.film-details__add-emoji-label`);
-      const targetSmile = evt.target.cloneNode();
-      const emotion = evt.target.parentElement.htmlFor;
+    this._popupComponent.setSmileClickHandler();
 
-      targetSmile.width = `55`;
-      targetSmile.height = `55`;
-      targetSmile.alt = emotion;
-
-      emotionContainer.innerHTML = ``;
-      emotionContainer.appendChild(targetSmile);
+    this._popupComponent.setDeleteCommentBtnClickHandler((index) => {
+      const newComments = this._popupComponent._film.comments.slice();
+      newComments.splice(index, 1);
+      this._onDataChange(this._popupComponent._film, Object.assign({}, this._popupComponent._film, {
+        comments: newComments
+      }), index);
     });
   }
 
@@ -132,9 +134,18 @@ export default class FilmController {
     }
   }
 
+  _onKeysDownAddComment(evt) {
+    if (event.ctrlKey && evt.keyCode === KeyCodes.ENTER_KEYCODE) {
+      this._onDataChange(this._popupComponent._film, Object.assign({}, this._popupComponent._film, {
+        comments: this._popupComponent._film.comments.concat(this._popupComponent.getComment())
+      }), this._popupComponent.getComment());
+    }
+  }
+
   _removePopUp() {
     this._mode = Mode.DEFAULT;
     remove(this._popupComponent);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
+    document.removeEventListener(`keydown`, this._onKeysDownAddComment);
   }
 }

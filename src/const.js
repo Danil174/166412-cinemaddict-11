@@ -14,6 +14,19 @@ export const months = [
   `December`
 ];
 
+export const FilterType = {
+  ALL: `All movies`,
+  WATCHLIST: `Watchlist`,
+  HISTORY: `History`,
+  FAVORITES: `Favorites`,
+};
+
+export const FilterConvertType = {
+  WATCHLIST: `inWatchlist`,
+  HISTORY: `watched`,
+  FAVORITES: `favorite`,
+};
+
 export const mainPageConfigs = {
   CARD_COUNT: 20,
   SHOWING_FILM_ON_START: 5,
@@ -28,5 +41,6 @@ export const sectionTitles = {
 };
 
 export const KeyCodes = {
-  ESC_KEYCODE: 27
+  ESC_KEYCODE: 27,
+  ENTER_KEYCODE: 13
 };

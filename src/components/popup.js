@@ -1,5 +1,6 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import {getReleaseDate, getFilmDuration, getHumanizeDate} from "../utils/common.js";
+import {encode} from "he";
 
 const generateGenresTemplate = (genres) => {
   return genres
@@ -54,7 +55,7 @@ const createFilmPopupTemplate = (film) => {
     genres,
     description,
     allowedAge,
-    watchlist,
+    inWatchlist,
     watched,
     favorite,
     comments
@@ -62,7 +63,7 @@ const createFilmPopupTemplate = (film) => {
 
   const readableDate = getReleaseDate(releaseDate);
   const multiGenresSign = genres.length > 1 ? `s` : ``;
-  const watchlistCheckStatus = setInputCheck(watchlist);
+  const watchlistCheckStatus = setInputCheck(inWatchlist);
   const watchedCheckStatus = setInputCheck(watched);
   const favoritetCheckStatus = setInputCheck(favorite);
   const commentsAmount = comments.length;
@@ -190,6 +191,26 @@ const createFilmPopupTemplate = (film) => {
   );
 };
 
+const setSmile = (evt) => {
+  const target = evt.target;
+
+  if (target.tagName !== `IMG`) {
+    return;
+  }
+
+  const newCommentContainer = target.parentElement.parentElement.parentElement;
+  const emotionContainer = newCommentContainer.querySelector(`.film-details__add-emoji-label`);
+  const targetSmile = target.cloneNode();
+  const emotion = target.parentElement.htmlFor;
+
+  targetSmile.width = `55`;
+  targetSmile.height = `55`;
+  targetSmile.alt = emotion;
+
+  emotionContainer.innerHTML = ``;
+  emotionContainer.appendChild(targetSmile);
+};
+
 export default class PopUp extends AbstractSmartComponent {
   constructor(film) {
     super();
@@ -200,10 +221,27 @@ export default class PopUp extends AbstractSmartComponent {
     this._watchedCheckboxHandler = null;
     this._favoriteCheckboxHandler = null;
     this._smileClickHandler = null;
+    this._setDeleteCommentBtnClickHandler = null;
   }
 
   getTemplate() {
     return createFilmPopupTemplate(this._film);
+  }
+
+  getComment() {
+    const popUp = this;
+    const newComment = popUp.getElement().querySelector(`.film-details__new-comment`);
+    const emoji = newComment.querySelector(`input:checked`).value;
+    const text = encode(newComment.querySelector(`.film-details__comment-input`).value);
+
+    const comment = {
+      comment: text,
+      author: `test`,
+      date: Date.now(),
+      emotion: emoji,
+    };
+
+    return comment;
   }
 
   recoveryListeners() {
@@ -212,6 +250,7 @@ export default class PopUp extends AbstractSmartComponent {
     this.setWatchedCheckboxHandler(this._watchedCheckboxHandler);
     this.setFavoriteCheckboxHandler(this._favoriteCheckboxHandler);
     this.setSmileClickHandler(this._smileClickHandler);
+    this.setDeleteCommentBtnClickHandler(this._setDeleteCommentBtnClickHandler);
   }
 
   rerender() {
@@ -246,13 +285,25 @@ export default class PopUp extends AbstractSmartComponent {
     this._favoriteCheckboxHandler = handler;
   }
 
-  setSmileClickHandler(handler) {
+  setSmileClickHandler() {
     this.getElement().querySelectorAll(`.film-details__emoji-label`)
       .forEach((el) => {
-        el.addEventListener(`click`, handler);
+        el.addEventListener(`click`, setSmile);
       });
 
-    this._smileClickHandler = handler;
+    this._smileClickHandler = setSmile;
+  }
+
+  setDeleteCommentBtnClickHandler(handler) {
+    this.getElement().querySelectorAll(`.film-details__comment-delete`)
+      .forEach((el, index) => {
+        el.addEventListener(`click`, (evt) => {
+          evt.preventDefault();
+          handler(index);
+        });
+      });
+
+    this._setDeleteCommentBtnClickHandler = handler;
   }
 }
 

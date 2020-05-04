@@ -6,36 +6,6 @@ import {
   getRandomDate
 } from "../utils/common.js";
 
-const REACTIONS = [
-  `unbelievably`,
-  `incredibly`,
-  `improbably`,
-  `amazingly`,
-  `terribly`,
-  `awfully`,
-  `horribly`,
-  `dreadfully`
-];
-
-const AUTHORS = [
-  `Tony Stark`,
-  `Steve Rogers`,
-  `Bruce Banner`,
-  `Thor`,
-  `Natasha Romanoff`,
-  `Clint Barton`,
-  `Loki`,
-  `Agent Phil Coulson`,
-  `Agent Maria Hill`,
-];
-
-const EMOTIONS = [
-  `smile`,
-  `sleeping`,
-  `puke`,
-  `angry`
-];
-
 const FILMS = [
   `Made for Each Other`,
   `Popeye Meets Sinbad`,
@@ -135,26 +105,6 @@ const AGES = [
   `4+`
 ];
 
-const MIN_COMMENTS_AMOUNT = 0;
-const MAX_COMMENTS_AMOUNT = 5;
-
-const generateComment = () => {
-  return ({
-    comment: getRandomArrayItem(REACTIONS),
-    author: getRandomArrayItem(AUTHORS),
-    date: getRandomDate(getRandomIntegerNumber(2018, 2020), getRandomIntegerNumber(1, 12), getRandomIntegerNumber(1, 30)),
-    emotion: getRandomArrayItem(EMOTIONS),
-  });
-};
-
-const generateFilmComments = (amount) => {
-  let comments = [];
-  for (let i = 0; i < amount; i++) {
-    comments.push(generateComment());
-  }
-  return comments;
-};
-
 
 const MIN_SENTENCES_AMOUNT = 1;
 const MAX_SENTENCES_AMOUNT = 5;
@@ -163,6 +113,7 @@ const generateFilm = () => {
   const randomIndex = getRandomIntegerNumber(0, FILMS.length - 1);
 
   return {
+    id: String(Date.now() + Math.random()),
     img: POSTERS[randomIndex],
     name: FILMS[randomIndex],
     originalName: FILMS[randomIndex].toUpperCase(),
@@ -176,10 +127,10 @@ const generateFilm = () => {
     genres: getRandomArrayItems(GENRES, 3, 1, `, `).split(`, `),
     description: getRandomArrayItems(DESCRIPTIONS, MAX_SENTENCES_AMOUNT, MIN_SENTENCES_AMOUNT, ` `),
     allowedAge: getRandomArrayItem(AGES),
-    watchlist: getRandomBool(),
+    inWatchlist: getRandomBool(),
     watched: getRandomBool(),
     favorite: getRandomBool(),
-    comments: generateFilmComments(getRandomIntegerNumber(MIN_COMMENTS_AMOUNT, MAX_COMMENTS_AMOUNT)),
+    comments: [],
   };
 };
 
