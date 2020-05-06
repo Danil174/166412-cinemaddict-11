@@ -109,7 +109,27 @@ const AGES = [
 const MIN_SENTENCES_AMOUNT = 1;
 const MAX_SENTENCES_AMOUNT = 5;
 
-const generateFilm = () => {
+const MIN_COMMENTS_AMOUNT = 0;
+const MAX_COMMENTS_AMOUNT = 5;
+
+const generateCommentId = (filmIndex, commentIndex) => {
+  return `${filmIndex}${commentIndex}`;
+};
+
+const generateComments = (count, filmIdex) => {
+  if (count === 0) {
+    return [];
+  }
+  const comments = [];
+
+  for (let i = 0; i < count; i++) {
+    comments.push(generateCommentId(filmIdex, i));
+  }
+
+  return comments;
+};
+
+const generateFilm = (current, index) => {
   const randomIndex = getRandomIntegerNumber(0, FILMS.length - 1);
 
   return {
@@ -130,7 +150,7 @@ const generateFilm = () => {
     inWatchlist: getRandomBool(),
     watched: getRandomBool(),
     favorite: getRandomBool(),
-    comments: [],
+    comments: generateComments(getRandomIntegerNumber(MIN_COMMENTS_AMOUNT, MAX_COMMENTS_AMOUNT), index),
   };
 };
 

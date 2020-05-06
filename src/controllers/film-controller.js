@@ -117,10 +117,10 @@ export default class FilmController {
 
     this._popupComponent.setDeleteCommentBtnClickHandler((index) => {
       const newComments = this._popupComponent._film.comments.slice();
-      newComments.splice(index, 1);
+      const deletedCommentId = newComments.splice(index, 1).shift().id;
       this._onDataChange(this._popupComponent._film, Object.assign({}, this._popupComponent._film, {
         comments: newComments
-      }), index);
+      }), deletedCommentId);
     });
   }
 

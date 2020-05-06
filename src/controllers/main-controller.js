@@ -47,10 +47,9 @@ const getSortedFilms = (films, sortType, from, to) => {
 };
 
 export default class MainController {
-  constructor(container, filmsModel, commentsModel) {
+  constructor(container, filmsModel) {
     this._container = container;
     this._filmsModel = filmsModel;
-    this._commentsModel = commentsModel;
 
     this._showedFilmControllers = [];
     this._showedFilmControllersExtra = [];
@@ -175,11 +174,11 @@ export default class MainController {
 
   _onDataChange(oldData, newData, comment = null) {
     if (comment !== null) {
-      if (Number.isInteger(comment)) {
-        this._commentsModel.removeComment(comment);
+      if (typeof comment === `string`) {
+        this._filmsModel.comments.removeComment(comment);
         this._updateData(oldData, newData);
       } else {
-        this._commentsModel.addComment(newData);
+        this._filmsModel.comments.addComment(newData);
         this._updateData(oldData, newData);
       }
     } else {

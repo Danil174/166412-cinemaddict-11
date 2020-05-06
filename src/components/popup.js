@@ -234,6 +234,7 @@ export default class PopUp extends AbstractSmartComponent {
     const text = encode(newComment.querySelector(`.film-details__comment-input`).value);
 
     const comment = {
+      id: String(Date.now() + Math.random()),
       comment: text,
       author: `test`,
       date: Date.now(),

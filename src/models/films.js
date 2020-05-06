@@ -1,9 +1,52 @@
 import {getFilmsByFilter} from "../utils/filter.js";
 import {FilterType} from "../const.js";
 
+class Comments {
+  constructor() {
+    this._comments = [];
+  }
+
+  getComments() {
+    return this._comments;
+  }
+
+  setComments(comments) {
+    this._comments = Array.from(comments);
+  }
+
+  getComment(id) {
+    return this._comments.find((comment) => comment.id === id);
+  }
+
+  addComment(comment) {
+    const index = this._comments.findIndex((it) => it.id === comment.id);
+
+    if (index !== -1) {
+      return false;
+    }
+
+    this._comments.push(comment);
+
+    return true;
+  }
+
+  removeComment(id) {
+    const index = this._comments.findIndex((it) => it.id === id);
+
+    if (index === -1) {
+      return false;
+    }
+
+    this._comments.splice(index, 1);
+
+    return true;
+  }
+}
+
 export default class Films {
-  constructor(commentsModel) {
-    this._commentsModel = commentsModel;
+  constructor() {
+    this.comments = new Comments();
+
     this._films = [];
     this._activeFilterType = FilterType.ALL;
 
@@ -22,12 +65,19 @@ export default class Films {
   setFilms(films) {
     this._films = Array.from(films);
     this._callHandlers(this._dataChangeHandlers);
+
+    this._films.forEach((film) => {
+      film.comments = this._setFilmComment(film.comments);
+    });
   }
 
-  fillFilmsComments() {
-    for (const film of this._films) {
-      film.comments = this._commentsModel.getFilmComments(film.id);
-    }
+  _setFilmComment(comments) {
+    const fillComments = [];
+    comments.forEach((comment) => {
+      fillComments.push(
+          this.comments.getComment(comment));
+    });
+    return fillComments;
   }
 
   updateFilm(id, film) {
