@@ -3,7 +3,7 @@ import {FilterType} from "../const.js";
 
 class Comments {
   constructor() {
-    this._comments = new Map();
+    this._comments = null;
   }
 
   getComments() {
@@ -11,18 +11,12 @@ class Comments {
   }
 
   setComments(comments) {
-    this._comments = comments;
+    this._comments = Array.from(comments);
   }
 
-  getComment(id, filmId) {
-    return this._comments.get(filmId).find((comment) => comment.id === id);
-    // return this._comments.find((comment) => comment.id === id);
+  getFilmComment(id) {
+    return this._comments.find((comment) => comment.id === id);
   }
-
-  getComments(filmId) {
-    return this._comments.get(filmId);
-  }
-
 
   addComment(comment) {
     const index = this._comments.findIndex((it) => it.id === comment.id);
@@ -73,6 +67,16 @@ export default class Films {
     this._films = Array.from(films);
     this._setFilmsIds(films);
     this._callHandlers(this._dataChangeHandlers);
+  }
+
+  connectFilmsAndComments() {
+    this._films.forEach((film) => {
+      const comments = [];
+      film.comments.forEach((it) => {
+        comments.push(this.comments.getFilmComment(it));
+      });
+      film.comments = comments;
+    });
   }
 
   getAllIds() {
