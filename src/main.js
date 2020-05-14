@@ -20,6 +20,7 @@ const filmsSectionController = new MainController(siteMainElement, filmsModel, a
 const footerCounter = new FooterCounterComponent(mainPageConfigs.CARD_COUNT);
 
 render(siteHeaderElement, headerProfile, RenderPosition.BEFOREEND);
+filmsSectionController.renderLoading();
 render(siteFooterElement, footerCounter, RenderPosition.BEFOREEND);
 
 

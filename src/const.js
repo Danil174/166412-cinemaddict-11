@@ -40,6 +40,11 @@ export const sectionTitles = {
   COMMENTED: `Most commented`,
 };
 
+export const emptyListTitles = {
+  EMPTY: `There are no movies in our database`,
+  LOAD: `Loading...`,
+};
+
 export const KeyCodes = {
   ESC_KEYCODE: 27,
   ENTER_KEYCODE: 13
