@@ -101,21 +101,25 @@ export default class FilmController {
     this._popupComponent.setCloseButtonClickHandler(this._onPopUpCloseBtnClick);
 
     this._popupComponent.setWatchlistCheckboxHandler(() => {
-      this._onDataChange(this._popupComponent._film, Object.assign({}, this._popupComponent._film, {
-        inWatchlist: !this._filmComponent._film.inWatchlist
-      }));
+      const newFilm = FilmModel.clone(this._filmComponent._film);
+      newFilm.inWatchlist = !newFilm.inWatchlist;
+
+      this._onDataChange(this._filmComponent._film, newFilm);
     });
 
     this._popupComponent.setWatchedCheckboxHandler(() => {
-      this._onDataChange(this._popupComponent._film, Object.assign({}, this._popupComponent._film, {
-        watched: !this._filmComponent._film.watched
-      }));
+      const newFilm = FilmModel.clone(this._filmComponent._film);
+      newFilm.watched = !newFilm.watched;
+      newFilm.watchingDate = new Date(Date.now());
+
+      this._onDataChange(this._filmComponent._film, newFilm);
     });
 
     this._popupComponent.setFavoriteCheckboxHandler(() => {
-      this._onDataChange(this._popupComponent._film, Object.assign({}, this._popupComponent._film, {
-        favorite: !this._popupComponent._film.favorite
-      }));
+      const newFilm = FilmModel.clone(this._filmComponent._film);
+      newFilm.favorite = !newFilm.favorite;
+
+      this._onDataChange(this._filmComponent._film, newFilm);
     });
 
     this._popupComponent.setSmileClickHandler();
