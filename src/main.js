@@ -18,7 +18,7 @@ const filmsModel = new FilmsModel();
 
 const headerProfile = new HeaderProfileComponent();
 const filmsSectionController = new MainController(siteMainElement, filmsModel, api);
-const footerCounter = new FooterCounterComponent(mainPageConfigs.CARD_COUNT);
+const footerCounter = new FooterCounterComponent(0);
 
 render(siteHeaderElement, headerProfile, RenderPosition.BEFOREEND);
 filmsSectionController.renderLoading();
@@ -44,9 +44,9 @@ api.getFilms()
     filmsModel.comments.setComments(parsedComment);
     filmsModel.connectFilmsAndComments();
     filmsSectionController.render();
+    footerCounter.updateCounter(filmsModel.getFilms().length);
   })
   .catch(() => {
-    filmsModel.setFilms([]);
     filmsSectionController.render();
   });
 
