@@ -88,6 +88,12 @@ export default class Films {
   }
 
   updateFilm(id, film) {
+    const comments = [];
+    film.comments.forEach((it) => {
+      comments.push(this.comments.getFilmComment(it));
+    });
+    film.comments = comments;
+
     const index = this._films.findIndex((it) => it.id === id);
 
     if (index === -1) {

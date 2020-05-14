@@ -1,5 +1,6 @@
 import FilmComponent from "../components/film-card.js";
 import PopupComponent from "../components/popup.js";
+import FilmModel from "../models/film-model.js";
 
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
 import {KeyCodes} from "../const.js";
@@ -74,21 +75,25 @@ export default class FilmController {
     this._filmComponent.setOpenPopUpElementsClickHandler(this._renderPopUp);
 
     this._filmComponent.setWatchlistBtnHandler(() => {
-      this._onDataChange(this._filmComponent._film, Object.assign({}, this._filmComponent._film, {
-        inWatchlist: !this._filmComponent._film.inWatchlist
-      }));
+      const newFilm = FilmModel.clone(this._filmComponent._film);
+      newFilm.inWatchlist = !newFilm.inWatchlist;
+
+      this._onDataChange(this._filmComponent._film, newFilm);
     });
 
     this._filmComponent.setWatchedBtnHandler(() => {
-      this._onDataChange(this._filmComponent._film, Object.assign({}, this._filmComponent._film, {
-        watched: !this._filmComponent._film.watched
-      }));
+      const newFilm = FilmModel.clone(this._filmComponent._film);
+      newFilm.watched = !newFilm.watched;
+      newFilm.watchingDate = new Date(Date.now());
+
+      this._onDataChange(this._filmComponent._film, newFilm);
     });
 
     this._filmComponent.setFavoriteBtnHandler(() => {
-      this._onDataChange(this._filmComponent._film, Object.assign({}, this._filmComponent._film, {
-        favorite: !this._filmComponent._film.favorite
-      }));
+      const newFilm = FilmModel.clone(this._filmComponent._film);
+      newFilm.favorite = !newFilm.favorite;
+
+      this._onDataChange(this._filmComponent._film, newFilm);
     });
   }
 

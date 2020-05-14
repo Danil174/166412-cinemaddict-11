@@ -47,9 +47,10 @@ const getSortedFilms = (films, sortType, from, to) => {
 };
 
 export default class MainController {
-  constructor(container, filmsModel) {
+  constructor(container, filmsModel, api) {
     this._container = container;
     this._filmsModel = filmsModel;
+    this._api = api;
 
     this._showedFilmControllers = [];
     this._showedFilmControllersExtra = [];
@@ -187,12 +188,15 @@ export default class MainController {
   }
 
   _updateData(oldData, newData) {
-    const isSuccess = this._filmsModel.updateFilm(oldData.id, newData);
+    this._api.updateFilm(oldData.id, newData)
+        .then((filmsModel) => {
+          const isSuccess = this._filmsModel.updateFilm(oldData.id, filmsModel);
 
-    if (isSuccess) {
-      const allShowedFilmControllers = this._showedFilmControllers.concat(this._showedFilmControllersExtra);
-      const controlletsToUpdate = allShowedFilmControllers.filter((it) => it._filmComponent._film.id === oldData.id);
-      controlletsToUpdate.forEach((it) => it.updateView(newData));
-    }
+          if (isSuccess) {
+            const allShowedFilmControllers = this._showedFilmControllers.concat(this._showedFilmControllersExtra);
+            const controlletsToUpdate = allShowedFilmControllers.filter((it) => it._filmComponent._film.id === oldData.id);
+            controlletsToUpdate.forEach((it) => it.updateView(filmsModel));
+          }
+        });
   }
 }

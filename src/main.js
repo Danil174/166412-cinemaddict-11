@@ -16,7 +16,7 @@ const api = new API(AUTHORIZATION);
 const filmsModel = new FilmsModel();
 
 const headerProfile = new HeaderProfileComponent();
-const filmsSectionController = new MainController(siteMainElement, filmsModel);
+const filmsSectionController = new MainController(siteMainElement, filmsModel, api);
 const footerCounter = new FooterCounterComponent(mainPageConfigs.CARD_COUNT);
 
 render(siteHeaderElement, headerProfile, RenderPosition.BEFOREEND);
