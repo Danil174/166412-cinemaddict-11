@@ -11,8 +11,9 @@ const siteMainElement = document.querySelector(`.main`);
 const siteFooterElement = document.querySelector(`.footer`);
 
 const AUTHORIZATION = `Basic dXNlckBdqwerty2020ZxCvB12`;
+const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict`;
 
-const api = new API(AUTHORIZATION);
+const api = new API(END_POINT, AUTHORIZATION);
 const filmsModel = new FilmsModel();
 
 const headerProfile = new HeaderProfileComponent();

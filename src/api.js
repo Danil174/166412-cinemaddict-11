@@ -1,6 +1,13 @@
 import Film from "./models/film-model.js";
 import Comment from "./models/comment-model.js";
 
+const Method = {
+  GET: `GET`,
+  POST: `POST`,
+  PUT: `PUT`,
+  DELETE: `DELETE`
+};
+
 const checkStatus = (response) => {
   if (response.status >= 200 && response.status < 300) {
     return response;
@@ -10,41 +17,42 @@ const checkStatus = (response) => {
 };
 
 const API = class {
-  constructor(authorization) {
+  constructor(endPoint, authorization) {
+    this._endPoint = endPoint;
     this._authorization = authorization;
   }
 
   getFilms() {
-    const headers = new Headers();
-    headers.append(`Authorization`, this._authorization);
-    return fetch(`https://11.ecmascript.pages.academy/cinemaddict/movies`, {headers})
-        .then(checkStatus)
-        .then((response) => response.json())
-        .then(Film.parseFilms);
+    return this._load({url: `movies`})
+      .then((response) => response.json())
+      .then(Film.parseFilms);
   }
 
   updateFilm(id, data) {
-    const headers = new Headers();
-    headers.append(`Authorization`, this._authorization);
-    headers.append(`Content-Type`, `application/json`);
-
-    return fetch(`https://11.ecmascript.pages.academy/cinemaddict/movies/${id}`, {
-      method: `PUT`,
+    return this._load({
+      url: `movies/${id}`,
+      method: Method.PUT,
       body: JSON.stringify(data.toRAW()),
-      headers,
+      headers: new Headers({"Content-Type": `application/json`})
     })
-    .then(checkStatus)
     .then((response) => response.json())
     .then(Film.parseFilm);
   }
 
   getComments(filmId) {
-    const headers = new Headers();
+    return this._load({url: `comments/${filmId}`})
+      .then((response) => response.json())
+      .then(Comment.parseComments);
+  }
+
+  _load({url, method = Method.GET, body = null, headers = new Headers()}) {
     headers.append(`Authorization`, this._authorization);
-    return fetch(`https://11.ecmascript.pages.academy/cinemaddict/comments/${filmId}`, {headers})
-        .then(checkStatus)
-        .then((response) => response.json())
-        .then(Comment.parseComments);
+
+    return fetch(`${this._endPoint}/${url}`, {method, body, headers})
+      .then(checkStatus)
+      .catch((err) => {
+        throw err;
+      });
   }
 };
 
