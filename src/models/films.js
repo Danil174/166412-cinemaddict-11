@@ -1,6 +1,7 @@
 import {getFilmsByFilter} from "../utils/filter.js";
 import {FilterType} from "../const.js";
 
+
 class Comments {
   constructor() {
     this._comments = null;
@@ -71,11 +72,7 @@ export default class Films {
 
   connectFilmsAndComments() {
     this._films.forEach((film) => {
-      const comments = [];
-      film.comments.forEach((it) => {
-        comments.push(this.comments.getFilmComment(it));
-      });
-      film.comments = comments;
+      film.comments = this._fillFilmComments(film.comments);
     });
   }
 
@@ -83,16 +80,8 @@ export default class Films {
     return this._filmsIds;
   }
 
-  _setFilmsIds(films) {
-    films.forEach((it) => this._filmsIds.push(it.id));
-  }
-
   updateFilm(id, film) {
-    const comments = [];
-    film.comments.forEach((it) => {
-      comments.push(this.comments.getFilmComment(it));
-    });
-    film.comments = comments;
+    film.comments = this._fillFilmComments(film.comments);
 
     const index = this._films.findIndex((it) => it.id === id);
 
@@ -118,6 +107,20 @@ export default class Films {
   setFilter(filterType) {
     this._activeFilterType = filterType;
     this._callHandlers(this._filterChangeHandlers);
+  }
+
+  _fillFilmComments(comments) {
+    const fullСomments = [];
+
+    comments.forEach((it) => {
+      fullСomments.push(this.comments.getFilmComment(it));
+    });
+
+    return fullСomments;
+  }
+
+  _setFilmsIds(films) {
+    films.forEach((it) => this._filmsIds.push(it.id));
   }
 
   _callHandlers(handlers) {
