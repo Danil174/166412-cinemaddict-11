@@ -44,6 +44,9 @@ api.getFilms()
     filmsModel.comments.setComments(parsedComment);
     filmsModel.connectFilmsAndComments();
     filmsSectionController.render();
+  })
+  .catch(() => {
+    filmsModel.setFilms([]);
+    filmsSectionController.render();
   });
-
 
