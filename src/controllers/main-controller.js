@@ -81,7 +81,6 @@ export default class MainController {
     this._primaryListElement = this._primaryList.getElement();
     this._primaryListContainer = this._primaryListElement.querySelector(`.films-list__container`);
 
-    // this._renderControls();
 
     if (films.length === 0) {
       render(container, this._emptyListComponent, RenderPosition.BEFOREEND);

@@ -22,10 +22,15 @@ const API = class {
     this._authorization = authorization;
   }
 
-  getFilms() {
+  getFilmsWithComments() {
     return this._load({url: `movies`})
       .then((response) => response.json())
-      .then(Film.parseFilms);
+      .then((films) => {
+        return films.map((film) => this._updateFilmComments(film));
+      })
+    // не до конца понимаю, как в этом месте работает, не забыть спросить
+    .then((data) => Promise.all(data))
+    .then(Film.parseFilms);
   }
 
   updateFilm(id, data) {
@@ -36,6 +41,7 @@ const API = class {
       headers: new Headers({"Content-Type": `application/json`})
     })
     .then((response) => response.json())
+    .then((film) => this._updateFilmComments(film))
     .then(Film.parseFilm);
   }
 
@@ -43,6 +49,14 @@ const API = class {
     return this._load({url: `comments/${filmId}`})
       .then((response) => response.json())
       .then(Comment.parseComments);
+  }
+
+  _updateFilmComments(film) {
+    return this.getComments(film.id)
+      .then((comments) => {
+        film.comments = comments;
+        return film;
+      });
   }
 
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {

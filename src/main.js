@@ -25,24 +25,9 @@ filmsSectionController.renderLoading();
 render(siteFooterElement, footerCounter, RenderPosition.BEFOREEND);
 
 
-api.getFilms()
+api.getFilmsWithComments()
   .then((films) => {
-    const comments = [];
     filmsModel.setFilms(films);
-    filmsModel.getAllIds().forEach((id) => {
-      comments.push(api.getComments(id));
-    });
-
-    return comments;
-  })
-  .then((comments) => Promise.all(comments))
-  .then((comments) => {
-    const parsedComment = [];
-    comments.map((it) => {
-      parsedComment.push(...it);
-    });
-    filmsModel.comments.setComments(parsedComment);
-    filmsModel.connectFilmsAndComments();
     filmsSectionController.render();
     footerCounter.updateCounter(filmsModel.getFilms().length);
   })

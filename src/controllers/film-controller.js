@@ -84,7 +84,8 @@ export default class FilmController {
     this._filmComponent.setWatchedBtnHandler(() => {
       const newFilm = FilmModel.clone(this._filmComponent._film);
       newFilm.watched = !newFilm.watched;
-      newFilm.watchingDate = new Date(Date.now());
+
+      newFilm.watchingDate = newFilm.watched ? new Date(Date.now()) : newFilm.watchingDate;
 
       this._onDataChange(this._filmComponent._film, newFilm);
     });

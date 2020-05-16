@@ -1,55 +1,9 @@
 import {getFilmsByFilter} from "../utils/filter.js";
 import {FilterType} from "../const.js";
 
-
-class Comments {
-  constructor() {
-    this._comments = null;
-  }
-
-  getComments() {
-    return this._comments;
-  }
-
-  setComments(comments) {
-    this._comments = Array.from(comments);
-  }
-
-  getFilmComment(id) {
-    return this._comments.find((comment) => comment.id === id);
-  }
-
-  addComment(comment) {
-    const index = this._comments.findIndex((it) => it.id === comment.id);
-
-    if (index !== -1) {
-      return false;
-    }
-
-    this._comments.push(comment);
-
-    return true;
-  }
-
-  removeComment(id) {
-    const index = this._comments.findIndex((it) => it.id === id);
-
-    if (index === -1) {
-      return false;
-    }
-
-    this._comments.splice(index, 1);
-
-    return true;
-  }
-}
-
 export default class Films {
   constructor() {
-    this.comments = new Comments();
-
     this._films = [];
-    this._filmsIds = [];
     this._activeFilterType = FilterType.ALL;
 
     this._dataChangeHandlers = [];
@@ -66,23 +20,10 @@ export default class Films {
 
   setFilms(films) {
     this._films = Array.from(films);
-    this._setFilmsIds(films);
     this._callHandlers(this._dataChangeHandlers);
   }
 
-  connectFilmsAndComments() {
-    this._films.forEach((film) => {
-      film.comments = this._fillFilmComments(film.comments);
-    });
-  }
-
-  getAllIds() {
-    return this._filmsIds;
-  }
-
   updateFilm(id, film) {
-    film.comments = this._fillFilmComments(film.comments);
-
     const index = this._films.findIndex((it) => it.id === id);
 
     if (index === -1) {
@@ -107,20 +48,6 @@ export default class Films {
   setFilter(filterType) {
     this._activeFilterType = filterType;
     this._callHandlers(this._filterChangeHandlers);
-  }
-
-  _fillFilmComments(comments) {
-    const fullСomments = [];
-
-    comments.forEach((it) => {
-      fullСomments.push(this.comments.getFilmComment(it));
-    });
-
-    return fullСomments;
-  }
-
-  _setFilmsIds(films) {
-    films.forEach((it) => this._filmsIds.push(it.id));
   }
 
   _callHandlers(handlers) {
