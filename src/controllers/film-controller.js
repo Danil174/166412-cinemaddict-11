@@ -70,7 +70,19 @@ export default class FilmController {
 
     setTimeout(() => {
       this._popupComponent.getElement().style.animation = ``;
+
     }, SHAKE_ANIMATION_TIMEOUT);
+  }
+
+  dеleteDeny() {
+    this.shake();
+    this._popupComponent.refreshDeleteBtns();
+  }
+
+  addDeny() {
+    this.shake();
+    document.addEventListener(`keydown`, this._onKeysDownAddComment);
+    this._popupComponent.enableCommentInput();
   }
 
   _renderPopUp() {
@@ -175,7 +187,14 @@ export default class FilmController {
       this._onDataChange(this._popupComponent._film, Object.assign({}, this._popupComponent._film, {
         comments: this._popupComponent._film.comments.concat(commentInfo.commentIdOrData)
       }), commentInfo);
+
+      this._freezeNewComment();
     }
+  }
+
+  _freezeNewComment() {
+    this._popupComponent.disableCommentInput();
+    document.removeEventListener(`keydown`, this._onKeysDownAddComment);
   }
 
   _removePopUp() {

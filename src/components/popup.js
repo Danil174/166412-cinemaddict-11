@@ -2,6 +2,11 @@ import AbstractSmartComponent from "./abstract-smart-component.js";
 import {getReleaseDate, getFilmDuration, getHumanizeDate} from "../utils/common.js";
 import {encode} from "he";
 
+const DeleteBtnTitles = {
+  deleting: `Deleting...`,
+  delete: `Delete`,
+};
+
 const generateGenresTemplate = (genres) => {
   return genres
     .map((genre) => {
@@ -27,7 +32,7 @@ const generateCommentsTemplate = (comments) => {
             <p class="film-details__comment-info">
               <span class="film-details__comment-author">${author}</span>
               <span class="film-details__comment-day">${commentDate}</span>
-              <button class="film-details__comment-delete">Delete</button>
+              <button class="film-details__comment-delete">${DeleteBtnTitles.delete}</button>
             </p>
           </div>
         </li>`
@@ -225,7 +230,7 @@ export default class PopUp extends AbstractSmartComponent {
   }
 
   getTemplate() {
-    return createFilmPopupTemplate(this._film);
+    return createFilmPopupTemplate(this._film, this._externalData);
   }
 
   getComment() {
@@ -307,11 +312,41 @@ export default class PopUp extends AbstractSmartComponent {
       .forEach((el, index) => {
         el.addEventListener(`click`, (evt) => {
           evt.preventDefault();
+          this._blockDeleteBtn(evt.target);
           handler(index);
         });
       });
 
     this._setDeleteCommentBtnClickHandler = handler;
+  }
+
+  refreshDeleteBtns() {
+    this.getElement().querySelectorAll(`.film-details__comment-delete`)
+      .forEach((el) => {
+        el.textContent = DeleteBtnTitles.delete;
+      });
+  }
+
+  disableCommentInput() {
+    this.getElement().querySelector(`.film-details__comment-input`).setAttribute(`disabled`, `true`);
+    this._resetSmileClickHandler();
+  }
+
+  enableCommentInput() {
+    this.getElement().querySelector(`.film-details__comment-input`).removeAttribute(`disabled`);
+    this.setSmileClickHandler();
+  }
+
+  _resetSmileClickHandler() {
+    this.getElement().querySelectorAll(`.film-details__emoji-label`)
+      .forEach((el) => {
+        el.removeEventListener(`click`, setSmile);
+      });
+  }
+
+  _blockDeleteBtn(btn) {
+    btn.textContent = DeleteBtnTitles.deleting;
+    btn.setAttribute(`disabled`, `true`);
   }
 }
 
