@@ -11,6 +11,8 @@ const Mode = {
   CLOSE: `close`,
 };
 
+const SHAKE_ANIMATION_TIMEOUT = 600;
+
 export default class FilmController {
   constructor(container, onDataChange, onViewChange) {
     this._container = container;
@@ -61,6 +63,14 @@ export default class FilmController {
 
   updateView(film) {
     this.render(film);
+  }
+
+  shake() {
+    this._popupComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+
+    setTimeout(() => {
+      this._popupComponent.getElement().style.animation = ``;
+    }, SHAKE_ANIMATION_TIMEOUT);
   }
 
   _renderPopUp() {
@@ -153,8 +163,7 @@ export default class FilmController {
   _onKeysDownAddComment(evt) {
     if (evt.ctrlKey && evt.keyCode === KeyCodes.ENTER_KEYCODE) {
       if (this._popupComponent.checkCommentFill()) {
-        // добавить класс покачивания + устранить дребезг
-        console.log(`форма не заполнена`);
+        this.shake();
         return;
       }
 

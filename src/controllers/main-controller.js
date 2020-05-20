@@ -183,13 +183,15 @@ export default class MainController {
 
   _onDataChange(oldData, newData, commentInfo = null) {
     if (commentInfo) {
-      if (commentInfo.mode === `ADD`) {
-        this._api.addComment(oldData.id, commentInfo.commentIdOrData)
-          .then((updatedFilm) => this._upDateLocalData(oldData.id, updatedFilm));
-      } else {
-        this._api.removeComment(commentInfo.commentIdOrData)
+      const api = commentInfo.mode === `ADD` ?
+        () => this._api.addComment(oldData.id, commentInfo.commentIdOrData)
+          .then((updatedFilm) => this._upDateLocalData(oldData.id, updatedFilm)) :
+        () => this._api.removeComment(commentInfo.commentIdOrData)
           .then(() => this._upDateLocalData(oldData.id, newData));
-      }
+      api().catch(() => {
+        const controlletsToUpdate = this._getFilmControllersToUpdate(oldData.id);
+        controlletsToUpdate.forEach((it) => it.shake());
+      });
     } else {
       this._updateData(oldData, newData);
     }
@@ -206,9 +208,13 @@ export default class MainController {
     const isSuccess = this._filmsModel.updateFilm(id, filmsModel);
 
     if (isSuccess) {
-      const allShowedFilmControllers = this._showedFilmControllers.concat(this._showedFilmControllersExtra);
-      const controlletsToUpdate = allShowedFilmControllers.filter((it) => it._filmComponent._film.id === id);
+      const controlletsToUpdate = this._getFilmControllersToUpdate(id);
       controlletsToUpdate.forEach((it) => it.updateView(filmsModel));
     }
+  }
+
+  _getFilmControllersToUpdate(id) {
+    const allShowedFilmControllers = this._showedFilmControllers.concat(this._showedFilmControllersExtra);
+    return allShowedFilmControllers.filter((it) => it._filmComponent._film.id === id);
   }
 }
