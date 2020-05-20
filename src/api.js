@@ -51,6 +51,37 @@ const API = class {
       .then(Comment.parseComments);
   }
 
+  addComment(filmId, comment) {
+    return this._load({
+      url: `comments/${filmId}`,
+      method: Method.POST,
+      body: JSON.stringify(comment.toRAW()),
+      headers: new Headers({"Content-Type": `application/json`})
+    })
+    .then((response) => response.json())
+    .then((data) => this._filmWithNewComments(data));
+  }
+
+  removeComment(commentID) {
+    return this._load({
+      url: `comments/${commentID}`,
+      method: Method.DELETE,
+    });
+  }
+
+  _filmWithNewComments(data) {
+    const newComments = [];
+    const film = new Film(data.movie);
+
+    data.comments.forEach((comment) => {
+      newComments.push(new Comment(comment));
+    });
+
+    film.comments = newComments;
+
+    return film;
+  }
+
   _updateFilmComments(film) {
     return this.getComments(film.id)
       .then((comments) => {

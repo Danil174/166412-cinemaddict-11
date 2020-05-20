@@ -181,14 +181,14 @@ export default class MainController {
     this._updateFilms(this._showingFilmsCount);
   }
 
-  _onDataChange(oldData, newData, comment = null) {
-    if (comment !== null) {
-      if (typeof comment === `string`) {
-        this._filmsModel.comments.removeComment(comment);
-        this._updateData(oldData, newData);
+  _onDataChange(oldData, newData, commentInfo = null) {
+    if (commentInfo) {
+      if (commentInfo.mode === `ADD`) {
+        this._api.addComment(oldData.id, commentInfo.commentIdOrData)
+          .then((updatedFilm) => this._upDateLocalData(oldData.id, updatedFilm));
       } else {
-        this._filmsModel.comments.addComment(newData);
-        this._updateData(oldData, newData);
+        this._api.removeComment(commentInfo.commentIdOrData)
+          .then(() => this._upDateLocalData(oldData.id, newData));
       }
     } else {
       this._updateData(oldData, newData);
@@ -198,13 +198,17 @@ export default class MainController {
   _updateData(oldData, newData) {
     this._api.updateFilm(oldData.id, newData)
         .then((filmsModel) => {
-          const isSuccess = this._filmsModel.updateFilm(oldData.id, filmsModel);
-
-          if (isSuccess) {
-            const allShowedFilmControllers = this._showedFilmControllers.concat(this._showedFilmControllersExtra);
-            const controlletsToUpdate = allShowedFilmControllers.filter((it) => it._filmComponent._film.id === oldData.id);
-            controlletsToUpdate.forEach((it) => it.updateView(filmsModel));
-          }
+          this._upDateLocalData(oldData.id, filmsModel);
         });
+  }
+
+  _upDateLocalData(id, filmsModel) {
+    const isSuccess = this._filmsModel.updateFilm(id, filmsModel);
+
+    if (isSuccess) {
+      const allShowedFilmControllers = this._showedFilmControllers.concat(this._showedFilmControllersExtra);
+      const controlletsToUpdate = allShowedFilmControllers.filter((it) => it._filmComponent._film.id === id);
+      controlletsToUpdate.forEach((it) => it.updateView(filmsModel));
+    }
   }
 }

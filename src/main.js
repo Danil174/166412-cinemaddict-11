@@ -4,13 +4,12 @@ import MainController from "./controllers/main-controller.js";
 import FooterCounterComponent from "./components/footer-movies-counter.js";
 import FilmsModel from "./models/films.js";
 import {render, RenderPosition} from "./utils/render";
-import {mainPageConfigs} from "./const.js";
 
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
 const siteFooterElement = document.querySelector(`.footer`);
 
-const AUTHORIZATION = `Basic dXNlckBdqwerty2020ZxCvB12`;
+const AUTHORIZATION = `Basic dXNlckBdqsdfwerty2020ZxCvB12`;
 const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict`;
 
 const api = new API(END_POINT, AUTHORIZATION);

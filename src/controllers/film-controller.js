@@ -1,6 +1,7 @@
 import FilmComponent from "../components/film-card.js";
 import PopupComponent from "../components/popup.js";
 import FilmModel from "../models/film-model.js";
+import CommentModel from "../models/comment-model.js";
 
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
 import {KeyCodes} from "../const.js";
@@ -127,10 +128,15 @@ export default class FilmController {
 
     this._popupComponent.setDeleteCommentBtnClickHandler((index) => {
       const newComments = this._popupComponent._film.comments.slice();
-      const deletedCommentId = newComments.splice(index, 1).shift().id;
+
+      const commentInfo = {
+        mode: `DELETE`,
+        commentIdOrData: newComments.splice(index, 1).shift().id,
+      };
+
       this._onDataChange(this._popupComponent._film, Object.assign({}, this._popupComponent._film, {
         comments: newComments
-      }), deletedCommentId);
+      }), commentInfo);
     });
   }
 
@@ -147,11 +153,19 @@ export default class FilmController {
   _onKeysDownAddComment(evt) {
     if (evt.ctrlKey && evt.keyCode === KeyCodes.ENTER_KEYCODE) {
       if (this._popupComponent.checkCommentFill()) {
+        // добавить класс покачивания + устранить дребезг
+        console.log(`форма не заполнена`);
         return;
       }
+
+      const commentInfo = {
+        mode: `ADD`,
+        commentIdOrData: CommentModel.create(this._popupComponent.getComment()),
+      };
+
       this._onDataChange(this._popupComponent._film, Object.assign({}, this._popupComponent._film, {
-        comments: this._popupComponent._film.comments.concat(this._popupComponent.getComment())
-      }), this._popupComponent.getComment());
+        comments: this._popupComponent._film.comments.concat(commentInfo.commentIdOrData)
+      }), commentInfo);
     }
   }
 

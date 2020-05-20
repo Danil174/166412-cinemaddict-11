@@ -7,11 +7,23 @@ export default class Comment {
     this.emotion = data[`emotion`];
   }
 
+  toRAW() {
+    return {
+      "comment": this.comment,
+      "date": this.date.toISOString(),
+      "emotion": this.emotion,
+    };
+  }
+
   static parseComment(data) {
     return new Comment(data);
   }
 
   static parseComments(data) {
     return data.map(Comment.parseComment);
+  }
+
+  static create(data) {
+    return new Comment(data);
   }
 }
