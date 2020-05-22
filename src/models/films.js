@@ -2,8 +2,7 @@ import {getFilmsByFilter} from "../utils/filter.js";
 import {FilterType} from "../const.js";
 
 export default class Films {
-  constructor(commentsModel) {
-    this._commentsModel = commentsModel;
+  constructor() {
     this._films = [];
     this._activeFilterType = FilterType.ALL;
 
@@ -22,12 +21,6 @@ export default class Films {
   setFilms(films) {
     this._films = Array.from(films);
     this._callHandlers(this._dataChangeHandlers);
-  }
-
-  fillFilmsComments() {
-    for (const film of this._films) {
-      film.comments = this._commentsModel.getFilmComments(film.id);
-    }
   }
 
   updateFilm(id, film) {

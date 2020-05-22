@@ -41,7 +41,7 @@ const createFilmCardTemplate = (film) => {
         <span class="film-card__duration">${prettyDuration}</span>
         <span class="film-card__genre">${genre}</span>
       </p>
-      <img src="./images/posters/${img}" alt="" class="film-card__poster">
+      <img src="./${img}" alt="" class="film-card__poster">
       <p class="film-card__description">${description}</p>
       <a class="film-card__comments">${commentsLength} comments</a>
       <form class="film-card__controls">

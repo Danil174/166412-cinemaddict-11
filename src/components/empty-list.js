@@ -1,15 +1,20 @@
 import AbstractComponent from "./abstract-component.js";
 
-export const createEmptyListTemplate = () => {
+export const createEmptyListTemplate = (title) => {
   return (
     `<section class="films-list">
-      <h2 class="films-list__title">There are no movies in our database</h2>
+      <h2 class="films-list__title">${title}</h2>
     </section>`
   );
 };
 
 export default class ListSection extends AbstractComponent {
+  constructor(title) {
+    super();
+
+    this._title = title;
+  }
   getTemplate() {
-    return createEmptyListTemplate();
+    return createEmptyListTemplate(this._title);
   }
 }

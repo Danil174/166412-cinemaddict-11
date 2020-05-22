@@ -2,6 +2,11 @@ import AbstractSmartComponent from "./abstract-smart-component.js";
 import {getReleaseDate, getFilmDuration, getHumanizeDate} from "../utils/common.js";
 import {encode} from "he";
 
+const DeleteBtnTitles = {
+  deleting: `Deleting...`,
+  delete: `Delete`,
+};
+
 const generateGenresTemplate = (genres) => {
   return genres
     .map((genre) => {
@@ -27,7 +32,7 @@ const generateCommentsTemplate = (comments) => {
             <p class="film-details__comment-info">
               <span class="film-details__comment-author">${author}</span>
               <span class="film-details__comment-day">${commentDate}</span>
-              <button class="film-details__comment-delete">Delete</button>
+              <button class="film-details__comment-delete">${DeleteBtnTitles.delete}</button>
             </p>
           </div>
         </li>`
@@ -80,7 +85,7 @@ const createFilmPopupTemplate = (film) => {
           </div>
           <div class="film-details__info-wrap">
             <div class="film-details__poster">
-              <img class="film-details__poster-img" src="./images/posters/${img}" alt="">
+              <img class="film-details__poster-img" src="./${img}" alt="">
 
               <p class="film-details__age">${allowedAge}</p>
             </div>
@@ -225,16 +230,16 @@ export default class PopUp extends AbstractSmartComponent {
   }
 
   getTemplate() {
-    return createFilmPopupTemplate(this._film);
+    return createFilmPopupTemplate(this._film, this._externalData);
   }
 
   getComment() {
-    const popUp = this;
-    const newComment = popUp.getElement().querySelector(`.film-details__new-comment`);
+    const newComment = this.getElement().querySelector(`.film-details__new-comment`);
     const emoji = newComment.querySelector(`input:checked`).value;
     const text = encode(newComment.querySelector(`.film-details__comment-input`).value);
 
     const comment = {
+      id: String(Date.now() + Math.random()),
       comment: text,
       author: `test`,
       date: Date.now(),
@@ -242,6 +247,14 @@ export default class PopUp extends AbstractSmartComponent {
     };
 
     return comment;
+  }
+
+  checkCommentFill() {
+    const newComment = this.getElement().querySelector(`.film-details__new-comment`);
+    const emojiNotSelect = newComment.querySelector(`input:checked`) === null;
+    const userCommentNotExist = newComment.querySelector(`.film-details__comment-input`).value === ``;
+
+    return (emojiNotSelect || userCommentNotExist);
   }
 
   recoveryListeners() {
@@ -299,11 +312,41 @@ export default class PopUp extends AbstractSmartComponent {
       .forEach((el, index) => {
         el.addEventListener(`click`, (evt) => {
           evt.preventDefault();
+          this._blockDeleteBtn(evt.target);
           handler(index);
         });
       });
 
     this._setDeleteCommentBtnClickHandler = handler;
+  }
+
+  refreshDeleteBtns() {
+    this.getElement().querySelectorAll(`.film-details__comment-delete`)
+      .forEach((el) => {
+        el.textContent = DeleteBtnTitles.delete;
+      });
+  }
+
+  disableCommentInput() {
+    this.getElement().querySelector(`.film-details__comment-input`).setAttribute(`disabled`, `true`);
+    this._resetSmileClickHandler();
+  }
+
+  enableCommentInput() {
+    this.getElement().querySelector(`.film-details__comment-input`).removeAttribute(`disabled`);
+    this.setSmileClickHandler();
+  }
+
+  _resetSmileClickHandler() {
+    this.getElement().querySelectorAll(`.film-details__emoji-label`)
+      .forEach((el) => {
+        el.removeEventListener(`click`, setSmile);
+      });
+  }
+
+  _blockDeleteBtn(btn) {
+    btn.textContent = DeleteBtnTitles.deleting;
+    btn.setAttribute(`disabled`, `true`);
   }
 }
 
