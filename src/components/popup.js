@@ -230,7 +230,7 @@ export default class PopUp extends AbstractSmartComponent {
   }
 
   getTemplate() {
-    return createFilmPopupTemplate(this._film, this._externalData);
+    return createFilmPopupTemplate(this._film);
   }
 
   getComment() {
