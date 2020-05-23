@@ -49,3 +49,9 @@ export const KeyCodes = {
   ESC_KEYCODE: 27,
   ENTER_KEYCODE: 13
 };
+
+export const UserRangs = {
+  NOVICE: `Novice`,
+  FAN: `Fan`,
+  EXPERT: `Movie Buff`,
+};

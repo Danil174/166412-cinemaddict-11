@@ -1,4 +1,5 @@
 import moment from "moment";
+import {UserRangs} from "../const.js";
 
 export const getReleaseDate = (date) => {
   return moment(date).format(`DD MMMM YYYY`);
@@ -56,4 +57,33 @@ export const sortObjectsByKeyMaxMin = (objects, key) => {
 export const sortObjectsByValueLength = (objects, key) => {
   const arr = objects.slice();
   return arr.sort((a, b) => b[key].length - a[key].length);
+};
+
+export const getWatchedFilmsCount = (films) => {
+  let watchedFilms = 0;
+  films.forEach((film) => {
+    if (film.watched) {
+      watchedFilms++;
+    }
+  });
+
+  return watchedFilms;
+};
+
+export const getRang = (filmsAmount) => {
+
+  if (filmsAmount === 0) {
+    return ``;
+  }
+
+  const numericRang = Math.ceil(filmsAmount / 10);
+
+  switch (numericRang) {
+    case 1:
+      return UserRangs.NOVICE;
+    case 2:
+      return UserRangs.FAN;
+    default:
+      return UserRangs.EXPERT;
+  }
 };
