@@ -5,6 +5,7 @@ import FiltersComponent, {SortType} from "../components/filters.js";
 import FilmsSectionComponent from "../components/films-section.js";
 import FilmsListComponent from "../components/films-list.js";
 import EmptyListComponent from "../components/empty-list.js";
+import StatisticComponent from "../components/statistic.js";
 import ShowMoreBtnComponent from "../components/show-more-btn.js";
 import {sortObjectsByKeyMaxMin, sortObjectsByValueLength} from "../utils/common.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
@@ -90,12 +91,27 @@ export default class MainController {
     this._initLists(films);
 
     this._renderShowMoreBtn();
+
+    this._renderStatistics(films);
   }
 
   renderLoading() {
     const container = this._filmsSection.getElement();
     this._renderControls();
     render(container, this._loadingListComponent, RenderPosition.BEFOREEND);
+  }
+
+  hide() {
+    this._container.hide();
+  }
+
+  show() {
+    this._container.show();
+  }
+
+  _renderStatistics(films) {
+    const statistic = new StatisticComponent(films);
+    render(this._container, statistic, RenderPosition.BEFOREEND);
   }
 
   _removeFilms() {
