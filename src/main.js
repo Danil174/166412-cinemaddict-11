@@ -4,7 +4,6 @@ import MainController from "./controllers/main-controller.js";
 import FooterCounterComponent from "./components/footer-movies-counter.js";
 import FilmsModel from "./models/films.js";
 import {render, RenderPosition} from "./utils/render";
-import {getWatchedFilmsCount} from "./utils/common.js";
 
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
@@ -30,7 +29,7 @@ api.getFilmsWithComments()
     filmsModel.setFilms(films);
     filmsSectionController.render();
     footerCounter.updateCounter(filmsModel.getFilms().length);
-    headerProfile.setUserRang(getWatchedFilmsCount(filmsModel.getFilms()));
+    headerProfile.setUserRang(filmsModel.getFilms());
   })
   .catch(() => {
     filmsSectionController.render();
