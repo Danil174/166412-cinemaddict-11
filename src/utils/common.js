@@ -11,8 +11,19 @@ export const getHumanizeDate = (date) => {
 
 export const getFilmDuration = (timeInMins) => {
   const time = moment.utc().startOf(`day`).add({minutes: timeInMins});
-  const hours = time.hour() ? `${time.hour()}h ` : ``;
-  return `${hours}${time.minutes()}m`;
+  return {
+    hours: time.hour() ? `${time.hour()}h ` : ``,
+    minutes: time.minutes() ? `${time.minutes()}m ` : ``,
+  };
+};
+
+export const getFullDuration = (timeInMins) => {
+  const hours = Math.floor(timeInMins / 60);
+  const minutes = timeInMins % 60;
+  return {
+    hours,
+    minutes,
+  };
 };
 
 export const getRandomArrayItems = (array, maxItems = array.length, minItems = 1, joinSTR = `, `) => {
@@ -59,19 +70,11 @@ export const sortObjectsByValueLength = (objects, key) => {
   return arr.sort((a, b) => b[key].length - a[key].length);
 };
 
-export const getWatchedFilmsCount = (films) => {
-  let watchedFilms = 0;
-  films.forEach((film) => {
-    if (film.watched) {
-      watchedFilms++;
-    }
-  });
-
-  return watchedFilms;
+export const getWatchedFilms = (films) => {
+  return films.slice().filter((film) => film.watched);
 };
 
 export const getRang = (filmsAmount) => {
-
   if (filmsAmount === 0) {
     return ``;
   }

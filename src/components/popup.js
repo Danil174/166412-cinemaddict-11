@@ -74,7 +74,7 @@ const createFilmPopupTemplate = (film) => {
   const commentsAmount = comments.length;
   const generesDetails = generateGenresTemplate(genres);
   const commentsTemplate = generateCommentsTemplate(comments);
-  const prettyDuration = getFilmDuration(duration);
+  const {hours, minutes} = getFilmDuration(duration);
 
   return (
     `<section class="film-details">
@@ -121,7 +121,7 @@ const createFilmPopupTemplate = (film) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Runtime</td>
-                  <td class="film-details__cell">${prettyDuration}</td>
+                  <td class="film-details__cell">${hours}${minutes}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Country</td>

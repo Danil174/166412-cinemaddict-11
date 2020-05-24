@@ -30,7 +30,7 @@ const createFilmCardTemplate = (film) => {
   const watchlisBtnIsActive = inWatchlist ? btnActiveClass : ``;
   const watchedBtnIsActive = watched ? btnActiveClass : ``;
   const favoriteBtnIsActive = favorite ? btnActiveClass : ``;
-  const prettyDuration = getFilmDuration(duration);
+  const {hours, minutes} = getFilmDuration(duration);
 
   return (
     `<article class="film-card">
@@ -38,7 +38,7 @@ const createFilmCardTemplate = (film) => {
       <p class="film-card__rating">${rating}</p>
       <p class="film-card__info">
         <span class="film-card__year">${releaseYear}</span>
-        <span class="film-card__duration">${prettyDuration}</span>
+        <span class="film-card__duration">${hours}${minutes}</span>
         <span class="film-card__genre">${genre}</span>
       </p>
       <img src="./${img}" alt="" class="film-card__poster">
