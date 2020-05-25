@@ -1,8 +1,15 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
-import {getRang, getFullDuration, getRandomArrayItem} from "../utils/common.js";
+import {getRang, getRandomArrayItem} from "../utils/common.js";
 
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+
+const sortTypeMap = new Map()
+  .set(`statistic-all-time`, 0)
+  .set(`statistic-today`, 1)
+  .set(`statistic-week`, 7)
+  .set(`statistic-month`, 31)
+  .set(`statistic-year`, 365);
 
 class WatchedFilms {
   constructor() {
@@ -137,9 +144,8 @@ const renderChart = (watchedFilms, element) => {
   });
 };
 
-const createStatisticTemplate = (watchedFilms) => {
+const createStatisticTemplate = (watchedFilms, userRang) => {
   const filmsAmount = watchedFilms.getFilms().length;
-  const userRang = getRang(filmsAmount);
   const {hours, minutes} = watchedFilms.getFilmsDuration();
   const topGenre = watchedFilms.getTopGenre();
 
@@ -193,12 +199,13 @@ const createStatisticTemplate = (watchedFilms) => {
   );
 };
 
-export default class PopUp extends AbstractSmartComponent {
+export default class Statistic extends AbstractSmartComponent {
   constructor(filmsModel) {
     super();
 
     this._watchedFilms = new WatchedFilms();
     this._filmsModel = filmsModel;
+    this._userRang = getRang(this._filmsModel.getWatchedFilms().length);
     this._chart = null;
 
     this._watchedFilms.setFilms(this._filmsModel.getWatchedFilms());
@@ -206,7 +213,7 @@ export default class PopUp extends AbstractSmartComponent {
   }
 
   getTemplate() {
-    return createStatisticTemplate(this._watchedFilms);
+    return createStatisticTemplate(this._watchedFilms, this._userRang);
   }
 
   show() {
@@ -216,11 +223,48 @@ export default class PopUp extends AbstractSmartComponent {
     this.rerender();
   }
 
-  recoveryListeners() {}
+  recoveryListeners() {
+    this._setStatisticFiltersClickHandler();
+  }
 
   rerender() {
     super.rerender();
     this._renderChart();
+  }
+
+  _setStatisticFiltersClickHandler() {
+    this.getElement().querySelector(`.statistic__filters`)
+      .addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+        if (evt.target.tagName !== `LABEL`) {
+          return;
+        }
+        this._setFilms(this._filmsByDay(sortTypeMap.get(evt.target.htmlFor)));
+        this.rerender();
+        this._setActiveRadio(evt.target.htmlFor);
+      });
+  }
+
+  _setActiveRadio(selector) {
+    this.getElement().querySelector(`#${selector}`).checked = true;
+  }
+
+  _filmsByDay(date) {
+    const dateFrom = (() => {
+      if (!date) {
+        return new Date(0);
+      }
+      const d = new Date(Date.now());
+      d.setDate(d.getDate() - Number(date));
+      return d;
+    })();
+    return this._filmsModel.getWatchedFilms().slice().filter((it) => {
+      return it.watchingDate >= dateFrom;
+    });
+  }
+
+  _setFilms(films) {
+    this._watchedFilms.setFilms(films);
   }
 
   _renderChart() {
