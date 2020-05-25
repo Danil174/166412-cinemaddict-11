@@ -4,56 +4,80 @@ import {getRang, getFullDuration, getRandomArrayItem} from "../utils/common.js";
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
-
-const getWatchTime = (films) => {
-  return films.length ? films.slice().map((film) => film.duration).reduce((a, b) => a + b) : 0;
-};
-
-const getWathcingGenres = (films) => {
-  return films.length ? films.slice().map((film) => film.genres).reduce((a, b) => [...a, ...b]) : ``;
-};
-
-const countWathcingGenres = (arr) => {
-  const hash = new Map();
-  for (let i = 0; i < arr.length; i++) {
-    if (hash.has(arr[i])) {
-      hash.set(arr[i], hash.get(arr[i]) + 1);
-    } else {
-      hash.set(arr[i], 1);
-    }
+class WatchedFilms {
+  constructor() {
+    this._films = [];
   }
-  return hash;
-};
 
-const createDictionary = (map) => {
-  const uniqueGenres = [];
-  map.forEach((value, key) => {
-    uniqueGenres.push([key, value]);
-  });
+  setFilms(films) {
+    this._films = films;
+  }
 
-  return uniqueGenres;
-};
+  getFilms() {
+    return this._films;
+  }
 
-const getTopGenre = (map) => {
-  let topGenres;
-  let topValue = 0;
-  map.forEach((value, key) => {
-    if (value > topValue) {
-      topValue = value;
-      topGenres = [key];
-    } else if (value === topValue) {
-      topGenres.push(key);
+  getFilmsDuration() {
+    const hours = this._getFilmsDurationMins() ? Math.floor(this._getFilmsDurationMins() / 60) : 0;
+    const minutes = this._getFilmsDurationMins() ? this._getFilmsDurationMins() % 60 : 0;
+
+    return {
+      hours,
+      minutes,
+    };
+  }
+
+  _getFilmsDurationMins() {
+    return this._films.length ? this._films.slice().map((film) => film.duration).reduce((a, b) => a + b) : 0;
+  }
+
+  getSortetGenresCollection() {
+    const uniqueGenres = [];
+    this._countWatchedGenres().forEach((value, key) => {
+      uniqueGenres.push({key, value});
+    });
+
+    return uniqueGenres.sort((a, b) => b.value - a.value);
+  }
+
+  _getWatchedGenres() {
+    return this.getFilms().length ? this.getFilms().slice().map((film) => film.genres).reduce((a, b) => [...a, ...b]) : ``;
+  }
+
+  _countWatchedGenres() {
+    const watchedGenres = this._getWatchedGenres();
+    const hash = new Map();
+
+    for (let i = 0; i < watchedGenres.length; i++) {
+      if (hash.has(watchedGenres[i])) {
+        hash.set(watchedGenres[i], hash.get(watchedGenres[i]) + 1);
+      } else {
+        hash.set(watchedGenres[i], 1);
+      }
     }
-  });
-  return topGenres ? getRandomArrayItem(topGenres) : 0;
-};
+    return hash;
+  }
 
-const renderChart = (films, element) => {
-  const wathcingGenres = getWathcingGenres(films);
-  const genres = countWathcingGenres(wathcingGenres);
-  const genresDictionary = createDictionary(genres).sort((a, b) => b[1] - a[1]);
-  const labels = genresDictionary.map((it) => it[0]);
-  const data = genresDictionary.map((it) => it[1]);
+  getTopGenre() {
+    let topGenres;
+    let topValue = 0;
+
+    this._countWatchedGenres().forEach((value, key) => {
+      if (value > topValue) {
+        topValue = value;
+        topGenres = [key];
+      } else if (value === topValue) {
+        topGenres.push(key);
+      }
+    });
+
+    return topGenres ? getRandomArrayItem(topGenres) : ``;
+  }
+}
+
+const renderChart = (watchedFilms, element) => {
+  const labels = watchedFilms.getSortetGenresCollection().map((it) => it.key);
+  const data = watchedFilms.getSortetGenresCollection().map((it) => it.value);
 
   return new Chart(element, {
     plugins: [ChartDataLabels],
@@ -113,14 +137,11 @@ const renderChart = (films, element) => {
   });
 };
 
-const createStatisticTemplate = (films) => {
-  const userRang = getRang(films.length); //
-  const watchedMinutes = getWatchTime(films);
-  const {hours, minutes} = getFullDuration(watchedMinutes); //
-
-  const wathcingGenres = getWathcingGenres(films);
-  const genres = countWathcingGenres(wathcingGenres);
-  const topGenre = getTopGenre(genres); //
+const createStatisticTemplate = (watchedFilms) => {
+  const filmsAmount = watchedFilms.getFilms().length;
+  const userRang = getRang(filmsAmount);
+  const {hours, minutes} = watchedFilms.getFilmsDuration();
+  const topGenre = watchedFilms.getTopGenre();
 
   return (
     `<section class="statistic">
@@ -152,7 +173,7 @@ const createStatisticTemplate = (films) => {
       <ul class="statistic__text-list">
         <li class="statistic__text-item">
           <h4 class="statistic__item-title">You watched</h4>
-          <p class="statistic__item-text">${films.length} <span class="statistic__item-description">movies</span></p>
+          <p class="statistic__item-text">${filmsAmount} <span class="statistic__item-description">movies</span></p>
         </li>
         <li class="statistic__text-item">
           <h4 class="statistic__item-title">Total duration</h4>
@@ -176,31 +197,29 @@ export default class PopUp extends AbstractSmartComponent {
   constructor(filmsModel) {
     super();
 
+    this._watchedFilms = new WatchedFilms();
     this._filmsModel = filmsModel;
-    this._films = this._filmsModel.getWatchedFilms();
     this._chart = null;
 
+    this._watchedFilms.setFilms(this._filmsModel.getWatchedFilms());
     this._renderChart();
   }
 
   getTemplate() {
-    return createStatisticTemplate(this._films);
+    return createStatisticTemplate(this._watchedFilms);
   }
 
   show() {
     super.show();
 
-    this._films = this._filmsModel.getWatchedFilms();
-    this.rerender(this._films);
+    this._watchedFilms.setFilms(this._filmsModel.getWatchedFilms());
+    this.rerender();
   }
 
   recoveryListeners() {}
 
-  rerender(films) {
-    this._films = films;
-
+  rerender() {
     super.rerender();
-
     this._renderChart();
   }
 
@@ -209,11 +228,10 @@ export default class PopUp extends AbstractSmartComponent {
 
     const BAR_HEIGHT = 50;
     const statisticCtx = element.querySelector(`.statistic__chart`);
-
-    statisticCtx.height = BAR_HEIGHT * getWathcingGenres(this._films).length;
+    statisticCtx.height = BAR_HEIGHT * this._watchedFilms.getSortetGenresCollection().length;
 
     this._resetChart();
-    this._chart = renderChart(this._films, statisticCtx);
+    this._chart = renderChart(this._watchedFilms, statisticCtx);
   }
 
   _resetChart() {

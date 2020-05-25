@@ -23,7 +23,7 @@ const createFilmCardTemplate = (film) => {
   } = film;
 
   const commentsLength = comments.length;
-  const genre = genres[0];
+  const genre = genres.length ? genres[0] : ``;
   const releaseYear = releaseDate.getFullYear();
 
   const btnActiveClass = `film-card__controls-item--active`;

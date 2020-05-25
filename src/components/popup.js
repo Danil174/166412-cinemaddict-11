@@ -8,6 +8,10 @@ const DeleteBtnTitles = {
 };
 
 const generateGenresTemplate = (genres) => {
+  if (!genres.length) {
+    return ``;
+  }
+
   return genres
     .map((genre) => {
       return (
