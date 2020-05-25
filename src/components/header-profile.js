@@ -1,5 +1,5 @@
 import AbstractComponent from "./abstract-component.js";
-import {getRang, getWatchedFilms} from "../utils/common.js";
+import {getRang} from "../utils/common.js";
 
 const createHeaderProfileTemplate = () => {
   return (
@@ -16,9 +16,9 @@ export default class HeaderProfile extends AbstractComponent {
   }
 
   setUserRang(films) {
-    const watchedFilmsAmount = getWatchedFilms(films).length;
+    const userRang = getRang(films.length);
     const rangContainer = this.getElement().querySelector(`.profile__rating`);
 
-    rangContainer.textContent = getRang(watchedFilmsAmount);
+    rangContainer.textContent = userRang;
   }
 }

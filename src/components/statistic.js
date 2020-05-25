@@ -1,5 +1,5 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
-import {getRang, getWatchedFilms, getFullDuration, getRandomArrayItem} from "../utils/common.js";
+import {getRang, getFullDuration, getRandomArrayItem} from "../utils/common.js";
 
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -177,7 +177,7 @@ export default class PopUp extends AbstractSmartComponent {
     super();
 
     this._filmsModel = filmsModel;
-    this._films = getWatchedFilms(this._filmsModel.getFilmsAll());
+    this._films = this._filmsModel.getWatchedFilms();
     this._chart = null;
 
     this._renderChart();
@@ -190,7 +190,7 @@ export default class PopUp extends AbstractSmartComponent {
   show() {
     super.show();
 
-    this._films = getWatchedFilms(this._filmsModel.getFilmsAll());
+    this._films = this._filmsModel.getWatchedFilms();
     this.rerender(this._films);
   }
 
@@ -210,10 +210,10 @@ export default class PopUp extends AbstractSmartComponent {
     const BAR_HEIGHT = 50;
     const statisticCtx = element.querySelector(`.statistic__chart`);
 
-    statisticCtx.height = BAR_HEIGHT * getWathcingGenres(getWatchedFilms(this._films)).length;
+    statisticCtx.height = BAR_HEIGHT * getWathcingGenres(this._films).length;
 
     this._resetChart();
-    this._chart = renderChart(getWatchedFilms(this._films), statisticCtx);
+    this._chart = renderChart(this._films, statisticCtx);
   }
 
   _resetChart() {

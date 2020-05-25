@@ -70,10 +70,6 @@ export const sortObjectsByValueLength = (objects, key) => {
   return arr.sort((a, b) => b[key].length - a[key].length);
 };
 
-export const getWatchedFilms = (films) => {
-  return films.slice().filter((film) => film.watched);
-};
-
 export const getRang = (filmsAmount) => {
   if (filmsAmount === 0) {
     return ``;
