@@ -6,11 +6,11 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 
 const getWatchTime = (films) => {
-  return films.slice().map((film) => film.duration).reduce((a, b) => a + b);
+  return films.length ? films.slice().map((film) => film.duration).reduce((a, b) => a + b) : 0;
 };
 
 const getWathcingGenres = (films) => {
-  return films.slice().map((film) => film.genres).reduce((a, b) => [...a, ...b]);
+  return films.length ? films.slice().map((film) => film.genres).reduce((a, b) => [...a, ...b]) : ``;
 };
 
 const countWathcingGenres = (arr) => {
@@ -45,7 +45,7 @@ const getTopGenre = (map) => {
       topGenres.push(key);
     }
   });
-  return getRandomArrayItem(topGenres);
+  return topGenres ? getRandomArrayItem(topGenres) : 0;
 };
 
 const renderChart = (films, element) => {
@@ -54,7 +54,6 @@ const renderChart = (films, element) => {
   const genresDictionary = createDictionary(genres).sort((a, b) => b[1] - a[1]);
   const labels = genresDictionary.map((it) => it[0]);
   const data = genresDictionary.map((it) => it[1]);
-  console.log(genresDictionary);
 
   return new Chart(element, {
     plugins: [ChartDataLabels],
@@ -115,13 +114,13 @@ const renderChart = (films, element) => {
 };
 
 const createStatisticTemplate = (films) => {
-  const userRang = getRang(films.length);
+  const userRang = getRang(films.length); //
   const watchedMinutes = getWatchTime(films);
-  const {hours, minutes} = getFullDuration(watchedMinutes);
+  const {hours, minutes} = getFullDuration(watchedMinutes); //
 
   const wathcingGenres = getWathcingGenres(films);
   const genres = countWathcingGenres(wathcingGenres);
-  const topGenre = getTopGenre(genres);
+  const topGenre = getTopGenre(genres); //
 
   return (
     `<section class="statistic">
@@ -174,10 +173,11 @@ const createStatisticTemplate = (films) => {
 };
 
 export default class PopUp extends AbstractSmartComponent {
-  constructor(films) {
+  constructor(filmsModel) {
     super();
 
-    this._films = getWatchedFilms(films);
+    this._filmsModel = filmsModel;
+    this._films = getWatchedFilms(this._filmsModel.getFilmsAll());
     this._chart = null;
 
     this._renderChart();
@@ -190,13 +190,14 @@ export default class PopUp extends AbstractSmartComponent {
   show() {
     super.show();
 
+    this._films = getWatchedFilms(this._filmsModel.getFilmsAll());
     this.rerender(this._films);
   }
 
   recoveryListeners() {}
 
   rerender(films) {
-    this._films = getWatchedFilms(films);
+    this._films = films;
 
     super.rerender();
 
@@ -206,13 +207,13 @@ export default class PopUp extends AbstractSmartComponent {
   _renderChart() {
     const element = this.getElement();
 
-    const BAR_HEIGHT = 35;
+    const BAR_HEIGHT = 50;
     const statisticCtx = element.querySelector(`.statistic__chart`);
 
-    statisticCtx.height = BAR_HEIGHT * this._films.length;
+    statisticCtx.height = BAR_HEIGHT * getWathcingGenres(getWatchedFilms(this._films)).length;
 
     this._resetChart();
-    this._chart = renderChart(this._films, statisticCtx);
+    this._chart = renderChart(getWatchedFilms(this._films), statisticCtx);
   }
 
   _resetChart() {

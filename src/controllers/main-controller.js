@@ -55,6 +55,7 @@ export default class MainController {
 
     this._showedFilmControllers = [];
     this._showedFilmControllersExtra = [];
+    this._statistic = null;
     this._showingFilmsCount = mainPageConfigs.SHOWING_FILM_ON_START;
     this._siteFilters = new FiltersComponent();
     this._filmsSection = new FilmsSectionComponent();
@@ -109,22 +110,38 @@ export default class MainController {
     this._container.show();
   }
 
-  _renderStatistics(films) {
-    const statistic = new StatisticComponent(films);
-    render(this._container, statistic, RenderPosition.BEFOREEND);
-  }
-
   _removeFilms() {
     this._showedFilmControllers.forEach((filmController) => filmController.destroy());
     this._showedFilmControllers = [];
   }
 
   _renderControls() {
-    const filterController = new FilterController(this._container, this._filmsModel);
+    const filterController = new FilterController(this._container, this._filmsModel, this);
     filterController.render();
 
     render(this._container, this._siteFilters, RenderPosition.BEFOREEND);
     render(this._container, this._filmsSection, RenderPosition.BEFOREEND);
+  }
+
+  _renderStatistics() {
+    this._statistic = new StatisticComponent(this._filmsModel);
+    render(this._container, this._statistic, RenderPosition.BEFOREEND);
+    this._statistic.hide();
+  }
+
+  showStatistic(navigationType) {
+    switch (navigationType) {
+      case `statistic`:
+        this._filmsSection.hide();
+        this._siteFilters.hide();
+        this._statistic.show();
+        break;
+      default:
+        this._filmsSection.show();
+        this._siteFilters.show();
+        this._statistic.hide();
+        break;
+    }
   }
 
   _initLists(films) {

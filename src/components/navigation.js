@@ -19,7 +19,7 @@ export const createNavigationTemplate = (filters) => {
       <div class="main-navigation__items">
         ${filtersMarkup}
       </div>
-      <a href="#stats" class="main-navigation__additional">Stats</a>
+      <a href="#stats" class="main-navigation__additional" data-navigation-type="statistic">Stats</a>
     </nav>`
   );
 };
@@ -36,13 +36,26 @@ export default class Navigation extends AbstractComponent {
   }
 
   setActiveElement(selectedElement) {
-    const elements = this.getElement().querySelectorAll(`.main-navigation__item`);
+    const elements = this.getElement().querySelectorAll(`a`);
 
     for (const element of elements) {
       element.classList.remove(navigationActiveClass);
     }
 
     selectedElement.classList.add(navigationActiveClass);
+  }
+
+  setScreenSwichClickHandler(handler) {
+    this.getElement().addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+
+      if (evt.target.tagName !== `A`) {
+        return;
+      }
+
+      const navigationType = evt.target.dataset.navigationType;
+      handler(navigationType);
+    });
   }
 
 
