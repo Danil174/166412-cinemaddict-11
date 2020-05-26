@@ -1,5 +1,9 @@
 import {FilterType, FilterConvertType} from "../const.js";
 
+export const getWatchedFilms = (films) => {
+  return films.slice().filter((film) => film[FilterConvertType.HISTORY]);
+};
+
 export const getFilmsByType = (films, type) => {
   return films.filter((film) => film[type]);
 };

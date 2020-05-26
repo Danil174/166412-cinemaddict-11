@@ -134,7 +134,7 @@ export default class FilmController {
     this._popupComponent.setWatchedCheckboxHandler(() => {
       const newFilm = FilmModel.clone(this._filmComponent._film);
       newFilm.watched = !newFilm.watched;
-      newFilm.watchingDate = new Date(Date.now());
+      // newFilm.watchingDate = new Date(Date.now()); пока выключил, что бы можно было проверять графики
 
       this._onDataChange(this._filmComponent._film, newFilm);
     });

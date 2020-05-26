@@ -1,4 +1,5 @@
 import moment from "moment";
+import {UserRangs} from "../const.js";
 
 export const getReleaseDate = (date) => {
   return moment(date).format(`DD MMMM YYYY`);
@@ -10,8 +11,19 @@ export const getHumanizeDate = (date) => {
 
 export const getFilmDuration = (timeInMins) => {
   const time = moment.utc().startOf(`day`).add({minutes: timeInMins});
-  const hours = time.hour() ? `${time.hour()}h ` : ``;
-  return `${hours}${time.minutes()}m`;
+  return {
+    hours: time.hour() ? `${time.hour()}h ` : ``,
+    minutes: time.minutes() ? `${time.minutes()}m ` : ``,
+  };
+};
+
+export const getFullDuration = (timeInMins) => {
+  const hours = Math.floor(timeInMins / 60);
+  const minutes = timeInMins % 60;
+  return {
+    hours,
+    minutes,
+  };
 };
 
 export const getRandomArrayItems = (array, maxItems = array.length, minItems = 1, joinSTR = `, `) => {
@@ -56,4 +68,21 @@ export const sortObjectsByKeyMaxMin = (objects, key) => {
 export const sortObjectsByValueLength = (objects, key) => {
   const arr = objects.slice();
   return arr.sort((a, b) => b[key].length - a[key].length);
+};
+
+export const getRang = (filmsAmount) => {
+  if (filmsAmount === 0) {
+    return ``;
+  }
+
+  const numericRang = Math.ceil(filmsAmount / 10);
+
+  switch (numericRang) {
+    case 1:
+      return UserRangs.NOVICE;
+    case 2:
+      return UserRangs.FAN;
+    default:
+      return UserRangs.EXPERT;
+  }
 };

@@ -4,9 +4,10 @@ import {render, replace, RenderPosition} from "../utils/render.js";
 import {getFilmsByFilter} from "../utils/filter.js";
 
 export default class FilterController {
-  constructor(container, filmsModel) {
+  constructor(container, filmsModel, mainController) {
     this._container = container;
     this._filmsModel = filmsModel;
+    this._mainController = mainController;
 
     this._activeFilterType = FilterType.ALL;
     this._filterComponent = null;
@@ -26,6 +27,9 @@ export default class FilterController {
 
     this._filterComponent = new Navigation(filters);
     this._filterComponent.setFilterClickHandler(this._onFilterChange);
+    this._filterComponent.setScreenSwichClickHandler((navigationType) => {
+      this._mainController.showStatistic(navigationType);
+    });
 
     if (oldComponent) {
       replace(this._filterComponent, oldComponent);

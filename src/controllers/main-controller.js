@@ -5,6 +5,7 @@ import FiltersComponent, {SortType} from "../components/filters.js";
 import FilmsSectionComponent from "../components/films-section.js";
 import FilmsListComponent from "../components/films-list.js";
 import EmptyListComponent from "../components/empty-list.js";
+import StatisticComponent from "../components/statistic.js";
 import ShowMoreBtnComponent from "../components/show-more-btn.js";
 import {sortObjectsByKeyMaxMin, sortObjectsByValueLength} from "../utils/common.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
@@ -54,6 +55,7 @@ export default class MainController {
 
     this._showedFilmControllers = [];
     this._showedFilmControllersExtra = [];
+    this._statistic = null;
     this._showingFilmsCount = mainPageConfigs.SHOWING_FILM_ON_START;
     this._siteFilters = new FiltersComponent();
     this._filmsSection = new FilmsSectionComponent();
@@ -90,6 +92,8 @@ export default class MainController {
     this._initLists(films);
 
     this._renderShowMoreBtn();
+
+    this._renderStatistics(films);
   }
 
   renderLoading() {
@@ -98,17 +102,46 @@ export default class MainController {
     render(container, this._loadingListComponent, RenderPosition.BEFOREEND);
   }
 
+  hide() {
+    this._container.hide();
+  }
+
+  show() {
+    this._container.show();
+  }
+
   _removeFilms() {
     this._showedFilmControllers.forEach((filmController) => filmController.destroy());
     this._showedFilmControllers = [];
   }
 
   _renderControls() {
-    const filterController = new FilterController(this._container, this._filmsModel);
+    const filterController = new FilterController(this._container, this._filmsModel, this);
     filterController.render();
 
     render(this._container, this._siteFilters, RenderPosition.BEFOREEND);
     render(this._container, this._filmsSection, RenderPosition.BEFOREEND);
+  }
+
+  _renderStatistics() {
+    this._statistic = new StatisticComponent(this._filmsModel);
+    render(this._container, this._statistic, RenderPosition.BEFOREEND);
+    this._statistic.hide();
+  }
+
+  showStatistic(navigationType) {
+    switch (navigationType) {
+      case `statistic`:
+        this._filmsSection.hide();
+        this._siteFilters.hide();
+        this._statistic.show();
+        break;
+      default:
+        this._filmsSection.show();
+        this._siteFilters.show();
+        this._statistic.hide();
+        break;
+    }
   }
 
   _initLists(films) {

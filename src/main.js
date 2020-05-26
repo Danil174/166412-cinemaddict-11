@@ -29,6 +29,7 @@ api.getFilmsWithComments()
     filmsModel.setFilms(films);
     filmsSectionController.render();
     footerCounter.updateCounter(filmsModel.getFilms().length);
+    headerProfile.setUserRang(filmsModel.getWatchedFilms());
   })
   .catch(() => {
     filmsSectionController.render();
