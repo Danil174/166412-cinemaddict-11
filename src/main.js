@@ -1,4 +1,5 @@
-import API from "./api.js";
+import API from "./api/index.js";
+import Provider from "./api/provider.js";
 import HeaderProfileComponent from "./components/header-profile.js";
 import MainController from "./controllers/main-controller.js";
 import FooterCounterComponent from "./components/footer-movies-counter.js";
@@ -13,10 +14,11 @@ const AUTHORIZATION = `Basic dXNlckBdqsdfwerty2020ZxCvB12`;
 const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict`;
 
 const api = new API(END_POINT, AUTHORIZATION);
+const apiWithProvider = new Provider(api);
 const filmsModel = new FilmsModel();
 
 const headerProfile = new HeaderProfileComponent();
-const filmsSectionController = new MainController(siteMainElement, filmsModel, api);
+const filmsSectionController = new MainController(siteMainElement, filmsModel, apiWithProvider);
 const footerCounter = new FooterCounterComponent(0);
 
 render(siteHeaderElement, headerProfile, RenderPosition.BEFOREEND);
@@ -24,7 +26,7 @@ filmsSectionController.renderLoading();
 render(siteFooterElement, footerCounter, RenderPosition.BEFOREEND);
 
 
-api.getFilmsWithComments()
+apiWithProvider.getFilmsWithComments()
   .then((films) => {
     filmsModel.setFilms(films);
     filmsSectionController.render();
