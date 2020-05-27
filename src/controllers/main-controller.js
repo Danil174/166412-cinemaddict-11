@@ -83,6 +83,7 @@ export default class MainController {
     this._primaryListElement = this._primaryList.getElement();
     this._primaryListContainer = this._primaryListElement.querySelector(`.films-list__container`);
 
+    this._renderStatistics();
 
     if (films.length === 0) {
       render(container, this._emptyListComponent, RenderPosition.BEFOREEND);
@@ -92,8 +93,6 @@ export default class MainController {
     this._initLists(films);
 
     this._renderShowMoreBtn();
-
-    this._renderStatistics(films);
   }
 
   renderLoading() {
@@ -130,9 +129,6 @@ export default class MainController {
   }
 
   showStatistic() {
-    if (!this._statistic) {
-      return;
-    }
     this._filmsSection.hide();
     this._siteFilters.hide();
     this._statistic.show();

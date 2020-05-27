@@ -1,4 +1,5 @@
 import API from "./api/index.js";
+import Store from "./api/store.js";
 import Provider from "./api/provider.js";
 import HeaderProfileComponent from "./components/header-profile.js";
 import MainController from "./controllers/main-controller.js";
@@ -14,7 +15,8 @@ const AUTHORIZATION = `Basic dXNlckBdqsdfwerty2020ZxCvB12`;
 const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict`;
 
 const api = new API(END_POINT, AUTHORIZATION);
-const apiWithProvider = new Provider(api);
+const store = new Store();
+const apiWithProvider = new Provider(api, store);
 const filmsModel = new FilmsModel();
 
 const headerProfile = new HeaderProfileComponent();
