@@ -1,4 +1,4 @@
-import Navigation from "../components/navigation.js";
+import Navigation, {additionalDataType} from "../components/navigation.js";
 import {FilterType} from "../const.js";
 import {render, replace, RenderPosition} from "../utils/render.js";
 import {getFilmsByFilter} from "../utils/filter.js";
@@ -27,9 +27,6 @@ export default class FilterController {
 
     this._filterComponent = new Navigation(filters);
     this._filterComponent.setFilterClickHandler(this._onFilterChange);
-    this._filterComponent.setScreenSwichClickHandler((navigationType) => {
-      this._mainController.showStatistic(navigationType);
-    });
 
     if (oldComponent) {
       replace(this._filterComponent, oldComponent);
@@ -49,8 +46,13 @@ export default class FilterController {
   }
 
   _onFilterChange(filterType) {
-    this._filmsModel.setFilter(filterType);
-    this._activeFilterType = filterType;
+    if (filterType === additionalDataType) {
+      this._mainController.showStatistic();
+    } else {
+      this._mainController.hideStatistic();
+      this._filmsModel.setFilter(filterType);
+      this._activeFilterType = filterType;
+    }
   }
 
   _onDataChange() {

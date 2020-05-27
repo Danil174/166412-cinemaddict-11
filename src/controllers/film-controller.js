@@ -108,8 +108,6 @@ export default class FilmController {
       const newFilm = FilmModel.clone(this._filmComponent._film);
       newFilm.watched = !newFilm.watched;
 
-      newFilm.watchingDate = newFilm.watched ? new Date(Date.now()) : newFilm.watchingDate;
-
       this._onDataChange(this._filmComponent._film, newFilm);
     });
 
@@ -134,7 +132,7 @@ export default class FilmController {
     this._popupComponent.setWatchedCheckboxHandler(() => {
       const newFilm = FilmModel.clone(this._filmComponent._film);
       newFilm.watched = !newFilm.watched;
-      // newFilm.watchingDate = new Date(Date.now()); пока выключил, что бы можно было проверять графики
+      newFilm.watchingDate = new Date(Date.now());
 
       this._onDataChange(this._filmComponent._film, newFilm);
     });

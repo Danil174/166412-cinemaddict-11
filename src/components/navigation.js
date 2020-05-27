@@ -1,5 +1,6 @@
 import AbstractComponent from "./abstract-component.js";
 
+export const additionalDataType = `statistic`;
 const navigationActiveClass = `main-navigation__item--active`;
 const filterWithoutСounterName = `All movies`;
 
@@ -19,7 +20,7 @@ export const createNavigationTemplate = (filters) => {
       <div class="main-navigation__items">
         ${filtersMarkup}
       </div>
-      <a href="#stats" class="main-navigation__additional" data-navigation-type="statistic">Stats</a>
+      <a href="#stats" class="main-navigation__additional" data-navigation-type="${additionalDataType}">Stats</a>
     </nav>`
   );
 };
@@ -44,20 +45,6 @@ export default class Navigation extends AbstractComponent {
 
     selectedElement.classList.add(navigationActiveClass);
   }
-
-  setScreenSwichClickHandler(handler) {
-    this.getElement().addEventListener(`click`, (evt) => {
-      evt.preventDefault();
-
-      if (evt.target.tagName !== `A`) {
-        return;
-      }
-
-      const navigationType = evt.target.dataset.navigationType;
-      handler(navigationType);
-    });
-  }
-
 
   setFilterClickHandler(handler) {
     this.getElement().addEventListener(`click`, (evt) => {
