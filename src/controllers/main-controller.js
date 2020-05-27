@@ -129,19 +129,19 @@ export default class MainController {
     this._statistic.hide();
   }
 
-  showStatistic(navigationType) {
-    switch (navigationType) {
-      case `statistic`:
-        this._filmsSection.hide();
-        this._siteFilters.hide();
-        this._statistic.show();
-        break;
-      default:
-        this._filmsSection.show();
-        this._siteFilters.show();
-        this._statistic.hide();
-        break;
+  showStatistic() {
+    if (!this._statistic) {
+      return;
     }
+    this._filmsSection.hide();
+    this._siteFilters.hide();
+    this._statistic.show();
+  }
+
+  hideStatistic() {
+    this._filmsSection.show();
+    this._siteFilters.show();
+    this._statistic.hide();
   }
 
   _initLists(films) {
