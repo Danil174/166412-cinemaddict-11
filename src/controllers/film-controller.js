@@ -77,7 +77,6 @@ export default class FilmController {
   dеleteDeny() {
     this.shake();
     this._popupComponent.refreshDeleteBtns();
-    this._popupComponent.enableCommentInput();
   }
 
   addDeny() {

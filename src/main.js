@@ -42,14 +42,16 @@ apiWithProvider.getFilmsWithComments()
     filmsSectionController.render();
   });
 
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`/sw.js`);
+});
+
 window.addEventListener(`online`, () => {
   document.title = document.title.replace(` [offline]`, ``);
-  console.log(`online`);
   apiWithProvider.sync();
 });
 
 window.addEventListener(`offline`, () => {
-  console.log(`offline`);
   document.title += ` [offline]`;
 });
 
