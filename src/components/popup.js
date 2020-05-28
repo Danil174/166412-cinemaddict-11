@@ -328,6 +328,7 @@ export default class PopUp extends AbstractSmartComponent {
     this.getElement().querySelectorAll(`.film-details__comment-delete`)
       .forEach((el) => {
         el.textContent = DeleteBtnTitles.delete;
+        el.removeAttribute(`disabled`);
       });
   }
 

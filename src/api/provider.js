@@ -73,4 +73,20 @@ export default class Provider {
 
     return Promise.reject(new Error(`Sync data failed`));
   }
+
+  addComment(filmId, comment) {
+    if (isOnline()) {
+      return this._api.addComment(filmId, comment);
+    }
+
+    return Promise.reject(new Error(`offline`));
+  }
+
+  removeComment(commentID) {
+    if (isOnline()) {
+      return this._api.removeComment(commentID);
+    }
+
+    return Promise.reject(new Error(`offline`));
+  }
 }

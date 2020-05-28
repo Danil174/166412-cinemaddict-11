@@ -77,6 +77,7 @@ export default class FilmController {
   dеleteDeny() {
     this.shake();
     this._popupComponent.refreshDeleteBtns();
+    this._popupComponent.enableCommentInput();
   }
 
   addDeny() {
@@ -90,7 +91,6 @@ export default class FilmController {
     this._popupComponent.rerender();
     render(this._popupContainer, this._popupComponent, RenderPosition.BEFOREEND);
     document.addEventListener(`keydown`, this._onEscKeyDown);
-    document.addEventListener(`keydown`, this._onKeysDownAddComment);
     this._mode = Mode.CLOSE;
   }
 
@@ -120,6 +120,7 @@ export default class FilmController {
   }
 
   _setPopupHandlers() {
+    document.addEventListener(`keydown`, this._onKeysDownAddComment);
     this._popupComponent.setCloseButtonClickHandler(this._onPopUpCloseBtnClick);
 
     this._popupComponent.setWatchlistCheckboxHandler(() => {
