@@ -13,9 +13,12 @@ const siteFooterElement = document.querySelector(`.footer`);
 
 const AUTHORIZATION = `Basic dXNlckBdqsdfwerty2020ZxCvB12`;
 const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict`;
+const STORE_PREFIX = `cinemaddict-localstorage`;
+const STORE_VER = `v1`;
+const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 
 const api = new API(END_POINT, AUTHORIZATION);
-const store = new Store();
+const store = new Store(STORE_NAME, window.localStorage);
 const apiWithProvider = new Provider(api, store);
 const filmsModel = new FilmsModel();
 
