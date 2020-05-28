@@ -1,8 +1,20 @@
 import Film from "../models/film-model.js";
-import Comment from "../models/comment-model.js";
 
 const isOnline = () => {
   return window.navigator.onLine;
+};
+
+const getSyncedFilms = (items) => {
+  return items.filter(({success}) => success)
+    .map(({payload}) => payload.film);
+};
+
+const createStoreStructure = (items) => {
+  return items.reduce((acc, current) => {
+    return Object.assign({}, acc, {
+      [current.id]: current,
+    });
+  }, {});
 };
 
 export default class Provider {
@@ -15,40 +27,18 @@ export default class Provider {
     if (isOnline()) {
       return this._api.getFilmsWithComments()
         .then((films) => {
-          films.forEach((film) => {
-            // film.comments.forEach((comment) => this._store.setItem(`comment_${comment.id}`, comment.toRAW()));
-            // this._store.setItem(`film_${film.id}`, film.toRAW());
-            this._store.setItem(film.id, film.toRAW());
-          });
+          const items = createStoreStructure(films.map((film) => film.toRAW()));
+
+          this._store.setItems(items);
+
           return films;
         });
     }
 
     const storeFilms = Object.values(this._store.getItems());
-    // const films = this.getDataByStr(storeData, `film_`);
-    // const comments = this.getDataByStr(storeData, `comment_`);
-    // console.log(films);
-    // console.log(comments);
-    // films.forEach((film) => {
-    //   films.comments.forEach((comment) => {
-    //     comment = comments.id
-    //   });
-    // });
-
 
     return Promise.resolve(Film.parseFilms(storeFilms));
   }
-
-  // getDataByStr(data, str) {
-  //   const arr = [];
-  //   for (let prop of data) {
-  //     console.log(prop);
-  //     if (prop.indexOf(str) !== -1) {
-  //       arr.push(prop);
-  //     }
-  //   }
-  //   return arr;
-  // }
 
   updateFilm(id, film) {
     if (isOnline()) {
@@ -67,21 +57,20 @@ export default class Provider {
     return Promise.resolve(localFilm);
   }
 
-  addComment(filmId, comment) {
+  sync() {
     if (isOnline()) {
-      return this._api.addComment(filmId, comment);
+      const storeFilms = Object.values(this._store.getItems());
+
+      return this._api.sync(storeFilms)
+        .then((response) => {
+          const updatedFilms = getSyncedFilms(response.updated);
+
+          const items = createStoreStructure([...updatedFilms]);
+
+          this._store.setItems(items);
+        });
     }
 
-    // TODO: Реализовать логику при отсутствии интернета
-    return Promise.reject(`offline logic is not implemented`);
-  }
-
-  removeComment(commentID) {
-    if (isOnline()) {
-      return this._api.removeComment(commentID);
-    }
-
-    // TODO: Реализовать логику при отсутствии интернета
-    return Promise.reject(`offline logic is not implemented`);
+    return Promise.reject(new Error(`Sync data failed`));
   }
 }

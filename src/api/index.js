@@ -69,6 +69,16 @@ const API = class {
     });
   }
 
+  sync(data) {
+    return this._load({
+      url: `movies/sync`,
+      method: Method.POST,
+      body: JSON.stringify(data),
+      headers: new Headers({"Content-Type": `application/json`})
+    })
+      .then((response) => response.json());
+  }
+
   _filmWithNewComments(data) {
     const newComments = [];
     const film = new Film(data.movie);
