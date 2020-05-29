@@ -76,7 +76,7 @@ export const getRandomFilmsByMaxPropertyValue = (films, amount, key) => {
   if (newFilms[0][key] === newFilms[1][key]) {
     const elementsWithMaxValues = newFilms.filter((film) => film[key] === newFilms[0][key]);
     return elementsWithMaxValues.sort(() => Math.random() - 0.5).slice(0, amount);
-  } else if (newFilms[1][key] === newFilms[2][key]) {
+  } else if (newFilms[2] && newFilms[1][key] === newFilms[2][key]) {
     const firstElement = newFilms[0];
     const elementsWithMaxValues = newFilms.filter((film) => film[key] === newFilms[1][key]);
     elementsWithMaxValues.sort(() => Math.random() - 0.5);
@@ -103,7 +103,7 @@ export const getRandomFilmsByMaxPropertyLenght = (films, amount, key) => {
   if (newFilms[0][key].length === newFilms[1][key].length) {
     const elementsWithMaxValues = newFilms.filter((film) => film[key].length === newFilms[0][key].length);
     return elementsWithMaxValues.sort(() => Math.random() - 0.5).slice(0, amount);
-  } else if (newFilms[1][key].length === newFilms[2][key].length) {
+  } else if (newFilms[2] && newFilms[1][key].length === newFilms[2][key].length) {
     const firstElement = newFilms[0];
     const elementsWithMaxValues = newFilms.filter((film) => film[key].length === newFilms[1][key].length);
     elementsWithMaxValues.sort(() => Math.random() - 0.5);

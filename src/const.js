@@ -34,6 +34,11 @@ export const mainPageConfigs = {
   PROMOTE_COUNT: 2,
 };
 
+export const ExtraListsPropertiesName = {
+  RATING: `rating`,
+  COMMENTS: `comments`,
+};
+
 export const sectionTitles = {
   DEFAULT: `All movies. Upcoming`,
   RATED: `Top rated`,

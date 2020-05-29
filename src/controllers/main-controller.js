@@ -9,7 +9,7 @@ import StatisticComponent from "../components/statistic.js";
 import ShowMoreBtnComponent from "../components/show-more-btn.js";
 import {getRandomFilmsByMaxPropertyValue, getRandomFilmsByMaxPropertyLenght} from "../utils/common.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
-import {mainPageConfigs, sectionTitles, emptyListTitles, DataChangeMode} from "../const.js";
+import {mainPageConfigs, sectionTitles, emptyListTitles, DataChangeMode, ExtraListsPropertiesName} from "../const.js";
 
 const renderFilms = (parent, collection, onDataChange, onViewChange) => {
   return collection.map((film) => {
@@ -150,8 +150,8 @@ export default class MainController {
     this._showedFilmControllers = this._showedFilmControllers.concat(newFilms);
   }
 
-  _renderTopRatedList(films) {
-    const topRatedFilms = getRandomFilmsByMaxPropertyValue(films, 2, `rating`);
+  _renderTopRatedList() {
+    const topRatedFilms = getRandomFilmsByMaxPropertyValue(this._filmsModel.getFilms(), mainPageConfigs.PROMOTE_COUNT, ExtraListsPropertiesName.RATING);
     if (topRatedFilms.length === 0) {
       return;
     }
@@ -159,8 +159,8 @@ export default class MainController {
     this._showedFilmControllersTopRated.push(...extraFilms);
   }
 
-  _renderMostCommented(films) {
-    const mostCommentedFilms = getRandomFilmsByMaxPropertyLenght(films, 2, `comments`);
+  _renderMostCommented() {
+    const mostCommentedFilms = getRandomFilmsByMaxPropertyLenght(this._filmsModel.getFilms(), mainPageConfigs.PROMOTE_COUNT, ExtraListsPropertiesName.COMMENTS);
     if (mostCommentedFilms.length === 0) {
       return;
     }
