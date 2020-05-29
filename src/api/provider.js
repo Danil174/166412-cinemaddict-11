@@ -1,5 +1,4 @@
 import Film from "../models/film-model.js";
-import Comment from "../models/comment-model.js";
 
 const isOnline = () => {
   return window.navigator.onLine;
