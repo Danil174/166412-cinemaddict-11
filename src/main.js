@@ -11,7 +11,8 @@ const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
 const siteFooterElement = document.querySelector(`.footer`);
 
-const AUTHORIZATION = `Basic dXNlckBdqsdfwerty2020ZxCvB12`;
+// const AUTHORIZATION = `Basic dXNlckBdqsdfwerty2020ZxCvB12`;
+const AUTHORIZATION = `Basic dXNlckBdqsdfwerty2020ZxCvB42`;
 const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict`;
 const STORE_PREFIX = `cinemaddict-localstorage`;
 const STORE_VER = `v1`;

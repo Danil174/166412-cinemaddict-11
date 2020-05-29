@@ -1,4 +1,5 @@
 import Film from "../models/film-model.js";
+import Comment from "../models/comment-model.js";
 
 const isOnline = () => {
   return window.navigator.onLine;
@@ -10,11 +11,25 @@ const getSyncedFilms = (items) => {
 };
 
 const createStoreStructure = (items) => {
-  return items.reduce((acc, current) => {
-    return Object.assign({}, acc, {
-      [current.id]: current,
-    });
-  }, {});
+  const films = items.map((item) => item.toRAW());
+  const comments = items.map((item) => item.comments).reduce((a, b) => [...a, ...b]);
+
+  comments.forEach((it) => {
+    it.toRAW();
+  });
+
+  return {
+    storeFilms: films.reduce((acc, current) => {
+      return Object.assign({}, acc, {
+        [current.id]: current,
+      });
+    }, {}),
+    comments: comments.reduce((acc, current) => {
+      return Object.assign({}, acc, {
+        [current.id]: current,
+      });
+    }, {}),
+  };
 };
 
 export default class Provider {
@@ -27,17 +42,25 @@ export default class Provider {
     if (isOnline()) {
       return this._api.getFilmsWithComments()
         .then((films) => {
-          const items = createStoreStructure(films.map((film) => film.toRAW()));
+          const {storeFilms, comments} = createStoreStructure(films);
 
-          this._store.setItems(items);
+          this._store.setItems(storeFilms, `films`);
+          this._store.setItems(comments, `comments`);
 
           return films;
         });
     }
 
-    const storeFilms = Object.values(this._store.getItems());
+    const filmsFromStore = Object.values(this._store.getItems(`films`));
+    filmsFromStore.map((film) => {
+      const newComments = [];
+      film.comments.forEach((it) => {
+        newComments.push(this._store.getItems(`comments`)[it]);
+      });
+      film.comments = newComments;
+    });
 
-    return Promise.resolve(Film.parseFilms(storeFilms));
+    return Promise.resolve(Film.parseFilms(filmsFromStore));
   }
 
   updateFilm(id, film) {
@@ -52,7 +75,13 @@ export default class Provider {
 
     const localFilm = Film.clone(Object.assign(film, {id}));
 
-    this._store.setItem(id, localFilm.toRAW());
+    const newComments = [];
+    localFilm.comments.forEach((it) => {
+      newComments.push(this._store.getItems(`comments`)[it]);
+    });
+    localFilm.comments = newComments;
+
+    this._store.setItem(`films`, localFilm.toRAW());
 
     return Promise.resolve(localFilm);
   }
@@ -67,7 +96,7 @@ export default class Provider {
 
           const items = createStoreStructure([...updatedFilms]);
 
-          this._store.setItems(items);
+          this._store.setItems(items, `films`);
         });
     }
 
