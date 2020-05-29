@@ -66,9 +66,11 @@ export default class FilmController {
   }
 
   shake() {
+    this._filmComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
     this._popupComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
 
     setTimeout(() => {
+      this._filmComponent.getElement().style.animation = ``;
       this._popupComponent.getElement().style.animation = ``;
 
     }, SHAKE_ANIMATION_TIMEOUT);

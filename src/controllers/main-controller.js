@@ -273,6 +273,9 @@ export default class MainController {
     this._api.updateFilm(oldData.id, newData)
         .then((filmsModel) => {
           this._upDateLocalData(oldData.id, filmsModel);
+        }).catch(() => {
+          const controlletsToUpdate = this._getFilmControllersToUpdate(oldData.id);
+          controlletsToUpdate.forEach((it) => it.shake());
         });
   }
 
