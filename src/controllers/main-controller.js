@@ -7,7 +7,7 @@ import FilmsListComponent from "../components/films-list.js";
 import EmptyListComponent from "../components/empty-list.js";
 import StatisticComponent from "../components/statistic.js";
 import ShowMoreBtnComponent from "../components/show-more-btn.js";
-import {sortObjectsByKeyMaxMin, sortObjectsByValueLength} from "../utils/common.js";
+import {getRandomFilmsByMaxPropertyValue, getRandomFilmsByMaxPropertyLenght} from "../utils/common.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {mainPageConfigs, sectionTitles, emptyListTitles, DataChangeMode} from "../const.js";
 
@@ -54,7 +54,8 @@ export default class MainController {
     this._api = api;
 
     this._showedFilmControllers = [];
-    this._showedFilmControllersExtra = [];
+    this._showedFilmControllersTopRated = [];
+    this._showedFilmControllersMostCommented = [];
     this._statistic = null;
     this._showingFilmsCount = mainPageConfigs.SHOWING_FILM_ON_START;
     this._siteFilters = new FiltersComponent();
@@ -92,8 +93,9 @@ export default class MainController {
       return;
     }
 
-    this._initLists(films);
-
+    this._startList(films);
+    this._renderTopRatedList(films);
+    this._renderMostCommented(films);
     this._renderShowMoreBtn();
   }
 
@@ -142,17 +144,35 @@ export default class MainController {
     this._statistic.hide();
   }
 
-  _initLists(films) {
-    const topRaredFilms = sortObjectsByKeyMaxMin(films, `rating`).slice(0, 2);
-    const mostCommentedFilms = sortObjectsByValueLength(films, `comments`).slice(0, 2);
+  _startList(films) {
     const showingFilmsInStart = films.slice(0, mainPageConfigs.SHOWING_FILM_ON_START);
-
     const newFilms = renderList(this._filmsSection.getElement(), this._primaryList, showingFilmsInStart, this._onDataChange, this._onViewChange);
     this._showedFilmControllers = this._showedFilmControllers.concat(newFilms);
+  }
 
-    let newFilmsExtra = renderList(this._filmsSection.getElement(), this._topRatedList, topRaredFilms, this._onDataChange, this._onViewChange);
-    newFilmsExtra = newFilmsExtra.concat(renderList(this._filmsSection.getElement(), this._mostCommentedList, mostCommentedFilms, this._onDataChange, this._onViewChange));
-    this._showedFilmControllersExtra = this._showedFilmControllers.concat(newFilmsExtra);
+  _renderTopRatedList(films) {
+    const topRatedFilms = getRandomFilmsByMaxPropertyValue(films, 2, `rating`);
+    if (topRatedFilms.length === 0) {
+      return;
+    }
+    const extraFilms = renderList(this._filmsSection.getElement(), this._topRatedList, topRatedFilms, this._onDataChange, this._onViewChange);
+    this._showedFilmControllersTopRated.push(...extraFilms);
+  }
+
+  _renderMostCommented(films) {
+    const mostCommentedFilms = getRandomFilmsByMaxPropertyLenght(films, 2, `comments`);
+    if (mostCommentedFilms.length === 0) {
+      return;
+    }
+    const extraFilms = renderList(this._filmsSection.getElement(), this._mostCommentedList, mostCommentedFilms, this._onDataChange, this._onViewChange);
+    this._showedFilmControllersMostCommented.push(...extraFilms);
+  }
+
+  _updateMostCommentedFilms() {
+    this._showedFilmControllersMostCommented.forEach((filmController) => filmController.destroy());
+    this._showedFilmControllersMostCommented = [];
+    const films = this._filmsModel.getFilms();
+    this._renderMostCommented(films);
   }
 
   _renderShowMoreBtn() {
@@ -195,7 +215,10 @@ export default class MainController {
   }
 
   _onViewChange() {
-    const allShowedFilmControllers = this._showedFilmControllers.concat(this._showedFilmControllersExtra);
+    const allShowedFilmControllers = this._showedFilmControllers.concat(
+        ...this._showedFilmControllersMostCommented,
+        ...this._showedFilmControllersTopRated
+    );
     allShowedFilmControllers.forEach((it) => it.setDefaultView());
   }
 
@@ -227,8 +250,9 @@ export default class MainController {
   }
 
   _onRemoveComment(oldData, newData, commentInfo) {
-    this._api.removeComment(commentInfo.commentIdOrData)
+    this._api.removeComment(commentInfo)
     .then(() => this._upDateLocalData(oldData.id, newData))
+    .then(() => this._updateMostCommentedFilms())
     .catch(() => {
       const controlletsToUpdate = this._getFilmControllersToUpdate(oldData.id);
       controlletsToUpdate.forEach((it) => it.dеleteDeny());
@@ -236,8 +260,9 @@ export default class MainController {
   }
 
   _onAddComment(oldData, commentInfo) {
-    this._api.addComment(oldData.id, commentInfo.commentIdOrData)
+    this._api.addComment(oldData.id, commentInfo)
     .then((updatedFilm) => this._upDateLocalData(oldData.id, updatedFilm))
+    .then(() => this._updateMostCommentedFilms())
     .catch(() => {
       const controlletsToUpdate = this._getFilmControllersToUpdate(oldData.id);
       controlletsToUpdate.forEach((it) => it.addDeny());
@@ -261,7 +286,10 @@ export default class MainController {
   }
 
   _getFilmControllersToUpdate(id) {
-    const allShowedFilmControllers = this._showedFilmControllers.concat(this._showedFilmControllersExtra);
+    const allShowedFilmControllers = this._showedFilmControllers.concat(
+        ...this._showedFilmControllersMostCommented,
+        ...this._showedFilmControllersTopRated
+    );
     return allShowedFilmControllers.filter((it) => it._filmComponent._film.id === id);
   }
 }
