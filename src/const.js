@@ -55,3 +55,9 @@ export const UserRangs = {
   FAN: `Fan`,
   EXPERT: `Movie Buff`,
 };
+
+export const DataChangeMode = {
+  ADD: `add`,
+  DELETE: `delete`,
+  CHANGE: `change`,
+};

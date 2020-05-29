@@ -9,7 +9,7 @@ import StatisticComponent from "../components/statistic.js";
 import ShowMoreBtnComponent from "../components/show-more-btn.js";
 import {sortObjectsByKeyMaxMin, sortObjectsByValueLength} from "../utils/common.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
-import {mainPageConfigs, sectionTitles, emptyListTitles} from "../const.js";
+import {mainPageConfigs, sectionTitles, emptyListTitles, DataChangeMode} from "../const.js";
 
 const renderFilms = (parent, collection, onDataChange, onViewChange) => {
   return collection.map((film) => {
@@ -65,9 +65,11 @@ export default class MainController {
     this._primaryList = new FilmsListComponent(sectionTitles.DEFAULT);
     this._topRatedList = new FilmsListComponent(sectionTitles.RATED, true);
     this._mostCommentedList = new FilmsListComponent(sectionTitles.COMMENTED, true);
-
     this._onViewChange = this._onViewChange.bind(this);
     this._onDataChange = this._onDataChange.bind(this);
+    this._updateData = this._updateData.bind(this);
+    this._onRemoveComment = this._onRemoveComment.bind(this);
+    this._onAddComment = this._onAddComment.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._onShowMoreBtnClick = this._onShowMoreBtnClick.bind(this);
@@ -210,26 +212,36 @@ export default class MainController {
     this._updateFilms(this._showingFilmsCount);
   }
 
-  _onDataChange(oldData, newData, commentInfo = null) {
-    if (commentInfo) {
-      if (commentInfo.mode === `ADD`) {
-        this._api.addComment(oldData.id, commentInfo.commentIdOrData)
-          .then((updatedFilm) => this._upDateLocalData(oldData.id, updatedFilm))
-          .catch(() => {
-            const controlletsToUpdate = this._getFilmControllersToUpdate(oldData.id);
-            controlletsToUpdate.forEach((it) => it.addDeny());
-          });
-      } else {
-        this._api.removeComment(commentInfo.commentIdOrData)
-          .then(() => this._upDateLocalData(oldData.id, newData))
-          .catch(() => {
-            const controlletsToUpdate = this._getFilmControllersToUpdate(oldData.id);
-            controlletsToUpdate.forEach((it) => it.dеleteDeny());
-          });
-      }
-    } else {
-      this._updateData(oldData, newData);
+  _onDataChange(mode, oldData, newData, commentInfo = null) {
+    switch (mode) {
+      case DataChangeMode.CHANGE:
+        this._updateData(oldData, newData);
+        break;
+      case DataChangeMode.ADD:
+        this._onAddComment(oldData, commentInfo);
+        break;
+      case DataChangeMode.DELETE:
+        this._onRemoveComment(oldData, newData, commentInfo);
+        break;
     }
+  }
+
+  _onRemoveComment(oldData, newData, commentInfo) {
+    this._api.removeComment(commentInfo.commentIdOrData)
+    .then(() => this._upDateLocalData(oldData.id, newData))
+    .catch(() => {
+      const controlletsToUpdate = this._getFilmControllersToUpdate(oldData.id);
+      controlletsToUpdate.forEach((it) => it.dеleteDeny());
+    });
+  }
+
+  _onAddComment(oldData, commentInfo) {
+    this._api.addComment(oldData.id, commentInfo.commentIdOrData)
+    .then((updatedFilm) => this._upDateLocalData(oldData.id, updatedFilm))
+    .catch(() => {
+      const controlletsToUpdate = this._getFilmControllersToUpdate(oldData.id);
+      controlletsToUpdate.forEach((it) => it.addDeny());
+    });
   }
 
   _updateData(oldData, newData) {
