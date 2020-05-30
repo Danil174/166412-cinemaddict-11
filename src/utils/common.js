@@ -29,7 +29,7 @@ export const getFullDuration = (timeInMins) => {
 export const getRandomArrayItems = (array, maxItems = array.length, minItems = 1, joinSTR = `, `) => {
   const arr = array.slice();
   const itemsAmount = getRandomIntegerNumber(minItems, maxItems);
-  let newArr = [];
+  const newArr = [];
 
   for (let i = 0; i < itemsAmount; i++) {
     newArr.push(arr.splice(getRandomIntegerNumber(0, arr.length - 1), 1));
