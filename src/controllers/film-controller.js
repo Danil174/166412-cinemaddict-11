@@ -76,6 +76,16 @@ export default class FilmController {
     }, SHAKE_ANIMATION_TIMEOUT);
   }
 
+  _inputError(element) {
+
+    element.getElement().querySelector(`.film-details__new-comment`).style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+
+    setTimeout(() => {
+      element.getElement().querySelector(`.film-details__new-comment`).style.animation = ``;
+
+    }, SHAKE_ANIMATION_TIMEOUT);
+  }
+
   dеleteDeny() {
     this.shake();
     this._popupComponent.refreshDeleteBtns();
@@ -171,7 +181,7 @@ export default class FilmController {
   _onKeysDownAddComment(evt) {
     if (evt.ctrlKey && evt.keyCode === KeyCodes.ENTER_KEYCODE) {
       if (this._popupComponent.checkCommentFill()) {
-        this.shake();
+        this._inputError(this._popupComponent);
         return;
       }
       const newComment = CommentModel.create(this._popupComponent.getComment());
