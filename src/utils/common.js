@@ -71,19 +71,7 @@ export const getRandomFilmsByMaxPropertyValue = (films, amount, key) => {
     return newFilms;
   }
 
-  newFilms.sort((a, b) => b[key] - a[key]);
-
-  if (newFilms[0][key] === newFilms[1][key]) {
-    const elementsWithMaxValues = newFilms.filter((film) => film[key] === newFilms[0][key]);
-    return elementsWithMaxValues.sort(() => Math.random() - 0.5).slice(0, amount);
-  } else if (newFilms[2] && newFilms[1][key] === newFilms[2][key]) {
-    const firstElement = newFilms[0];
-    const elementsWithMaxValues = newFilms.filter((film) => film[key] === newFilms[1][key]);
-    elementsWithMaxValues.sort(() => Math.random() - 0.5);
-    return [firstElement, ...elementsWithMaxValues.slice(0, 1)];
-  }
-
-  return newFilms.slice(0, amount);
+  return newFilms.sort((a, b) => b[key] - a[key]).slice(0, amount);
 };
 
 export const getRandomFilmsByMaxPropertyLenght = (films, amount, key) => {
@@ -98,19 +86,7 @@ export const getRandomFilmsByMaxPropertyLenght = (films, amount, key) => {
     return newFilms;
   }
 
-  newFilms.sort((a, b) => b[key].length - a[key].length);
-
-  if (newFilms[0][key].length === newFilms[1][key].length) {
-    const elementsWithMaxValues = newFilms.filter((film) => film[key].length === newFilms[0][key].length);
-    return elementsWithMaxValues.sort(() => Math.random() - 0.5).slice(0, amount);
-  } else if (newFilms[2] && newFilms[1][key].length === newFilms[2][key].length) {
-    const firstElement = newFilms[0];
-    const elementsWithMaxValues = newFilms.filter((film) => film[key].length === newFilms[1][key].length);
-    elementsWithMaxValues.sort(() => Math.random() - 0.5);
-    return [firstElement, ...elementsWithMaxValues.slice(0, 1)];
-  }
-
-  return newFilms.slice(0, amount);
+  return newFilms.sort((a, b) => b[key].length - a[key].length).slice(0, amount);
 };
 
 export const getRang = (filmsAmount) => {
