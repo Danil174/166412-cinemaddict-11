@@ -1,27 +1,20 @@
 export default class Store {
-  constructor(key, storage) {
+  constructor(prefix, storage) {
     this._storage = storage;
-    this._storeKey = key;
+    this._storePrefix = prefix;
   }
 
   getItems(key) {
     try {
-      return JSON.parse(this._storage.getItem(key)) || {};
+      return JSON.parse(this._storage.getItem(`${this._storePrefix}/${key}`)) || {};
     } catch (err) {
       return {};
     }
   }
 
-  // setItems(items) {
-  //   this._storage.setItem(
-  //       this._storeKey,
-  //       JSON.stringify(items)
-  //   );
-  // }
-
   setItems(items, key) {
     this._storage.setItem(
-        key,
+        `${this._storePrefix}/${key}`,
         JSON.stringify(items)
     );
   }
@@ -30,7 +23,7 @@ export default class Store {
     const store = this.getItems(key);
 
     this._storage.setItem(
-        key,
+        `${this._storePrefix}/${key}`,
         JSON.stringify(
             Object.assign({}, store, {
               [value.id]: value

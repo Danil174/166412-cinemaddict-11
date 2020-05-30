@@ -1,34 +1,32 @@
 import Film from "../models/film-model.js";
 
-const isOnline = () => {
-  return window.navigator.onLine;
-};
-
-const getSyncedFilms = (items) => {
-  return items.filter(({success}) => success)
-    .map(({payload}) => payload.film);
+const StoreNames = {
+  FILMS: `films`,
+  COMMENTS: `comments`
 };
 
 const createStoreStructure = (items) => {
   const films = items.map((item) => item.toRAW());
+
+  return films.reduce((acc, current) => {
+    return Object.assign({}, acc, {
+      [current.id]: current,
+    });
+  }, {});
+};
+
+const createCommentsStructure = (items) => {
   const comments = items.map((item) => item.comments).reduce((a, b) => [...a, ...b]);
 
   comments.forEach((it) => {
     it.toRAW();
   });
 
-  return {
-    storeFilms: films.reduce((acc, current) => {
-      return Object.assign({}, acc, {
-        [current.id]: current,
-      });
-    }, {}),
-    comments: comments.reduce((acc, current) => {
-      return Object.assign({}, acc, {
-        [current.id]: current,
-      });
-    }, {}),
-  };
+  return comments.reduce((acc, current) => {
+    return Object.assign({}, acc, {
+      [current.id]: current,
+    });
+  }, {});
 };
 
 export default class Provider {
@@ -38,35 +36,32 @@ export default class Provider {
   }
 
   getFilmsWithComments() {
-    if (isOnline()) {
+    if (this._isOnline()) {
       return this._api.getFilmsWithComments()
         .then((films) => {
-          const {storeFilms, comments} = createStoreStructure(films);
+          const storeFilms = createStoreStructure(films);
+          const comments = createCommentsStructure(films);
 
-          this._store.setItems(storeFilms, `films`);
-          this._store.setItems(comments, `comments`);
+          this._store.setItems(storeFilms, StoreNames.FILMS);
+          this._store.setItems(comments, StoreNames.COMMENTS);
 
           return films;
         });
     }
 
-    const filmsFromStore = Object.values(this._store.getItems(`films`));
+    const filmsFromStore = Object.values(this._store.getItems(StoreNames.FILMS));
     filmsFromStore.map((film) => {
-      const newComments = [];
-      film.comments.forEach((it) => {
-        newComments.push(this._store.getItems(`comments`)[it]);
-      });
-      film.comments = newComments;
+      film.comments = this._getCommentsFromStore(film);
     });
 
     return Promise.resolve(Film.parseFilms(filmsFromStore));
   }
 
   updateFilm(id, film) {
-    if (isOnline()) {
+    if (this._isOnline()) {
       return this._api.updateFilm(id, film)
         .then((newFilm) => {
-          this._store.setItem(newFilm.id, newFilm.toRAW());
+          this._store.setItem(StoreNames.FILMS, newFilm.toRAW());
 
           return newFilm;
         });
@@ -74,28 +69,24 @@ export default class Provider {
 
     const localFilm = Film.clone(Object.assign(film, {id}));
 
-    const newComments = [];
-    localFilm.comments.forEach((it) => {
-      newComments.push(this._store.getItems(`comments`)[it]);
-    });
-    localFilm.comments = newComments;
+    localFilm.comments = this._getCommentsFromStore(localFilm);
 
-    this._store.setItem(`films`, localFilm.toRAW());
+    this._store.setItem(StoreNames.FILMS, localFilm.toRAW());
 
     return Promise.resolve(localFilm);
   }
 
   sync() {
-    if (isOnline()) {
-      const storeFilms = Object.values(this._store.getItems());
+    if (this._isOnline()) {
+      const filmsToUpdate = Object.values(this._store.getItems(StoreNames.FILMS));
 
-      return this._api.sync(storeFilms)
+      return this._api.sync(filmsToUpdate)
         .then((response) => {
-          const updatedFilms = getSyncedFilms(response.updated);
+          const updatedFilms = Film.parseFilms(response.updated);
 
-          const items = createStoreStructure([...updatedFilms]);
+          const storeFilms = createStoreStructure(updatedFilms);
 
-          this._store.setItems(items, `films`);
+          this._store.setItems(storeFilms, StoreNames.FILMS);
         });
     }
 
@@ -103,7 +94,7 @@ export default class Provider {
   }
 
   addComment(filmId, comment) {
-    if (isOnline()) {
+    if (this._isOnline()) {
       return this._api.addComment(filmId, comment);
     }
 
@@ -111,10 +102,24 @@ export default class Provider {
   }
 
   removeComment(commentID) {
-    if (isOnline()) {
+    if (this._isOnline()) {
       return this._api.removeComment(commentID);
     }
 
     return Promise.reject(new Error(`offline`));
+  }
+
+  _getCommentsFromStore(film) {
+    const newComments = [];
+
+    film.comments.forEach((it) => {
+      newComments.push(this._store.getItems(StoreNames.COMMENTS)[it]);
+    });
+
+    return newComments;
+  }
+
+  _isOnline() {
+    return window.navigator.onLine;
   }
 }

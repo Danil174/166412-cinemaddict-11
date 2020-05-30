@@ -28,7 +28,6 @@ const API = class {
       .then((films) => {
         return films.map((film) => this._updateFilmComments(film));
       })
-    // не до конца понимаю, как в этом месте работает, не забыть спросить
     .then((data) => Promise.all(data))
     .then(Film.parseFilms);
   }
