@@ -60,14 +60,33 @@ export const getAmountByCurrentKey = (objects, key, value) => {
   return (objects.filter((obj) => obj[key] === value)).length;
 };
 
-export const sortObjectsByKeyMaxMin = (objects, key) => {
-  const arr = objects.slice();
-  return arr.sort((a, b) => b[key] - a[key]);
+export const getRandomFilmsByMaxPropertyValue = (films, amount, key) => {
+  const newFilms = films.slice().filter((film) => film[key] !== 0);
+
+  if (newFilms.length === 0) {
+    return [];
+  }
+
+  if (newFilms.length === 1) {
+    return newFilms;
+  }
+
+  return newFilms.sort((a, b) => b[key] - a[key]).slice(0, amount);
 };
 
-export const sortObjectsByValueLength = (objects, key) => {
-  const arr = objects.slice();
-  return arr.sort((a, b) => b[key].length - a[key].length);
+export const getRandomFilmsByMaxPropertyLenght = (films, amount, key) => {
+
+  const newFilms = films.slice().filter((film) => film[key].length !== 0);
+
+  if (newFilms.length === 0) {
+    return [];
+  }
+
+  if (newFilms.length === 1) {
+    return newFilms;
+  }
+
+  return newFilms.sort((a, b) => b[key].length - a[key].length).slice(0, amount);
 };
 
 export const getRang = (filmsAmount) => {

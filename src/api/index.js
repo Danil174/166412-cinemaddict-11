@@ -1,5 +1,5 @@
-import Film from "./models/film-model.js";
-import Comment from "./models/comment-model.js";
+import Film from "../models/film-model.js";
+import Comment from "../models/comment-model.js";
 
 const Method = {
   GET: `GET`,
@@ -28,7 +28,6 @@ const API = class {
       .then((films) => {
         return films.map((film) => this._updateFilmComments(film));
       })
-    // не до конца понимаю, как в этом месте работает, не забыть спросить
     .then((data) => Promise.all(data))
     .then(Film.parseFilms);
   }
@@ -67,6 +66,16 @@ const API = class {
       url: `comments/${commentID}`,
       method: Method.DELETE,
     });
+  }
+
+  sync(data) {
+    return this._load({
+      url: `movies/sync`,
+      method: Method.POST,
+      body: JSON.stringify(data),
+      headers: new Headers({"Content-Type": `application/json`})
+    })
+      .then((response) => response.json());
   }
 
   _filmWithNewComments(data) {
