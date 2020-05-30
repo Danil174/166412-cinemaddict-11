@@ -28,6 +28,8 @@ self.addEventListener(`install`, (evt) => {
             `/images/icons/icon-watchlist-active.svg`,
           ]);
         })
+        .catch(() => {
+        })
   );
 });
 
@@ -47,6 +49,8 @@ self.addEventListener(`activate`, (evt) => {
                   .filter((key) => key !== null)
             )
         )
+        .catch(() => {
+        })
   );
 });
 
@@ -74,6 +78,8 @@ self.addEventListener(`fetch`, (evt) => {
 
               return response;
             });
+        })
+        .catch(() => {
         })
   );
 });
