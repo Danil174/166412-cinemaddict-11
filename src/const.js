@@ -66,3 +66,5 @@ export const DataChangeMode = {
   DELETE: `delete`,
   CHANGE: `change`,
 };
+
+export const HIDDEN_CLASS = `visually-hidden`;
