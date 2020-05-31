@@ -1,7 +1,7 @@
 import FilmComponent from "../components/film-card.js";
 import PopupComponent from "../components/popup.js";
-import FilmModel from "../models/film-model.js";
-import CommentModel from "../models/comment-model.js";
+import Film from "../models/film.js";
+import Comment from "../models/comment.js";
 
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
 import {KeyCodes, DataChangeMode} from "../const.js";
@@ -109,21 +109,21 @@ export default class FilmController {
     this._filmComponent.setOpenPopUpElementsClickHandler(this._renderPopUp);
 
     this._filmComponent.setWatchlistBtnHandler(() => {
-      const newFilm = FilmModel.clone(this._filmComponent._film);
+      const newFilm = Film.clone(this._filmComponent._film);
       newFilm.inWatchlist = !newFilm.inWatchlist;
 
       this._onDataChange(DataChangeMode.CHANGE, this._filmComponent._film, newFilm);
     });
 
     this._filmComponent.setWatchedBtnHandler(() => {
-      const newFilm = FilmModel.clone(this._filmComponent._film);
+      const newFilm = Film.clone(this._filmComponent._film);
       newFilm.watched = !newFilm.watched;
 
       this._onDataChange(DataChangeMode.CHANGE, this._filmComponent._film, newFilm);
     });
 
     this._filmComponent.setFavoriteBtnHandler(() => {
-      const newFilm = FilmModel.clone(this._filmComponent._film);
+      const newFilm = Film.clone(this._filmComponent._film);
       newFilm.favorite = !newFilm.favorite;
 
       this._onDataChange(DataChangeMode.CHANGE, this._filmComponent._film, newFilm);
@@ -135,14 +135,14 @@ export default class FilmController {
     this._popupComponent.setCloseButtonClickHandler(this._onPopUpCloseBtnClick);
 
     this._popupComponent.setWatchlistCheckboxHandler(() => {
-      const newFilm = FilmModel.clone(this._filmComponent._film);
+      const newFilm = Film.clone(this._filmComponent._film);
       newFilm.inWatchlist = !newFilm.inWatchlist;
 
       this._onDataChange(DataChangeMode.CHANGE, this._filmComponent._film, newFilm);
     });
 
     this._popupComponent.setWatchedCheckboxHandler(() => {
-      const newFilm = FilmModel.clone(this._filmComponent._film);
+      const newFilm = Film.clone(this._filmComponent._film);
       newFilm.watched = !newFilm.watched;
       newFilm.watchingDate = new Date(Date.now());
 
@@ -150,7 +150,7 @@ export default class FilmController {
     });
 
     this._popupComponent.setFavoriteCheckboxHandler(() => {
-      const newFilm = FilmModel.clone(this._filmComponent._film);
+      const newFilm = Film.clone(this._filmComponent._film);
       newFilm.favorite = !newFilm.favorite;
 
       this._onDataChange(DataChangeMode.CHANGE, this._filmComponent._film, newFilm);
@@ -184,7 +184,7 @@ export default class FilmController {
         this._inputError(this._popupComponent);
         return;
       }
-      const newComment = CommentModel.create(this._popupComponent.getComment());
+      const newComment = Comment.create(this._popupComponent.getComment());
 
       this._onDataChange(DataChangeMode.ADD, this._popupComponent._film, Object.assign({}, this._popupComponent._film, {
         comments: this._popupComponent._film.comments.concat(newComment)
