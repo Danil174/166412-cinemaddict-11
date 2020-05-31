@@ -4,6 +4,8 @@ import {getRang, getRandomArrayItem} from "../utils/common.js";
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
+const BAR_HEIGHT = 50;
+
 const sortTypeMap = new Map()
   .set(`statistic-all-time`, 0)
   .set(`statistic-today`, 1)
@@ -270,7 +272,6 @@ export default class Statistic extends AbstractSmartComponent {
   _renderChart() {
     const element = this.getElement();
 
-    const BAR_HEIGHT = 50;
     const statisticCtx = element.querySelector(`.statistic__chart`);
     statisticCtx.height = BAR_HEIGHT * this._watchedFilms.getSortetGenresCollection().length;
 

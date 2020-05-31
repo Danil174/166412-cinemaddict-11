@@ -1,4 +1,4 @@
-import Film from "../models/film-model.js";
+import Film from "../models/film.js";
 
 const StoreNames = {
   FILMS: `films`,

@@ -65,4 +65,7 @@ export const DataChangeMode = {
   ADD: `add`,
   DELETE: `delete`,
   CHANGE: `change`,
+  CHANGE_POPUP: `changePopUp`
 };
+
+export const HIDDEN_CLASS = `visually-hidden`;
