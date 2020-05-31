@@ -7,6 +7,11 @@ const DeleteBtnTitles = {
   delete: `Delete`,
 };
 
+const SmileParameters = {
+  WIDTH: `55`,
+  HEIGHT: `55`,
+};
+
 const generateGenresTemplate = (genres) => {
   if (!genres.length) {
     return ``;
@@ -212,8 +217,8 @@ const setSmile = (evt) => {
   const targetSmile = target.cloneNode();
   const emotion = target.parentElement.htmlFor;
 
-  targetSmile.width = `55`;
-  targetSmile.height = `55`;
+  targetSmile.width = SmileParameters.WIDTH;
+  targetSmile.height = SmileParameters.HEIGHT;
   targetSmile.alt = emotion;
 
   emotionContainer.innerHTML = ``;
