@@ -14,7 +14,8 @@ const Mode = {
 const SHAKE_ANIMATION_TIMEOUT = 600;
 
 export default class FilmController {
-  constructor(container, onDataChange, onViewChange) {
+  constructor(container, onDataChange, onViewChange, mainController) {
+    this._mainController = mainController;
     this._container = container;
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
@@ -138,7 +139,7 @@ export default class FilmController {
       const newFilm = Film.clone(this._filmComponent._film);
       newFilm.inWatchlist = !newFilm.inWatchlist;
 
-      this._onDataChange(DataChangeMode.CHANGE, this._filmComponent._film, newFilm);
+      this._onDataChange(DataChangeMode.CHANGE_POPUP, this._filmComponent._film, newFilm);
     });
 
     this._popupComponent.setWatchedCheckboxHandler(() => {
@@ -146,14 +147,14 @@ export default class FilmController {
       newFilm.watched = !newFilm.watched;
       newFilm.watchingDate = new Date(Date.now());
 
-      this._onDataChange(DataChangeMode.CHANGE, this._filmComponent._film, newFilm);
+      this._onDataChange(DataChangeMode.CHANGE_POPUP, this._filmComponent._film, newFilm);
     });
 
     this._popupComponent.setFavoriteCheckboxHandler(() => {
       const newFilm = Film.clone(this._filmComponent._film);
       newFilm.favorite = !newFilm.favorite;
 
-      this._onDataChange(DataChangeMode.CHANGE, this._filmComponent._film, newFilm);
+      this._onDataChange(DataChangeMode.CHANGE_POPUP, this._filmComponent._film, newFilm);
     });
 
     this._popupComponent.setSmileClickHandler();
@@ -169,11 +170,15 @@ export default class FilmController {
   }
 
   _onPopUpCloseBtnClick() {
+    this._mainController.updateAfterDataChange();
+    this._mainController.updateMostCommentedFilms();
     this._removePopUp();
   }
 
   _onEscKeyDown(evt) {
     if (evt.keyCode === KeyCodes.ESC_KEYCODE) {
+      this._mainController.updateAfterDataChange();
+      this._mainController.updateMostCommentedFilms();
       this._removePopUp();
     }
   }
