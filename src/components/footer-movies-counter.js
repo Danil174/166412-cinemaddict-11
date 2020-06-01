@@ -1,6 +1,6 @@
 import AbstractComponent from "./abstract-component.js";
 
-const createMoviesCounterTemplate = (amount) => {
+const createFooterMoviesCounterTemplate = (amount) => {
   return (
     `<section class="footer__statistics">
       <span class="counter">${amount}</span> inside
@@ -8,7 +8,7 @@ const createMoviesCounterTemplate = (amount) => {
   );
 };
 
-export default class MoviesCounter extends AbstractComponent {
+export default class FooterMoviesCounter extends AbstractComponent {
   constructor(amount) {
     super();
 
@@ -16,7 +16,7 @@ export default class MoviesCounter extends AbstractComponent {
   }
 
   getTemplate() {
-    return createMoviesCounterTemplate(this._amount);
+    return createFooterMoviesCounterTemplate(this._amount);
   }
 
   updateCounter(amount) {

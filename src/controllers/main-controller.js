@@ -1,5 +1,5 @@
 import FilmController from "./film-controller.js";
-import FilterController from "./navigation.js";
+import FilterController from "./filter-controller.js";
 
 import FiltersComponent, {SortType} from "../components/filters.js";
 import FilmsSectionComponent from "../components/films-section.js";
