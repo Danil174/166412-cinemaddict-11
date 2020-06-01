@@ -69,3 +69,15 @@ export const DataChangeMode = {
 };
 
 export const HIDDEN_CLASS = `visually-hidden`;
+
+export const Method = {
+  GET: `GET`,
+  POST: `POST`,
+  PUT: `PUT`,
+  DELETE: `DELETE`
+};
+
+export const StatusCodes = {
+  SUCCESS: 200,
+  REDIRECTION: 300
+};
