@@ -8,7 +8,7 @@ export const createEmptyListTemplate = (title) => {
   );
 };
 
-export default class ListSection extends AbstractComponent {
+export default class EmptyList extends AbstractComponent {
   constructor(title) {
     super();
 

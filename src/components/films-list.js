@@ -3,7 +3,7 @@ import AbstractComponent from "./abstract-component.js";
 const extraClass = `--extra`;
 const hideClass = `visually-hidden`;
 
-export const createListSectionTemplate = (title, isExtraList) => {
+export const createFilmsListTemplate = (title, isExtraList) => {
   const classPostfix = isExtraList ? extraClass : ``;
   const hideTitleIfRegularList = isExtraList ? `` : hideClass;
   return (
@@ -15,7 +15,7 @@ export const createListSectionTemplate = (title, isExtraList) => {
   );
 };
 
-export default class ListSection extends AbstractComponent {
+export default class FilmsList extends AbstractComponent {
   constructor(title, isExtraLis = false) {
     super();
 
@@ -24,6 +24,6 @@ export default class ListSection extends AbstractComponent {
   }
 
   getTemplate() {
-    return createListSectionTemplate(this._title, this._isExtraLis);
+    return createFilmsListTemplate(this._title, this._isExtraLis);
   }
 }
