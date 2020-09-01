@@ -155,7 +155,7 @@ const createStatisticTemplate = (watchedFilms, userRang) => {
     `<section class="statistic">
       <p class="statistic__rank">
         Your rank
-        <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
+        <img class="statistic__img" src="./public/images/bitmap@2x.png" alt="Avatar" width="35" height="35">
         <span class="statistic__rank-label">${userRang}</span>
       </p>
 
