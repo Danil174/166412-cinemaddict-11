@@ -23273,8 +23273,6 @@ const createFilmCardTemplate = (film) => {
     favorite
   } = film;
 
-  console.log(img);
-
   const commentsLength = comments.length;
   const genre = genres.length ? genres[0] : ``;
   const releaseYear = releaseDate.getFullYear();
